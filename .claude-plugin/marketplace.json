@@ -1,0 +1,34 @@
+{
+  "name": "design-workflow-marketplace",
+  "owner": {
+    "name": "Fitio",
+    "email": "fitio.devs@gmail.com"
+  },
+  "metadata": {
+    "description": "Flutter-first design workflow skills for Claude Code: theme manager, critique, refinement, motion, frontend, UX writing.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "design-workflow",
+      "description": "Full design pipeline — theme audit/create/extend/port, critique, bolder/quieter/distill, motion, frontend-design, ux-writing.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/theme-audit",
+        "./skills/theme-create",
+        "./skills/theme-extend",
+        "./skills/theme-port",
+        "./skills/theme-prompt",
+        "./skills/theme-sandbox",
+        "./skills/theme-critique",
+        "./skills/theme-bolder",
+        "./skills/theme-quieter",
+        "./skills/theme-distill",
+        "./skills/theme-motion",
+        "./skills/frontend-design",
+        "./skills/ux-writing"
+      ]
+    }
+  ]
+}

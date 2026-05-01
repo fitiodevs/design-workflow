@@ -1,0 +1,51 @@
+# design-workflow project config
+#
+# Copy to your project root as `.design-workflow.yaml` and adjust paths.
+# Skills read this file to locate your design tokens, product doc, and
+# scripts. All paths are resolved relative to the project root.
+
+# Tokens — Flutter-first defaults
+tokens:
+  colors: lib/core/theme/app_colors.dart
+  spacing: lib/core/theme/app_spacing.dart
+  motion: lib/core/theme/app_motion.dart
+  curves: lib/core/theme/app_curves.dart
+  text_theme: lib/core/theme/app_theme.dart
+
+# Product context — used by `theme-critique` for persona walkthrough,
+# AI-slop verdict, and copy alignment.
+product:
+  doc: docs/product.md
+  personas:
+    # 3 archetypal users for walkthrough. Keep concrete (named, with
+    # context), not abstract ("the user"). Skill reads these to simulate
+    # screen reactions.
+    - name: ""
+      context: ""
+      goal: ""
+    - name: ""
+      context: ""
+      goal: ""
+    - name: ""
+      context: ""
+      goal: ""
+
+# Design system widget conventions
+widgets:
+  prefix: App                # AppButton, AppDialog, AppScaffold, ...
+  primary_button: AppButton
+  scaffold: AppScaffold
+  text_field: AppTextField
+  dialog: AppDialog
+  snackbar: AppSnackbar
+
+# Locale of user-facing copy (used by ux-writing + theme-port)
+locale: pt_BR
+
+# Stack hints — currently informational; future versions will branch
+# behaviour by stack.
+stack:
+  framework: flutter
+  state: riverpod
+  routing: go_router
+  backend: supabase
