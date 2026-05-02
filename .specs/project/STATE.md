@@ -112,6 +112,29 @@ Iteration history before final: first sweep flagged 8 frontmatter parse errors (
 ### Stack-agnostic adapter
 - **Status:** Onda A é Flutter-first hard-coded (`detect_mode.py` busca `lib/*.dart`). Adapter para React Native / SwiftUI / web fica para Onda E pós-v1.0.
 
+## Onda B — Spec-driven workflow (2026-05-02)
+
+### Decisões locked
+
+- **D-B1 — 3 wrapper skills, não 1 mega-skill.** `compose`, `sequence`, `ship` separadas. Cada uma é fina (~125 linhas SKILL.md) e responsável por 1 phase + gate.
+- **D-B2 — Phase gate é hard-stop.** Cada wrapper recusa iniciar se o input phase está com `status` != `approved`. Sem fallback "auto-aprovar com flag".
+- **D-B3 — `decisions.md` schema YAML em `.design-spec/project/decisions.md`.** Schema canônico em `skills/compose/references/decisions-schema.md`. Refining skills (Brasa/Calma/Lâmina/Jack) ler antes de propor mudança em fase futura (lockable em Onda D).
+- **D-B4 — Atomic commits com `Refs: <feature>/<T-id>` footer.** Squash forbidden during Ship (preserves rollback granularity).
+- **D-B5 — `--interactive` e `--dry-run` em Ship.** Default é auto-execute; flags pra stakes altos / debug.
+- **D-B6 — Ship NUNCA auto-merges PR.** Hard rule (REQ-D4.4 já antecipa para Ralph). Ship só commita; merge é humano.
+
+### Validation runs (2026-05-02)
+
+- 3 new skills (`compose`, `sequence`, `ship`) — quick_validate: all valid.
+- SKILL.md sizes: 121 / 125 / 127 (≤200 target).
+- Each skill has 1+ references + evals.json (3 evals each).
+- `decisions.md.template` seed em `.design-spec/project/`.
+
+### Deferred (Onda B → Onda C/D)
+
+- **`/design-spec approve <phase> <feature>` convenience command** — Onda C (Productivity).
+- **Refining-skill enforcement leitura `decisions.md`** — Onda D (Ralph) lockable; em Onda B é norma documentada não-mecanizada.
+
 ## Conventions reminder
 
 - Source of truth for scripts: `<repo>/scripts/<name>.py`. Edit there, then re-run `bash scripts/_sync.sh`.

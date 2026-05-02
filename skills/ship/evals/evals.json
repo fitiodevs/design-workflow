@@ -1,0 +1,39 @@
+{
+  "skill_name": "ship",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/design-spec ship coupon-unlocked (tasks.md status: draft)",
+      "expected_output": "Ship refuses to start; no commits, no edits.",
+      "files": [],
+      "assertions": [
+        {"text": "Output names the current tasks.md status and approval requirement", "type": "regex_match"},
+        {"text": "git log shows no new commits", "type": "tool_use"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "/design-spec ship coupon-unlocked (tasks.md status: approved, 3 tasks all green).",
+      "expected_output": "Ship runs each task in dependency order, each producing exactly 1 commit with `Refs: coupon-unlocked/T-NN` footer. After all tasks, runs /theme-audit + /theme-critique on touched paths and appends to ship-log.md. tasks.md status flips to consumed.",
+      "files": [],
+      "assertions": [
+        {"text": "Exactly 3 new commits are created (one per task), each with Refs footer matching T-\\d{2}", "type": "regex_match"},
+        {"text": "ship-log.md exists with frontmatter final_status: completed", "type": "regex_match"},
+        {"text": "ship-log.md contains both '## Final audit' and '## Final critique' sections with output", "type": "regex_match"},
+        {"text": "tasks.md frontmatter status flips to consumed at the end", "type": "qualitative"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "/design-spec ship coupon-unlocked, but T-02 verify fails (flutter analyze returns 3 issues).",
+      "expected_output": "Ship halts cleanly: T-02 marked status: blocked with block_reason, ship-log.md final_status: halted, T-01 already committed remains. User-facing message names T-02, the verify command, and the resume path.",
+      "files": [],
+      "assertions": [
+        {"text": "tasks.md shows T-02 with status: blocked and block_reason mentioning flutter analyze", "type": "regex_match"},
+        {"text": "ship-log.md final_status is halted, not completed", "type": "regex_match"},
+        {"text": "T-03 is NOT executed (it remains pending; not auto-skipped)", "type": "qualitative"},
+        {"text": "Output mentions resume path '/design-spec ship coupon-unlocked'", "type": "regex_match"}
+      ]
+    }
+  ]
+}
