@@ -1,0 +1,42 @@
+{
+  "skill_name": "theme-audit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Roda /theme-audit em lib/features/marketplace e me mostra cobertura + WCAG.",
+      "expected_output": "Relatório executivo com 5 seções (cobertura por feature, violações por regra, status WCAG AA por modo, top offenders file:line, sugestões priorizadas). Inclui contagens estruturais (hex_color, material_color, font_size, font_weight) e check de WCAG light + dark.",
+      "files": [],
+      "assertions": [
+        {"text": "Output mentions WCAG ratio for at least 3 color pairs in both light and dark modes", "type": "qualitative"},
+        {"text": "Bash tool invokes audit_theme.py (and optionally check_contrast.py)", "type": "tool_use"},
+        {"text": "Report contains the exact section headers '🏆 Cobertura por feature', '♿ Status WCAG AA', and '⏭️ Sugestão de ações'", "type": "regex_match"},
+        {"text": "Each WCAG failure is paired with an explicit /theme-extend suggestion", "type": "qualitative"},
+        {"text": "Output does NOT count `Colors.transparent` as a violation", "type": "qualitative"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Anexei uma screenshot. O ícone de cupom no dark mode parece muito fraco. Diagnostica e diz a próxima skill.",
+      "expected_output": "Triagem visual: identifica categoria do problema (contraste WCAG vs geometria de asset), mapeia para a tabela de roteamento e propõe próxima skill (`/theme-extend` se contraste, diagnóstico SVG se geometria). NÃO executa modificação automaticamente — diagnostica → propõe → aguarda OK.",
+      "files": [],
+      "assertions": [
+        {"text": "Read tool is called on the screenshot file before any other action", "type": "tool_use"},
+        {"text": "Output explicitly classifies the symptom as either 'Contraste WCAG' or 'Geometria de asset' using the triage table vocabulary", "type": "regex_match"},
+        {"text": "Output suggests a next skill (/theme-extend or /theme-port) without auto-running it", "type": "qualitative"},
+        {"text": "Output includes the rule: 'nunca executar uma skill de modificação automaticamente a partir de screenshot sem confirmação'", "type": "qualitative"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Valida WCAG do par textOnBrand sobre brandDefault em ambos os modos.",
+      "expected_output": "Roda check_contrast.py com os hex correspondentes (ou --theme), reporta ratio decimal (e.g. 4.63:1) e classificação AA/AAA por modo. Se algum lado falha, lista qual ajuste sugerido (escurecer brand light, clarear textOnBrand, etc) e roteia pra `/theme-extend`.",
+      "files": [],
+      "assertions": [
+        {"text": "Bash tool invokes check_contrast.py", "type": "tool_use"},
+        {"text": "Output reports a numeric contrast ratio (matches pattern '\\d+\\.\\d+:1') for both light AND dark modes", "type": "regex_match"},
+        {"text": "Output classifies each ratio as AA pass/fail (and AAA where applicable)", "type": "qualitative"},
+        {"text": "If any pair fails, output explicitly recommends /theme-extend as the next skill", "type": "qualitative"}
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 ---
 name: theme-prompt
-description: Composes a structured Stitch prompt (Content + Style + Layout) from a Critic handoff plus `docs/product.md` plus `docs/design-tokens.md`. Pure prompt-engineering sub-skill — no MCP calls, no generation. Output is the `intent.brief_prompt` that `/theme-sandbox` sends to the Atelier agent. Use when reviewing or tuning the prompt before spending Stitch credits. Triggers: `/theme-prompt`, "monta o prompt sandbox", "compose stitch prompt", "preview stitch prompt".
+description: Composes a structured Stitch prompt (Content + Style + Layout) from a Critic handoff plus `docs/product.md` plus `docs/design-tokens.md`. Pure prompt-engineering sub-skill — no MCP calls, no generation. Output is the `intent.brief_prompt` that `/theme-sandbox` sends to the Atelier agent. Use when reviewing or tuning the prompt before spending Stitch credits. Triggered by `/theme-prompt`, "monta o prompt sandbox", "compose stitch prompt", "preview stitch prompt".
 ---
 
 # Skill: theme-prompt (`/theme-prompt`)

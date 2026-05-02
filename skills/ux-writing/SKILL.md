@@ -1,6 +1,6 @@
 ---
 name: ux-writing
-description: UX writing for a Flutter app. Reviews and rewrites interface copy (labels, CTAs, errors, empty states, placeholders, success messages) against `docs/product.md` §4 and the 4 quality standards. Delivers before/after per element with ready-to-paste Dart strings. Persona: Pena. Use when the user asks for `/Writer`, `/Pena`, `/ux-write`, "fix this copy", "rewrite this empty state", "review the CTA wording".
+description: UX writing for a Flutter app. Reviews and rewrites interface copy (labels, CTAs, errors, empty states, placeholders, success messages) against `docs/product.md` §4 and the 4 quality standards. Delivers before/after per element with ready-to-paste Dart strings. Invokes the Writer persona (Pena). Use when the user asks for `/Writer`, `/Pena`, `/ux-write`, "fix this copy", "rewrite this empty state", "review the CTA wording".
 ---
 
 # Skill: ux-writing (`/pena`) — persona **Pena** (English: **Writer**)

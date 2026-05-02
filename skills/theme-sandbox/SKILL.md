@@ -1,6 +1,6 @@
 ---
 name: theme-sandbox
-description: Orchestrator for the visual sandbox cycle. Reads a Critic handoff (P0–P1), invokes `/theme-prompt` to compose the Stitch brief, spawns the Atelier agent that generates N variations via the Stitch MCP, downloads screenshots+HTML, and proposes either re-critique via `/theme-critique` or port via `/theme-port` based on the user's pick. Use when a screen has a pending critique and you want to explore 3 visual paths before porting from Figma. Triggers: `/Orchestrator`, `/Orquestrador`, `/theme-sandbox <critique-path>`, "explore variations", "manda pro Stitch".
+description: Orchestrator for the visual sandbox cycle. Reads a Critic handoff (P0–P1), invokes `/theme-prompt` to compose the Stitch brief, spawns the Atelier agent that generates N variations via the Stitch MCP, downloads screenshots+HTML, and proposes either re-critique via `/theme-critique` or port via `/theme-port` based on the user's pick. Use when a screen has a pending critique and you want to explore 3 visual paths before porting from Figma. Triggered by `/Orchestrator`, `/Orquestrador`, `/theme-sandbox` plus a critique handoff path, "explore variations", "manda pro Stitch".
 ---
 
 # Skill: theme-sandbox (`/theme-sandbox`) — persona **Orquestrador** (English: **Orchestrator**)

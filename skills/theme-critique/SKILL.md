@@ -1,6 +1,6 @@
 ---
 name: theme-critique
-description: Design critique of a screen/feature in your Flutter app. Goes beyond `/theme-audit` (which only checks structural hardcoding) — scores Nielsen 0–4 × 10 heuristics, emits AI-slop verdict, runs persona walkthroughs, counts cognitive load, maps P0–P3 issues to next skills. Accepts a Flutter path, a screenshot, or a natural-language description as input. Use after `/theme-port`, in screen review, or when the user shows/describes a visual issue. Triggers: `/Critic`, `/Júri`, `/theme-critique`, "critique this screen", "design review", "Nielsen heuristic".
+description: Design critique of a screen/feature in your Flutter app. Goes beyond `/theme-audit` (which only checks structural hardcoding) — scores Nielsen 0–4 × 10 heuristics, emits AI-slop verdict, runs persona walkthroughs, counts cognitive load, maps P0–P3 issues to next skills. Accepts a Flutter path, a screenshot, or a natural-language description as input. Use after `/theme-port`, in screen review, or when the user shows/describes a visual issue. Triggered by `/Critic`, `/Júri`, `/theme-critique`, "critique this screen", "design review", "Nielsen heuristic".
 ---
 
 # Skill: theme-critique (`/theme-critique`) — invokes **Júri** (English: **Critic**)

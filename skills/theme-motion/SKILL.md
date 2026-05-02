@@ -1,6 +1,6 @@
 ---
 name: theme-motion
-description: Adds or tunes motion (animations, transitions, loops) in Flutter widgets using `AppMotion`/`AppCurves` tokens and `flutter_animate`. Decides whether a screen deserves motion before implementing — refuses motion-for-motion. Use when the user asks for `/Choreographer`, `/Jack`, `/theme-motion`, "anima essa tela", "animate this screen", "give this card life", "route transition", or after `/theme-critique` flags a screen "too static" in a celebration context. NOT for: palette creation, Figma port, copy tweaks, WCAG validation.
+description: Adds or tunes motion (animations, transitions, loops) in Flutter widgets using `AppMotion`/`AppCurves` tokens and `flutter_animate`. Decides whether a screen deserves motion before implementing — refuses motion-for-motion. Use when the user asks for `/Choreographer`, `/Jack`, `/theme-motion`, "anima essa tela", "animate this screen", "give this card life", "route transition", or after `/theme-critique` flags a screen "too static" in a celebration context. Skip for palette creation, Figma port, copy tweaks, and WCAG validation.
 ---
 
 # Skill: theme-motion (`/theme-motion`) — invokes **Jack** (English: **Choreographer**)

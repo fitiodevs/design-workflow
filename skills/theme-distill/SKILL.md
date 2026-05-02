@@ -1,6 +1,6 @@
 ---
 name: theme-distill
-description: Removes everything that doesn't earn its pixel on a screen. Reduces decision points to ≤4, eliminates purposeless elements, forces progressive disclosure. Use when `/theme-critique` flags cognitive load >4, low Nielsen #8 (Aesthetic), or a "cluttered screen" that isn't visually aggressive. Triggers: `/Distiller`, `/Lâmina`, `/theme-distill`, "essa tela tem coisa demais", "strip this screen", "reduce cognitive load".
+description: Removes everything that doesn't earn its pixel on a screen. Reduces decision points to ≤4, eliminates purposeless elements, forces progressive disclosure. Use when `/theme-critique` flags high cognitive load, low Nielsen #8 (Aesthetic), or a cluttered screen that isn't visually aggressive. Triggered by `/Distiller`, `/Lâmina`, `/theme-distill`, "essa tela tem coisa demais", "strip this screen", "reduce cognitive load".
 ---
 
 # Skill: theme-distill (`/theme-distill`) — invokes **Lâmina** (English: **Distiller**)

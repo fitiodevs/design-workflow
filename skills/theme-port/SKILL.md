@@ -1,6 +1,6 @@
 ---
 name: theme-port
-description: Ports a Figma frame OR Stitch HTML into Flutter widgets in your project. The source provides ONLY structure (widths, heights, radii, spacing, text hierarchy); colors and fonts come from your theme (light/dark + A/A+/A++ font scale). Use when the user asks for `/Architect`, `/Arquiteto`, `/theme-port`, `/figma-port`, `/theme-port --from-stitch <html>`, "porta esse frame", "implement that frame from Figma", "migrate from Figma to Flutter".
+description: Ports a Figma frame OR Stitch HTML into Flutter widgets in your project. The source provides ONLY structure (widths, heights, radii, spacing, text hierarchy); colors and fonts come from your theme (light/dark + A/A+/A++ font scale). Use when the user asks for `/Architect`, `/Arquiteto`, `/theme-port`, `/figma-port`, `/theme-port --from-stitch` plus an HTML path, "porta esse frame", "implement that frame from Figma", or "migrate from Figma to Flutter".
 ---
 
 # Skill: theme-port (`/theme-port`) — persona **Arquiteto** (English: **Architect**)

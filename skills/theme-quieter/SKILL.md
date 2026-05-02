@@ -1,6 +1,6 @@
 ---
 name: theme-quieter
-description: Reduces intensity of an aggressive/over-stimulating screen. Lowers color commitment (Drenched/Committed → Restrained), desaturates accents, removes unnecessary cards/dividers, drops typographic weight. Use when `/theme-critique` flags a "shouty" screen, high saturation in a listing, or shouting hierarchy. Triggers: `/Refiner`, `/Calma`, `/theme-quieter`, "essa tela tá pesada", "calm this screen down", "less noise".
+description: Reduces intensity of an aggressive/over-stimulating screen. Lowers color commitment (Drenched/Committed → Restrained), desaturates accents, removes unnecessary cards/dividers, drops typographic weight. Use when `/theme-critique` flags a "shouty" screen, high saturation in a listing, or shouting hierarchy. Triggered by `/Refiner`, `/Calma`, `/theme-quieter`, "essa tela tá pesada", "calm this screen down", "less noise".
 ---
 
 # Skill: theme-quieter (`/theme-quieter`) — invokes **Calma** (English: **Refiner**)

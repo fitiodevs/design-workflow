@@ -1,6 +1,6 @@
 ---
 name: frontend-design
-description: Generates production-grade HTML/CSS/JS mockups for Flutter projects with surgical attention to detail — spacing, hierarchy, alignment, typographic rhythm, microcopy. Output feeds `/theme-port --from-stitch <html>` for conversion to Flutter widgets. Persona Clara is rigorous about refinement; she refuses "good enough" visuals. Use when the user asks for `/Designer`, `/Clara`, `/frontend-design`, "cria um mockup", "create a mockup", "redesign this screen", "explore visually". NOT for: direct Flutter code edits (delegate `/theme-port`), WCAG validation (delegate Auditor), new palette creation (delegate Composer).
+description: Generates production-grade HTML/CSS/JS mockups for Flutter projects with surgical attention to detail — spacing, hierarchy, alignment, typographic rhythm, microcopy. Output feeds `/theme-port --from-stitch` (HTML path) for conversion to Flutter widgets. Persona Clara is rigorous about refinement; she refuses "good enough" visuals. Use when the user asks for `/Designer`, `/Clara`, `/frontend-design`, "cria um mockup", "create a mockup", "redesign this screen", "explore visually". Skip for direct Flutter code edits (delegate `/theme-port`), WCAG validation (delegate Auditor), and new palette creation (delegate Composer).
 ---
 
 # Skill: frontend-design (`/frontend-design`) — invokes **Clara** (English: **Designer**)
