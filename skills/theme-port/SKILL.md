@@ -113,15 +113,7 @@ Para cada container/leaf extrair:
 - **Width / height**: px literal (são estruturais).
 - **Border radius**: snap para `AppRadius.{sm:6, md:10, lg:14, xl:20, pill:999}`. Se Figma estiver >2px de todo token, reportar ao usuário.
 - **Padding / gap**: snap para `AppSpacing.{xxs:2, xs:4, sm:8, md:12, lg:16, xl:20, xxl:24, xxxl:32, huge:48}`. Mesma regra.
-- **Texto**: capturar ordem relativa de font-size (maior → menor) no frame. Mapear para roles semânticos (tabela abaixo). **Nunca** copiar `fontSize` / `fontWeight` literal.
-
-| Role                          | Uso                               | Base |
-|-------------------------------|-----------------------------------|-----:|
-| `displayLarge/Medium/Small`   | Hero numérico, splash             | 57/45/36 |
-| `headlineLarge/Medium/Small`  | Títulos de página                 | 32/28/24 |
-| `titleLarge/Medium/Small`     | Títulos de card/seção/AppBar      | 22/18/16 |
-| `bodyLarge/Medium/Small`      | Texto corrido                     | 16/14/12 |
-| `labelLarge/Medium/Small`     | Botão, chip, caption              | 14/12/11 |
+- **Texto**: capturar ordem relativa de font-size (maior → menor) no frame. Mapear para roles semânticos. **Nunca** copiar `fontSize` / `fontWeight` literal. Para a tabela completa de roles + bases + regras de hierarquia (ratio adjacente ≥1.25, anchor único, `cappedTextTheme` para layout fixo), leia `references/text-hierarchy.md`.
 
 ### Step 3 — Identify color semantic roles
 
@@ -145,60 +137,9 @@ Para cada fill/stroke/shadow:
 
 ### Step 4 — Widget composition
 
-Antes de escrever, mapear para design system (`lib/core/widgets/widgets.dart`):
-
-- Tap target com label → `AppButton(variant: primary|secondary|ghost|danger|social)`.
-- Input → `AppTextField`.
-- **2+ inputs no mesmo bloco lógico → `AppFormGroup`** (project convention, see below).
-- Card → `Card` com defaults do tema.
-- Scaffold completo → `AppScaffold` + `AppAppBar`.
-- Estado vazio → `AppEmptyState`.
-- Loading → `AppLoading` / `AppSkeleton`.
-- Feedback → `AppSnackbar.show` / `AppDialog.confirm`.
+Antes de escrever código, mapear cada elemento da source para um component do design system (`AppButton`, `AppTextField`, `AppFormGroup`, `AppScaffold`, `AppAppBar`, `AppEmptyState`, `AppSnackbar`, `AppDialog`, etc). Para a tabela completa source → component + a regra de agrupamento de inputs (`AppFormGroup` com filhos `AppTextField(bare: true)`, exceções e anti-patterns como combinar `bare: true` com `prefixIcon`), leia `references/widget-mapping.md` antes de compor.
 
 Custom só se nenhum component cobre. Coloca em `lib/features/<feature>/presentation/widgets/`.
-
-#### Regra: agrupamento de inputs (`AppFormGroup`)
-
-**Sempre que houver 2+ campos de formulário** (`AppTextField`, dropdown, toggle) que pertencem ao mesmo bloco lógico, envolva em `AppFormGroup`. O resultado visual é **um único card bordado com os campos empilhados separados por dividers** (same anatomy as `ProfileSectionContainer` in Settings — adapt to your app's equivalent grouped-field container).
-
-Spec do `AppFormGroup`:
-- `bgSurface` como fill,
-- `borderDefault` como contorno externo E como cor dos dividers (token de tema — adapta light/dark automaticamente),
-- `AppRadius.lg`,
-- sem padding vertical no container; cada filho controla a própria altura via `bare`.
-
-**Os filhos devem usar `AppTextField(bare: true)`** — modo sem outline/fill próprio, padding vertical 14px, hint em `bodyLarge/textSecondary`. Isso evita borda dupla e garante que o card seja a única moldura visível.
-
-```dart
-AppFormGroup(
-  children: [
-    AppTextField(hint: 'Nome', bare: true, controller: nomeCtrl),
-    AppTextField(hint: 'Email', bare: true, controller: emailCtrl),
-    AppTextField(hint: 'CPF', bare: true, controller: cpfCtrl),
-    AppTextField(hint: 'Data de nascimento', bare: true, controller: dataCtrl),
-  ],
-)
-```
-
-Visualmente:
-```
-┌─────────────────────────┐
-│  Nome                   │
-├─────────────────────────┤
-│  Email                  │
-├─────────────────────────┤
-│  CPF                    │
-├─────────────────────────┤
-│  Data de nascimento     │
-└─────────────────────────┘
-```
-
-**Exceções:**
-- 1 campo só → `AppTextField` solto (modo padrão com outline próprio), sem wrapper.
-- Campos de seções diferentes (ex: "Dados pessoais" + "Endereço") → 2 `AppFormGroup` separados, cada um com seu título via `ProfileSectionTitle` ou equivalente.
-- Input solto fora de form (ex: search bar, single comment) → `AppTextField` padrão (não `bare`).
-- **Não** combinar `bare: true` com `prefixIcon` — o ícone fica visualmente desconectado da row. Se precisa de ícone, use o modo padrão num input solto, fora do `AppFormGroup`.
 
 ### Step 5 — Implement
 

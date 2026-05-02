@@ -26,8 +26,9 @@ done
 
 echo ""
 echo "✓ installed ${count} skill(s) into ${TARGET}"
+echo "  scripts bundled per skill (sourced from <repo>/scripts/ via _sync.sh)"
 echo ""
 echo "Next steps:"
 echo "  1. Open Claude Code in a Flutter project"
 echo "  2. (Optional) Drop config.example.yaml as .design-workflow.yaml in the project root"
-echo "  3. Try: /theme-audit  (or /Lupa)"
+echo "  3. Try: /theme-audit  (or /Lupa, or /Auditor)"

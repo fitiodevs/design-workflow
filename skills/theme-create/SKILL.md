@@ -130,70 +130,11 @@ Suave, harmonioso. Evitar em contextos competitivos/urgentes.
 
 **Triadic/split**: disponíveis mas raramente apropriados — risco de "carnaval de cores". Use só com direção explícita de design.
 
-### Step 5 — Montar pares light + dark dos 29 tokens
+### Step 5 — Montar pares light + dark dos ~29 tokens
 
-O sistema atual (`lib/core/theme/app_colors.dart`) tem **29 tokens em 7 grupos**. Cada um precisa de par light + dark validado.
+Reference shape: ~29 tokens in 7 groups (`bg*` 6, `brand*` 5, `text*` 4, `border*` 3, `feedback*` 8 = 4 cores × 2 variants, `gameAccent*` 3). Each token needs a validated light + dark pair.
 
-Tabela de targets por categoria (L = lightness OKLCH, C = chroma):
-
-#### Backgrounds (6 tokens)
-
-| Token | Light L | Dark L | Regra |
-|-------|--------:|-------:|-------|
-| `bgBase` | 0.96-0.98 | 0.07-0.10 | Page bg, off-white/off-black |
-| `bgSurface` | 0.99-1.00 | 0.11-0.14 | Cards, modais, elevado |
-| `bgSurfaceRaised` | 0.99-1.00 | 0.11-0.14 | Igual ou +0.01 vs surface |
-| `bgInput` | 0.93-0.96 | 0.16-0.19 | Field fill, mais escuro que surface |
-| `bgSkeleton` | 0.90-0.93 | 0.17-0.20 | Loading shimmer base |
-| `bgOverlay` | rgba(0,0,0,0.6) | rgba(0,0,0,0.6) | Modal scrim, geralmente igual |
-
-#### Brand / Ação (5 tokens)
-
-| Token | Light L | Dark L | Regra |
-|-------|--------:|-------:|-------|
-| `brandDefault` | 0.30-0.45 | 0.30-0.50 | Pode manter mesma hue/L ou clarear no dark |
-| `brandMuted` | 0.92-0.96 | 0.18-0.25 | Bg de chip selecionado, low-sat |
-| `brandOnColor` | 0.99-1.00 | 0.99-1.00 | Texto/ícone sobre brand — quase sempre branco |
-| `brandPressed` | 0.22-0.30 | 0.55-0.70 | -0.08 do default no light, +0.20 no dark |
-| `brandDisabled` | 0.65-0.78 | 0.30-0.40 | Mid, baixa sat, sem WCAG (decorativo) |
-
-#### Texto (4 tokens)
-
-| Token | Light L | Dark L | Regra |
-|-------|--------:|-------:|-------|
-| `textPrimary` | 0.08-0.18 | 0.95-1.00 | Max contraste, ~21:1 |
-| `textSecondary` | 0.30-0.45 | 0.65-0.78 | WCAG AA mín 4.5:1 sobre `bgBase` |
-| `textMuted` | 0.50-0.60 | 0.50-0.62 | Captions, helper — AA opcional (small text) |
-| `textOnBrand` | 0.99-1.00 | 0.99-1.00 | Branco/quase, contraste sobre `brandDefault` |
-
-#### Bordas (3 tokens)
-
-| Token | Light L | Dark L | Regra |
-|-------|--------:|-------:|-------|
-| `borderDefault` | 0.86-0.92 | 0.20-0.28 | Card stroke, divider |
-| `borderStrong` | 0.74-0.80 | 0.30-0.38 | Outlined input, ênfase |
-| `borderFocus` | = `brandDefault` | = `brandDefault` (light) ou variante saturada | Sempre igual ao brand do tema |
-
-#### Feedback semântico (8 tokens — cada um tem `<x>` + `<x>Muted`)
-
-Hue alvo por papel:
-
-| Papel | Hue OKLCH | Light L (cor) | Dark L (cor) | Light L (Muted) | Dark L (Muted) |
-|-------|----------:|--------------:|-------------:|----------------:|---------------:|
-| `feedbackSuccess` | ~140-150 | 0.50-0.58 | 0.78-0.85 | 0.93-0.96 | 0.18-0.22 |
-| `feedbackWarning` | ~65-80 | 0.55-0.65 (não usar amarelo puro — falha AA) | 0.85-0.92 | 0.93-0.96 | 0.16-0.20 |
-| `feedbackError` | ~25-30 | 0.50-0.58 | 0.65-0.72 | 0.92-0.96 | 0.16-0.20 |
-| `feedbackInfo` | ~245-260 | 0.45-0.55 | 0.70-0.80 | 0.92-0.96 | 0.13-0.18 |
-
-Validar AA (4.5:1) de cada cor sobre `bgBase` em ambos os modos. `*Muted` não precisa AA (é background de badge).
-
-#### Gamificação (3 tokens)
-
-| Token | Light | Dark | Regra |
-|-------|-------|------|-------|
-| `gameAccent` | hue 35-45, alto C | mesmo ou +0.05 L | Âmbar/dourado/neon decorativo — sem WCAG |
-| `gameAccentMuted` | L 0.92-0.96 | L 0.16-0.22 | Bg de badge gamificado |
-| `gameAccentOnColor` | L 0.20-0.30 | L 0.85-0.92 | Texto sobre `gameAccent` se aplicável |
+**Read `references/oklch-recipes.md` before generating** — it carries the per-token L/C target tables for each group, plus per-feedback hue ranges. Without those tables, lightness picks become guesswork and WCAG fails recur in Step 6.
 
 ### Step 6 — Validar WCAG
 
@@ -213,28 +154,7 @@ Se algum falha: voltar ao Step 5, ajustar L/C do role ofensor, revalidar. **Não
 
 ### Step 7 — Anti-AI-slop checklist final
 
-Antes de commitar, passar por todos os checks:
-
-**Cor**
-- [ ] NÃO é purple+blue gradient padrão (`#6366F1` → `#8B5CF6`).
-- [ ] NÃO é orange+teal (`#F97316` + `#14B8A6`).
-- [ ] NÃO usa defaults do Tailwind/Material direto sem modificação.
-- [ ] Inspiração rastreável a algo real (brand existente, fotografia, cultura específica).
-- [ ] Tem pelo menos UMA cor "inesperada" que distingue do domínio padrão.
-- [ ] Saturação varia entre roles (não todos high-sat, não todos muted).
-- [ ] `bgBase` não é `#FFFFFF` puro nem `#000000` puro.
-- [ ] Dark mode tem personalidade — não é só inversão de light.
-- [ ] Distribuição é dominante+accent, não evenly-distributed.
-
-**Tipografia (caso a palette inclua proposta de fonte)**
-- [ ] NÃO é Inter, Roboto, Arial, Helvetica, Space Grotesk, ou system-ui como fonte principal.
-- [ ] Display font tem caráter (serif com swash, geometric com idiossincrasia, mono opinionada).
-- [ ] Body font legível em 12-16px no dispositivo (não só em desktop).
-- [ ] `fontFamilyFallback` declarado (cobre quando a fonte custom não carrega).
-
-**Execução**
-- [ ] Implementação combina com a tone declarada (minimal não tem 9 cores, maximalist não tem 3).
-- [ ] Differentiation declarada no Step 0 está visualmente expressa em pelo menos 1 token.
+Antes de commitar, **leia e percorra `references/slop-patterns.md`** — ele carrega o checklist completo (cor + tipografia + execução) com cada item ticável. Não pular: a maior parte dos AI-slop incidents pega na lista de cor ("não é purple-blue gradient", "tem cor inesperada", "dark não é só inverso do light").
 
 ### Step 8 — Emitir artefatos
 
@@ -251,43 +171,7 @@ Saída completa da skill deve conter:
 
 #### Step 8.5 — Ficha de referência em `docs/themes/`
 
-Para cada palette criada, gerar `docs/themes/<theme-name>.md` no formato:
-
-```markdown
-# <Theme Name>
-
-<Uma frase de descrição evocativa — 10-20 palavras.>
-
-## Color Palette (light)
-
-- **<Token role>** (`<TokenName>`): `#XXXXXX` — <papel em uma frase>
-- **<Token role>**: `#XXXXXX` — <papel>
-- **<Accent>**: `#XXXXXX` — <papel>
-- **<Background>**: `#XXXXXX` — <papel>
-
-## Color Palette (dark)
-
-- **<mesma estrutura, hexes do dark>**
-
-## Typography
-
-- **Headers**: <font + fallback>
-- **Body**: <font + fallback>
-
-## Best Used For
-
-<Frase descrevendo contextos onde esse tema brilha — ex: "Sub-brand competitivo da Arena, eventos de duelo, telas de leaderboard com energia visual alta.">
-
-## Anti-patterns evitados
-
-- <O que esse tema explicitamente NÃO faz — ex: "Não usa purple-on-white nem Inter, evitando tech-SaaS genérico.">
-
-## Inspiração
-
-<Referência rastreável real — ex: "Sinalização de pista de atletismo (lane lines amarelas + concrete cinza)", "Capa do álbum X de Y", "Bandeira de Z".>
-```
-
-Esse formato é navegável (vira tabela de conteúdo de `docs/themes/index.md`) e força documentação anti-slop (campos "Anti-patterns evitados" e "Inspiração" são obrigatórios).
+Para cada palette criada, gerar `docs/themes/<theme-name>.md` seguindo o template em `references/slop-patterns.md` § "docs/themes ficha template" (campos obrigatórios: descrição evocativa, palette light, palette dark, typography, "Best used for", "Anti-patterns evitados", "Inspiração"). Os dois últimos campos forçam rastreio anti-slop e são não-opcionais.
 
 ### Step 9 — Implementação
 
@@ -351,20 +235,9 @@ ShellRoute(
 - ❌ Propor fonte Inter/Roboto/Space Grotesk sem alternativa de caráter.
 - ❌ Pular a ficha em `docs/themes/` — sem documentação não há rastreio anti-slop.
 
-## Referência — palettes inspiracionais por mood (domain-agnostic, não copiar)
+## Referência — palettes inspiracionais por mood
 
-Ponto de partida para inspecionar a hue ideal por mood pretendido. Nomear após o caráter, não o hue.
-
-| Mood | Hue dominante | Saturação | Exemplo |
-|------|---------------|-----------|---------|
-| Energia / competição | 350-20 (vermelho/coral) ou 55-75 (amarelo) | Alta | Arena, corrida, duelo |
-| Confiança / serenidade | 200-250 (azul) | Média | Healthcare, finance |
-| Sofisticação / premium | 270-310 (roxo/magenta) ou neutros | Baixa | Luxo, assinatura |
-| Natureza / saudável | 120-160 (verde) | Média-alta | Nutrição, bem-estar |
-| Warmth / comunidade | 20-50 (laranja/âmbar) | Média | Social, indicação |
-| Tech edge | 180-220 (ciano/azul) com dark base | Alta | Dev tools, power users |
-| Editorial / printed | 0 + 1 saturated jewel | Baixa-média | Long-form, magazine |
-| Brutalist / signage | 60 (yellow) + 0 (black) + concrete | Extrema | Industrial, hi-vis |
+Para a tabela domain-agnostic de hues por mood (energia, confiança, sofisticação, etc.) e como nomear o resultado pelo caráter (não pelo hue), leia `references/slop-patterns.md` § "Inspirational palettes by mood".
 
 ## Integração
 

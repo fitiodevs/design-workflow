@@ -153,55 +153,7 @@ Output HTML respeita as regras do skill global `frontend-design`:
 
 ### Step 7 — Auto-revisão (o passo que define Clara)
 
-Antes de devolver o mockup, Clara percorre uma checklist:
-
-```yaml
-revisão_clara:
-  spacing:
-    - todos os gaps em escala (2, 4, 8, 12, 16, 20, 24, 32, 48)?
-    - vertical rhythm: 1 unidade base, múltiplos consistentes?
-    - respiro suficiente entre seções (≥16px)?
-
-  hierarquia:
-    - âncora visual identificável em <1s?
-    - ratio adjacente ≥1.25× entre roles tipográficos?
-    - peso de fonte progride monotonicamente (não pulando)?
-
-  alinhamento:
-    - elementos em grid alinhados ao mesmo eixo (pixel-perfect)?
-    - baseline de textos vizinhos coincide?
-    - CTA primário em posição previsível (geralmente bottom-fixed em mobile)?
-
-  copy:
-    - zero banidos absolutos do product.md §4.2?
-    - imperativo direto em CTAs (não gerúndio)?
-    - números antes de palavras quando há quantidade?
-    - sem placeholder genérico ("João Silva", "Lorem ipsum", "Acme")?
-
-  cor:
-    - axis declarado (Restrained / Committed / Full / Drenched)?
-    - accent ratio respeita o axis (≤10% em Restrained)?
-    - feedback semantic (success/error) usa cor própria, não brand?
-
-  motion (se aplicável):
-    - cada animação tem causalidade?
-    - asymmetric enter/exit (entrada lenta, saída rápida)?
-    - sem bounce/elastic em UI funcional?
-    - comentário `<!-- motion: ... -->` por intenção?
-```
-
-Se 1 item falhar, refazer aquele detalhe **antes** de entregar. "Quase" não passa por Clara.
-
-## Anti-patterns que Clara corta sem dó
-
-- Cards 3-em-linha idênticos por reflexo SaaS → quebrar ritmo (variar largura, ordem, peso visual)
-- Hero-metric template (número grande + label pequeno + 3 supporting stats lado-a-lado) → category-reflex
-- Avatar grande + nome no topo "olá Maria" → ruído passivo, ocupa primeira dobra sem ação
-- Botão fantasma com label "Saiba mais" → sem hierarquia de comando, copy preguiçoso
-- Gradient roxo→rosa em fundo branco → AI-slop universal
-- Padding 14px ou 18px → quebra escala (forçar 12 ou 16)
-- Letter-spacing 0 em texto uppercase → vira massa visual, prescrever 1–2px
-- "Bem-vindo" como copy → vocativo morno, banido por `product.md §4.3`
+Antes de devolver o mockup, Clara percorre o checklist completo (spacing / hierarquia / alinhamento / copy / cor / motion) em `references/clara-checklist.md`. Se 1 item falhar, refazer aquele detalhe **antes** de entregar. "Quase" não passa por Clara. O mesmo arquivo carrega a lista de anti-patterns que Clara corta sem dó (cards 3-em-linha por reflexo, hero-metric template, avatar grande + nome no topo, botão fantasma "Saiba mais", gradient roxo→rosa, padding 14/18, letter-spacing 0 em uppercase, "Bem-vindo" como copy).
 
 ## Output esperado
 

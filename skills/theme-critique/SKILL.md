@@ -247,7 +247,8 @@ Derivadas de `docs/product.md` §3:
 
 ## Referência rápida
 
+Para o rubric completo Nielsen 0–4 com critério de scoring por heurística + bandas de recomendação + severidade P0–P3 + roteamento fix → próxima skill, leia `references/nielsen-rubric.md` antes de scoring.
+
 - Heurísticas Nielsen: nomes oficiais em inglês (não traduzir no relatório — convenção UX).
-- Severidade P0–P3: P0 = bloqueia tarefa; P1 = causa dificuldade significativa; P2 = anoyance com workaround; P3 = polish.
-- Score bandas: 36–40 ship · 28–35 polish · 20–27 needs work · <20 redesign.
+- Score bandas (resumo): 36–40 ship · 28–35 polish · 20–27 needs work · <20 redesign.
 - Cognitive load threshold: >4 opções visíveis em ponto de decisão = flag.

@@ -116,35 +116,13 @@ Se 1 ou mais responde "não merece", **recusar e justificar**. Não tentar "salv
 
 ### Step 2 — Escolher pattern canônico
 
-Antes de inventar, checar `docs/motion.md §4`:
-
-- §4.1 Press feedback
-- §4.2 Shimmer (progresso vivo)
-- §4.3 Pulse (alvo)
-- §4.4 Stagger (lista entrando)
-- §4.5 Hero number entrada
-- §4.6 Milestone hit (recompensa)
-- §4.7 Route transitions
-- §4.8 Scroll-driven (auto-scroll, paralax)
-
-Se cabe em um padrão existente, usar. Inventar novo padrão **só** se falhar nos 8.
+Antes de inventar, checar os 8 padrões canônicos em `docs/motion.md §4` (press feedback, shimmer, pulse, stagger, hero entry, milestone hit, route transitions, scroll-driven). Para a tabela completa de durations + curves + quando-usar de cada um, leia `references/motion-tokens.md` antes de implementar. Se cabe em um padrão existente, usar — inventar novo padrão só se falhar nos 8.
 
 ### Step 3 — Implementar com tokens
 
-**Sempre** usar `AppMotion.*` e `AppCurves.*`. Nunca literal de duração ou curva nova.
+**Sempre** usar `AppMotion.*` e `AppCurves.*`. Nunca literal de duração ou curva built-in (`Curves.easeIn` etc). Se o token necessário não existe (ex: `AppMotion.celebration`), **criar primeiro** em `lib/core/theme/app_motion.dart` ou `app_curves.dart`, depois usar.
 
-```dart
-// ✅ correto
-.fadeIn(duration: AppMotion.normal, curve: AppCurves.enter)
-
-// ❌ errado — duração mágica
-.fadeIn(duration: const Duration(milliseconds: 200))
-
-// ❌ errado — curva built-in fraca
-.fadeIn(curve: Curves.easeIn)
-```
-
-Se o token necessário não existe (ex: `AppMotion.celebration` ainda não definido), **criar primeiro** em `lib/core/theme/app_motion.dart` ou `app_curves.dart`, depois usar.
+Para snippets prontos (press feedback, shimmer, pulse, hero entry, stagger, route transition, reduce-motion wrapper), leia `references/flutter-animate-snippets.md`.
 
 ### Step 4 — Verificar perf
 

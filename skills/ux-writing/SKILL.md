@@ -61,14 +61,7 @@ Pena também pode ser invocada diretamente sem handoff de Júri.
 
 ## As 4 Quality Standards (filtro base)
 
-Toda string passa por estas 4 perguntas antes de chegar ao output:
-
-| Standard | Pergunta | Benchmark |
-|---|---|---|
-| **Purposeful** | Ajuda o usuário a agir ou entender o que ganhou? | Se não, corta. |
-| **Concise** | Usa o mínimo de palavras sem perder significado? | CTA: 1-4 palavras. Erro: ≤18 palavras. Body: ≤14 palavras por frase. |
-| **Conversational** | Leria em voz alta sem soar robótico? | Voz ativa 85%. Sem gerúndio em CTA ("Entrar", não "Entrando"). |
-| **Clear** | Unambíguo, específico, sem jargão? | Verbo específico ("Resgatar" ≠ "Usar"). Número antes da palavra ("+100 pontos"). |
+Toda string passa por **Purposeful** + **Concise** + **Conversational** + **Clear** antes de chegar ao output. Para a tabela completa com benchmarks por categoria + a escala de severidade P0/P1/P2/P3 (banidos absolutos, quality standards, terminologia, polish) + length benchmarks por tipo de string, leia `references/quality-standards.md`.
 
 ## Workflow
 
@@ -96,38 +89,7 @@ Toda string passa por estas 4 perguntas antes de chegar ao output:
 
 ### Step 3 — Avaliar cada string
 
-Para cada string, verificar em ordem:
-
-#### P0 — Banidos absolutos (`docs/product.md` §4.2)
-
-Violação P0 = string tem que ser reescrita, sem negociação:
-
-| Padrão proibido | Exemplo violação | Fix |
-|---|---|---|
-| Vocativo clichê | "atleta!", "campeão!", "guerreiro!" | Remover vocativo. |
-| Filler motivacional | "Continue assim", "Você está indo bem", "Jornada fitness" | Número real + resultado. |
-| Eufemismo de erro | "Algo deu errado, tente novamente" | O que falhou + como resolver. |
-| Gerúndio em CTA | "Salvando...", "Carregando" em botão estático | Imperativo: "Salvar", "Carregar". |
-| AI-slop lista §4.2 | "Eleve seu", "Conquiste seus objetivos", "Próximo nível" | Direto, sem coaching. |
-
-#### P1 — Viola as 4 quality standards
-
-- String >18 palavras num erro → muito longa.
-- CTA genérico ("OK", "Confirmar" sem objeto) → verbo + objeto específico.
-- Palavra antes do número ("pontos: 100") → inverter ("100 pontos").
-- Passive voice em mensagem de ação ("Foi salvo") → ativo ("Salvo").
-
-#### P2 — Inconsistência terminológica
-
-- "check-in" vs "checkin" vs "entrada" no mesmo app.
-- "pontos" vs "pts" vs "moedas" misturados.
-- Nome do mesmo recurso variando entre telas.
-
-#### P3 — Polish
-
-- Data sem formato relativo quando caberia "hoje às 14:30".
-- Placeholder que já está no label (redundante).
-- Título de seção em maiúsculas onde sentence case seria suficiente.
+Para cada string, classificar a violação em P0 (banidos absolutos do `docs/product.md` §4.2 — vocativo clichê, filler motivacional, eufemismo de erro, gerúndio em CTA, AI-slop list) → P1 (viola as 4 quality standards) → P2 (inconsistência terminológica) → P3 (polish). A tabela detalhada de cada padrão proibido + fix sugerido está em `references/quality-standards.md` § "Severity scale".
 
 ### Step 4 — Montar relatório before/after
 
@@ -185,72 +147,9 @@ Aplicar strings diretamente nos arquivos Dart. Regras:
 - Strings que vêm de variável/interpolação: mostrar no relatório, não alterar (o valor vem do backend).
 - Rodar `flutter analyze` após edição.
 
-## Patterns de copy por categoria (reference — adapt to your project's `docs/product.md`)
+## Patterns de copy por categoria
 
-### Títulos de página (root tabs)
-- Noun phrase, sentence case, sem pontuação final.
-- ✅ "Corridas", "Extrato", "Cupons" — ❌ "Suas corridas", "Histórico de atividades"
-
-### Títulos de seção
-- Sentence case. Específico ao conteúdo.
-- ✅ "Extrato", "Em destaque" — ❌ "Suas atividades recentes", "Confira também"
-
-### CTAs primários
-- Imperativo + objeto quando não óbvio. 1–4 palavras.
-- ✅ "Resgatar", "Iniciar corrida", "Ver cupom" — ❌ "Clique aqui", "OK", "Continuar"
-
-### Erros inline (validação)
-- `[Campo] [requisito específico]`. Sem "Por favor".
-- ✅ "Senha precisa ter 8 caracteres" — ❌ "Por favor, insira uma senha válida"
-
-### Erros sistêmicos (snackbar/modal)
-- `[O que falhou]. [Por quê, se conhecido]. [O que fazer].`
-- ✅ "GPS impreciso. Aguarde 30s em área aberta." — ❌ "Algo deu errado, tente novamente"
-
-### Mensagens de sucesso
-- Passado + resultado concreto. Breve.
-- ✅ "Check-in feito. +100 pontos." — ❌ "Parabéns! Seu check-in foi registrado com sucesso!"
-
-### Empty states
-- Explica o vazio + convida à ação sem condescendência.
-- ✅ "Nenhuma corrida ainda. Saia pra correr e ganhe seus primeiros pontos." — ❌ "Você não tem nenhuma atividade registrada ainda. Que tal começar agora?"
-
-### Confirmações destrutivas
-- Transparente, sem manipulação. Consequência clara.
-- ✅ "Remover corrida? Isso apaga o histórico desta atividade. Não tem como desfazer." — ❌ "Tem certeza que deseja excluir?"
-
-### Placeholders
-- Só para inputs com formato específico (email, CPF). Nunca como substituto de label.
-- ✅ `hint: 'nome@exemplo.com'` — ❌ `hint: 'Digite seu e-mail aqui'`
-
-## Benchmarks de comprimento
-
-| Tipo | Ideal | Máximo |
-|---|---|---|
-| CTA / botão | 1–3 palavras | 6 palavras |
-| Título de página | 1–2 palavras | 4 palavras |
-| Título de seção | 2–4 palavras | 6 palavras |
-| Erro inline | 5–10 palavras | 15 palavras |
-| Erro sistêmico | 8–15 palavras | 20 palavras |
-| Mensagem sucesso | 3–8 palavras | 12 palavras |
-| Empty state (linha 1) | 3–6 palavras | 8 palavras |
-| Empty state (linha 2) | 6–12 palavras | 18 palavras |
-| Frase de body text | ≤14 palavras | — (90% compreensão) |
-
-> **Rule of thumb:** 8 words/sentence = 100% comprehension. 14 = 90%. Above 20 = rewrite.
-
-## Tom por estado emocional do usuário
-
-Não é intuição — é protocolo:
-
-| Estado | Contexto típico | Tom | Exemplo |
-|---|---|---|---|
-| **Rotina** (Maria 6h30) | Check-in, abrir app | Eficiente, zero coaching | "+100 pontos." |
-| **Conquista** | Cupom desbloqueado, meta batida | Direto, número em destaque | "Cupom Whey desbloqueado. 3.000 pontos." |
-| **Erro recuperável** | GPS falhou, conexão caiu | Calmo, solução no mesmo texto | "GPS impreciso. Tente em área aberta." |
-| **Erro bloqueante** | Sessão expirada, plano cancelado | Sério, transparente, saída clara | "Acesso expirado. Renove o plano pra continuar." |
-| **Iniciante** (João semana 1) | Onboarding, first empty state | Convidativo, sem jargão técnico | "Nenhuma corrida ainda. Saia pra correr e ganhe seus primeiros pontos." |
-| **Ação destrutiva** | Delete conta, cancelar corrida | Neutro, consequência clara | "Apagar corrida? O histórico desta atividade é removido permanentemente." |
+Para a biblioteca completa de patterns (títulos de página/seção, CTAs primários, erros inline/sistêmicos, mensagens de sucesso, empty states, confirmações destrutivas, placeholders) — cada um com pattern + ✅ exemplo + ❌ counter-example, mais a tabela de tom por estado emocional do usuário (rotina/conquista/erro recuperável/erro bloqueante/iniciante/ação destrutiva), leia `references/before-after-patterns.md`.
 
 ## Anti-patterns desta skill
 
