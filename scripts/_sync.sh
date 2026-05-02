@@ -11,10 +11,11 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # Map: <script-filename> => <space-separated list of consuming skills>
 declare -A USAGE=(
-  [audit_theme.py]="theme-audit"
+  [audit_theme.py]="theme-audit theme-critique"
   [check_contrast.py]="theme-audit theme-extend theme-create"
   [generate_palette.py]="theme-create"
   [oklch_to_hex.py]="theme-create theme-extend"
+  [detect_mode.py]="theme-critique"
 )
 
 count=0

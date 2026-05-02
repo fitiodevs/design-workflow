@@ -1,15 +1,54 @@
 ---
 name: theme-critique
-description: Design critique of a screen/feature in your Flutter app. Goes beyond `/theme-audit` (which only checks structural hardcoding) — scores Nielsen 0–4 × 10 heuristics, emits AI-slop verdict, runs persona walkthroughs, counts cognitive load, maps P0–P3 issues to next skills. Accepts a Flutter path, a screenshot, or a natural-language description as input. Use after `/theme-port`, in screen review, or when the user shows/describes a visual issue. Triggered by `/Critic`, `/Júri`, `/theme-critique`, "critique this screen", "design review", "Nielsen heuristic".
+description: Júri persona — dual-mode design orchestrator. Without args, runs Discovery interview (4 blocks Produto/Tom/Identidade/Stack, brownfield pre-scan, generates discovery.md + PRD/skeletons, emits priority-ordered routing plan). With a Flutter path, runs Critique (Nielsen 0–4 × 10 heuristics, AI-slop verdict, persona walkthroughs, cognitive load, P0–P3 issues mapped to next skills). Triggered by `/Critic`, `/Júri`, `/theme-critique`, "critique this screen", "design review", "Nielsen heuristic", "/juri" alone for project discovery.
 ---
 
 # Skill: theme-critique (`/theme-critique`) — invokes **Júri** (English: **Critic**)
 
 ## Triggers
 
-- **English:** `/Critic`, `/theme-critique`, "critique this screen", "design review", "Nielsen heuristic", "is this design good?", "review this screenshot"
-- **Português:** `/Júri`, `/Juri`, `/júri`, `/juri`, `/theme-critique`, "critica essa tela", "design review", "heurística de Nielsen", "o que está errado nessa tela", "analisa essa imagem"
-- **Natural language:** path to a feature dir; pasted screenshot; "is this AI-slop?"
+- **English:** `/Critic`, `/theme-critique`, "critique this screen", "design review", "Nielsen heuristic", "is this design good?", "review this screenshot", "start a design discovery", "interview me about this project"
+- **Português:** `/Júri`, `/Juri`, `/júri`, `/juri`, `/theme-critique`, "critica essa tela", "design review", "heurística de Nielsen", "o que está errado nessa tela", "analisa essa imagem", "começar discovery", "entrevista de design"
+- **Natural language:** path to a feature dir; pasted screenshot; "is this AI-slop?"; bare `/juri` to start project discovery.
+
+## Mode dispatch
+
+Júri opera em 2 modos. Decide pelo shape do argumento — **antes** de carregar qualquer reference pesada.
+
+| Invocation                    | Mode      | Loads                                                                  |
+|-------------------------------|-----------|------------------------------------------------------------------------|
+| `/juri` (sem argumentos)      | discovery | `references/discovery-sizing.md` + `references/discovery-protocol.md`  |
+| `/juri <flutter-path>`        | critique  | `references/nielsen-rubric.md` (existente, fluxo abaixo)               |
+| `/juri --discuss <topic>`     | discuss   | (Onda C — placeholder; ver §"Discuss mode placeholder")                |
+| `/juri --resume <feature>`    | resume    | `references/discovery-resume.md` + retoma `discovery.md`               |
+| `/juri --mode <tier>`         | discovery override | `references/discovery-sizing.md` (override do tier auto-detectado) |
+
+**Resolution order:** flag (`--`) → caminho existente em `lib/` ou arquivo `.dart` → discovery default.
+
+**Critique mode preservado byte-perfect.** Quando shape = path, todo o workflow abaixo (Setup gates → Inputs → Workflow → Step 1..5 → Persona walkthroughs) roda idêntico. Discovery-mode adiciona um pré-passo de detecção e desvia para `discovery-protocol.md`.
+
+## Discovery mode (overview)
+
+`/juri` sem argumentos abre o modo Discovery. Júri:
+
+1. Roda `python scripts/detect_mode.py` (greenfield vs brownfield + tier recomendado).
+2. Honra override se usuário passou `--mode`.
+3. Em brownfield, roda silently `python scripts/audit_theme.py lib/` antes da primeira pergunta — números reais alimentam o bloco Stack.
+4. Conduz entrevista de 4 blocos (Produto → Tom → Identidade → Stack) — 1 bloco/turno, recusando respostas vagas. Protocolo completo em `references/discovery-protocol.md`.
+5. Gera artefatos por tier (ver `references/discovery-sizing.md`).
+6. Emite plano de ação priorizado (ver `references/discovery-routing.md`) — **nunca** auto-roda a próxima skill.
+
+Discovery **nunca edita arquivos em `lib/`**. Read-only em código; write-only em `docs/` + `.design-spec/features/<feature>/`.
+
+## Discovery — auto-sizing
+
+Tabela tier × deliverables, decision tree, e override semantics em **`references/discovery-sizing.md`**. Carregar antes de iniciar a entrevista — define quantos blocos rodar e quais docs escrever.
+
+## Discuss mode placeholder
+
+`/juri --discuss <topic>` ainda não está implementado completamente. Comportamento atual: imprimir "Discuss mode chega na Onda C. Para discovery formal, use `/juri` sem args. Para crítica, passe um caminho do `lib/`." e sair sem efeito colateral.
+
+---
 
 Avalia se um design **merece shippar**. `/theme-audit` responde "tem hardcode?". Esta skill responde "isto é bom?".
 
