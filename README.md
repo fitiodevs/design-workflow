@@ -95,7 +95,21 @@ Apache 2.0 — see [LICENSE.txt](LICENSE.txt). Each skill folder also carries a 
 
 ## Status
 
-v0.2.0 — extracted from production use in the [Fitio](https://fitio.app) Flutter app. Stack-agnosticism and additional examples are roadmap items.
+**v1.0.0** — full `design-spec-driven` pipeline (discovery → compose → sequence → ship → ralph autonomy) shipped on top of the 13 atomic operators. Extracted from production use in the [Fitio](https://fitio.app) Flutter app. Stack-agnostic adapter is the next-major roadmap item (Onda E).
+
+## What changed in v1.0
+
+The 13 atomic skills become **operators**. A new orchestration layer wraps them with phase gates, decisions tracking, and an autonomous execution loop. Four ondas (waves) shipped:
+
+- **Onda A — Discovery foundation.** Júri (`theme-critique`) gains a Discovery mode dispatched by `/juri` (no args). Auto-sizes greenfield vs brownfield via `scripts/detect_mode.py`, runs `/theme-audit` silently in brownfield to bring real numbers to the interview, conducts a 4-block structured interview (Produto / Tom / Identidade / Stack — 1 block per turn, refuses vague answers with 2-retry cap), generates `.design-spec/features/<feature>/discovery.md` plus tier-appropriate skeletons in `docs/`, and emits a priority-ordered routing plan into the next skill — never auto-runs. `/juri --resume <feature>`, `/juri specify <feature>`, `/juri discuss <topic>` (Socratic, stateless), `/juri --mode <tier>` flags supported. Critique mode preserved byte-perfect.
+
+- **Onda B — Spec-driven workflow.** Three new wrapper skills with hard phase gates: `compose` (reads approved discovery → `/theme-create` + `/frontend-design` + Clara review → `compose.md`), `sequence` (Arquiteto persona — atomic ≤30min tasks each with binary `verify:` blocks), `ship` (executes tasks one by one, 1 commit per task with `Refs: <feature>/<task-id>` footer, halts cleanly on verify fail, finalizes with `/theme-audit` + `/theme-critique` re-run). `decisions.md` schema with supersedes-based audit trail prevents refining skills from contradicting prior locked decisions.
+
+- **Onda C — Productivity layer.** `productivity` skill bundling `/design-spec pause`, `/design-spec resume` (suggests light re-discovery after 14 days), `/design-spec status` (calls `scripts/design_state.py` — JSON or prose, `<2s`), and `/design-spec approve <phase> <feature>` (validates schema before flipping `draft → approved`). Júri's discuss mode upgraded from placeholder to real Socratic informal mode.
+
+- **Onda D — Ralph autonomy.** New `ralph-loop` skill with 3 tiers: **Watch** (read-only audit + critique, emits issue payload), **Mechanical** (deterministic regex-replaceable fixes, opens PR draft, never merges), **Composer** (executes approved `tasks.md`, halts on 2× verify fail / `requires_human` / branch protection / halt file / budget). Hard rules: never auto-merge any tier; `.design-spec/halt` checked first each tick; `budget.yaml` is human-set; persona injection per tick (re-loads `voice_dna` from SKILL.md); cycle detection within 3-tick window. Ships JSONL append-only audit log per feature/day, `scripts/ralph_tick.py` (skeleton) + `scripts/ralph_budget.py` (cost dashboard, DuckDB-friendly), and 3 GitHub Actions workflow templates (`design-watch.yml` daily, `design-pre-merge.yml` on PR, `design-sprint.yml` weekly Tier 2 sweep).
+
+`.design-spec/` is the runtime state directory (features per-phase, project-level decisions, audit logs, halt switch). `.specs/` continues to hold human-written planning artifacts (spec/design/tasks per feature). See `docs/design-spec-driven-plan.md` for the full plan and `.specs/project/STATE.md` for locked decisions and validation runs.
 
 ## What changed in v0.2
 

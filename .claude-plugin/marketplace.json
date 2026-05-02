@@ -5,13 +5,13 @@
     "email": "fitio.devs@gmail.com"
   },
   "metadata": {
-    "description": "Flutter-first design workflow skills for Claude Code: theme manager, critique, refinement, motion, frontend, UX writing.",
-    "version": "0.2.0"
+    "description": "Flutter-first design-spec-driven workflow skills for Claude Code: discovery, compose, sequence, ship, ralph autonomy loop, plus 13 atomic theme/critique/refine operators.",
+    "version": "1.0.0"
   },
   "plugins": [
     {
       "name": "design-workflow",
-      "description": "Full design pipeline — theme audit/create/extend/port, critique, bolder/quieter/distill, motion, frontend-design, ux-writing.",
+      "description": "Full design-spec-driven pipeline — Júri discovery + critique, compose/sequence/ship orchestrators, ralph-loop 3-tier autonomy, productivity helpers, and 13 atomic operators (theme audit/create/extend/port, bolder/quieter/distill, motion, frontend-design, ux-writing).",
       "source": "./",
       "strict": false,
       "skills": [
@@ -27,7 +27,12 @@
         "./skills/theme-distill",
         "./skills/theme-motion",
         "./skills/frontend-design",
-        "./skills/ux-writing"
+        "./skills/ux-writing",
+        "./skills/compose",
+        "./skills/sequence",
+        "./skills/ship",
+        "./skills/productivity",
+        "./skills/ralph-loop"
       ]
     }
   ]
