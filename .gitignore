@@ -9,3 +9,6 @@ node_modules/
 # Local overrides
 .design-workflow.yaml
 *.local.yaml
+
+# design-spec runtime — kill switch is local-only (Onda D)
+.design-spec/halt

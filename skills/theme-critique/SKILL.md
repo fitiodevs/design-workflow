@@ -44,6 +44,44 @@ Discovery **nunca edita arquivos em `lib/`**. Read-only em código; write-only e
 
 Tabela tier × deliverables, decision tree, e override semantics em **`references/discovery-sizing.md`**. Carregar antes de iniciar a entrevista — define quantos blocos rodar e quais docs escrever.
 
+## Discovery — workflow
+
+1. **Detect.** Rodar `python scripts/detect_mode.py` da raiz do repo. Capturar JSON. Se usuário passou `--mode <tier>`, honrar override (warning se discrepar do `tier_recommended` em >1 nível).
+2. **Pre-scan (brownfield only).** Rodar `python scripts/audit_theme.py lib/` silently. Armazenar stdout para uso em Bloco 4 (Stack) e apêndice em `discovery.md`.
+3. **Interview.** Carregar `references/discovery-protocol.md`. Conduzir 4 blocos em ordem fixa (Produto → Tom → Identidade → Stack), 1 bloco/turno, recusando respostas vagas (lista em `references/discovery-vague-words.md`). Cap 2 retries por pergunta — após, persiste `quality: weak` e segue.
+4. **Persist incremental.** Escrever em `.design-spec/features/<feature>/discovery.md` após **cada bloco completo** (não só no fim). Frontmatter inicia com `status: in_progress`; vira `draft` quando todos os blocos completam.
+5. **Generate docs.** Carregar `references/discovery-doc-templates.md`. Por tier:
+   - `quick`: só `discovery.md` (mini, 3 perguntas).
+   - `light`: `discovery.md` completo + `docs/PRD.md` curto.
+   - `full`: + `docs/PRD.md` completo + append em `docs/design.md` se existir (greenfield-friendly se `docs/` vazio).
+   - `greenfield`: + 4 skeletons completos em `docs/` (`product.md`, `design.md`, `design-tokens.md`, `PRD.md`). Confirmar antes de sobrescrever existentes.
+6. **Route.** Carregar `references/discovery-routing.md`. Compor `plan` YAML (≤5 itens), apendar a `discovery.md` na seção `## Action plan`, ecoar prosa numerada pro usuário escolher próxima skill. **Nunca** auto-rodar.
+
+## Discovery — outputs
+
+| Tier         | discovery.md     | PRD              | docs skeletons (greenfield)                                  | Pre-scan |
+|--------------|------------------|------------------|---------------------------------------------------------------|----------|
+| `quick`      | mini             | não              | não                                                           | não      |
+| `light`      | completo         | curto            | não                                                           | brownfield only |
+| `full`       | completo         | completo         | append a docs existentes; não cria do zero                   | brownfield only |
+| `greenfield` | completo         | completo         | cria 4 skeletons (`product/design/design-tokens/PRD.md`)     | n/a      |
+
+`discovery.md` sempre nasce com `status: draft`. Aprovação humana muda para `approved` (manual ou via `/design-spec approve discovery <feature>` na Onda B).
+
+## Discovery — resume
+
+`/juri --resume <feature>` retoma entrevista parcial. Ver `references/discovery-resume.md` para validação strict, mensagens de erro e algoritmo find-first-incomplete-block.
+
+## Discovery — anti-patterns
+
+- ❌ Auto-rodar a próxima skill após emitir plan. Júri **sempre** para no plan e devolve ao usuário.
+- ❌ Despejar todas as perguntas de uma vez. 1 bloco/turno, sem exceção.
+- ❌ Aceitar resposta vaga (lista canônica em `discovery-vague-words.md`). Recusa + retry, cap 2.
+- ❌ Editar arquivos em `lib/`. Read-only em código; write-only em `docs/` + `.design-spec/`.
+- ❌ Sobrescrever `docs/product.md` existente em greenfield sem confirmar.
+- ❌ Inventar resposta quando usuário disse "não sei". Persistir `<!-- não respondido -->` + `quality: weak`.
+- ❌ Misturar discovery e critique no mesmo turno. Modo escolhido no dispatch é mantido até o fim.
+
 ## Discuss mode placeholder
 
 `/juri --discuss <topic>` ainda não está implementado completamente. Comportamento atual: imprimir "Discuss mode chega na Onda C. Para discovery formal, use `/juri` sem args. Para crítica, passe um caminho do `lib/`." e sair sem efeito colateral.
