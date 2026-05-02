@@ -18,8 +18,10 @@ Júri opera em 2 modos. Decide pelo shape do argumento — **antes** de carregar
 | Invocation                    | Mode      | Loads                                                                  |
 |-------------------------------|-----------|------------------------------------------------------------------------|
 | `/juri` (sem argumentos)      | discovery | `references/discovery-sizing.md` + `references/discovery-protocol.md`  |
+| `/juri specify <feature>`     | discovery (slug-aware) | mesmo que acima, com `<feature>` pré-definido               |
 | `/juri <flutter-path>`        | critique  | `references/nielsen-rubric.md` (existente, fluxo abaixo)               |
-| `/juri --discuss <topic>`     | discuss   | (Onda C — placeholder; ver §"Discuss mode placeholder")                |
+| `/juri discuss <topic>`       | discuss   | `references/discovery-discuss.md` (Socratic, stateless, sem file diffs)|
+| `/juri --discuss <topic>`     | discuss   | alias do anterior                                                       |
 | `/juri --resume <feature>`    | resume    | `references/discovery-resume.md` + retoma `discovery.md`               |
 | `/juri --mode <tier>`         | discovery override | `references/discovery-sizing.md` (override do tier auto-detectado) |
 
@@ -82,9 +84,13 @@ Tabela tier × deliverables, decision tree, e override semantics em **`reference
 - ❌ Inventar resposta quando usuário disse "não sei". Persistir `<!-- não respondido -->` + `quality: weak`.
 - ❌ Misturar discovery e critique no mesmo turno. Modo escolhido no dispatch é mantido até o fim.
 
-## Discuss mode placeholder
+## Discuss mode (Onda C)
 
-`/juri --discuss <topic>` ainda não está implementado completamente. Comportamento atual: imprimir "Discuss mode chega na Onda C. Para discovery formal, use `/juri` sem args. Para crítica, passe um caminho do `lib/`." e sair sem efeito colateral.
+`/juri discuss <topic>` (também `/juri --discuss <topic>`) abre modo informal: Socratic, stateless, sem file diffs, voz Júri preservada. Transition para `/juri specify <feature>` por consent. Protocolo completo em `references/discovery-discuss.md`.
+
+## Specify mode (Onda C)
+
+`/juri specify <feature>` é alias formal para `/juri` (sem args) com feature slug pré-definido. Mesmo workflow de discovery. Útil quando vindo de discuss e o feature slug já é claro.
 
 ---
 

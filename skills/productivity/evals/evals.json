@@ -1,0 +1,47 @@
+{
+  "skill_name": "productivity",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/design-spec pause (active feature coupon-unlocked, phase ship, task T-03 in_progress, notes 'finish T-03 verify next session').",
+      "expected_output": "pause-state.yaml is written with paused_at iso, active_feature, active_phase, active_task=T-03, last_commit, and notes as given. Echo a summary + resume hint.",
+      "files": [],
+      "assertions": [
+        {"text": "File .design-spec/pause-state.yaml exists after the action", "type": "tool_use"},
+        {"text": "pause-state.yaml contains active_feature: coupon-unlocked AND active_task: T-03", "type": "regex_match"},
+        {"text": "Output ends with a hint mentioning '/design-spec resume'", "type": "regex_match"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "/design-spec resume (pause-state.yaml exists, paused_at = 20 days ago).",
+      "expected_output": "Resume prints summary + suggests `/juri --mode light` due to >14d age. Does not auto-continue.",
+      "files": [],
+      "assertions": [
+        {"text": "Output mentions a suggestion to run /juri --mode light or equivalent re-discovery", "type": "regex_match"},
+        {"text": "Resume does not auto-execute the active phase's next action (waits for user)", "type": "qualitative"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "/design-spec approve compose coupon-unlocked (compose.md status: draft, valid).",
+      "expected_output": "Frontmatter flips to status: approved with approved_at iso. Output summarizes change + names next phase (sequence).",
+      "files": [],
+      "assertions": [
+        {"text": "compose.md frontmatter shows status: approved after the action", "type": "regex_match"},
+        {"text": "approved_at field is added with valid ISO timestamp", "type": "regex_match"},
+        {"text": "Output mentions '/design-spec sequence' as the next step", "type": "regex_match"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "/design-spec status",
+      "expected_output": "Runs scripts/design_state.py prose mode. Output shows last commit, listed features (if any), each feature's per-phase statuses, and tasks summary (done/pending/blocked counts).",
+      "files": [],
+      "assertions": [
+        {"text": "Output starts with '# design-state' and an ISO timestamp", "type": "regex_match"},
+        {"text": "If features exist, each is printed with phase statuses", "type": "qualitative"}
+      ]
+    }
+  ]
+}

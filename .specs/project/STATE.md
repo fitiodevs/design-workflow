@@ -135,6 +135,29 @@ Iteration history before final: first sweep flagged 8 frontmatter parse errors (
 - **`/design-spec approve <phase> <feature>` convenience command** — Onda C (Productivity).
 - **Refining-skill enforcement leitura `decisions.md`** — Onda D (Ralph) lockable; em Onda B é norma documentada não-mecanizada.
 
+## Onda C — Productivity layer (2026-05-02)
+
+### Decisões locked
+
+- **D-C1 — Pause/resume são thin orchestrators numa skill `productivity`.** Não merecem skill própria cada — cohesion alta (todos lidam com state inspection / state mutation). Subcommands na mesma skill.
+- **D-C2 — `pause-state.yaml` é deletado após resume "continue".** Re-prioritize preserva (com `superseded_by`). Re-uso confuso é pior que perder estado.
+- **D-C3 — 14 dias é o cutoff de re-discovery suggestion.** Hard rule no resume; `/juri --mode light` é o sugerido.
+- **D-C4 — `design_state.py` é determinístico, paralelo a `detect_mode.py`.** Read-only, sem LLM. JSON ou prose.
+- **D-C5 — `/design-spec approve` valida schema antes de flipar status.** Convenience é gate, não bypass.
+- **D-C6 — `discuss` mode é stateless por design.** Zero file diffs em `discovery-discuss.md`. Transition para `specify` é por consent explícito.
+- **D-C7 — `specify` é alias do discovery default com slug pré-definido.** Mantém superfície fina; sem novo dispatch path.
+
+### Validation runs (2026-05-02)
+
+- `quick_validate skills/productivity`: valid (após remover `<...>` do description — recorrência D-05).
+- `quick_validate skills/theme-critique`: valid (regression — adicionado discuss + specify modes).
+- `python scripts/design_state.py --json`: válido em <1s no repo `design-workflow`.
+- SKILL.md sizes: productivity=75, theme-critique=337 (≤400 target).
+
+### Deferred (Onda C → Onda D)
+
+- **Cycle detection no resume** quando ramos de discovery foram superseded mas ainda referenciados em decisions.md (Onda D budget+audit fortalece).
+
 ## Conventions reminder
 
 - Source of truth for scripts: `<repo>/scripts/<name>.py`. Edit there, then re-run `bash scripts/_sync.sh`.

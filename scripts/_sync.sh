@@ -16,6 +16,7 @@ declare -A USAGE=(
   [generate_palette.py]="theme-create"
   [oklch_to_hex.py]="theme-create theme-extend"
   [detect_mode.py]="theme-critique"
+  [design_state.py]="productivity"
 )
 
 count=0
