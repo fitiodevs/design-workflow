@@ -1,18 +1,15 @@
 ---
 name: theme-sandbox
-license: Complete terms in LICENSE.txt
-description: Orchestrator do ciclo sandbox visual Fitio. Lê handoff Júri (P0–P1), invoca `/theme-prompt` para compor brief Stitch, spawna o agent Atelier que gera N variações via Stitch MCP, baixa screenshots+HTML, e propõe re-critica via `/theme-critique` ou port via `/theme-port` da escolha do usuário. Use quando uma tela tem critique pendente e você quer explorar 3 caminhos visuais antes de portar do Figma ("/theme-sandbox <critique-path>", "explora variações dessa tela", "manda pro Stitch").
-triggers:
-  - /theme-sandbox
-  - /Orquestrador
-  - /orquestrador
-  - explora(r)? variações
-  - manda(r)? (pro|para o)? stitch
-  - sandbox visual
-  - 3 caminhos
+description: Orchestrator for the visual sandbox cycle. Reads a Critic handoff (P0–P1), invokes `/theme-prompt` to compose the Stitch brief, spawns the Atelier agent that generates N variations via the Stitch MCP, downloads screenshots+HTML, and proposes either re-critique via `/theme-critique` or port via `/theme-port` based on the user's pick. Use when a screen has a pending critique and you want to explore 3 visual paths before porting from Figma. Triggers: `/Orchestrator`, `/Orquestrador`, `/theme-sandbox <critique-path>`, "explore variations", "manda pro Stitch".
 ---
 
-# Skill: fitio-theme-sandbox (`/theme-sandbox`) — persona **Orquestrador**
+# Skill: theme-sandbox (`/theme-sandbox`) — persona **Orquestrador** (English: **Orchestrator**)
+
+## Triggers
+
+- **English:** `/Orchestrator`, `/theme-sandbox`, "explore visual variations", "send to Stitch", "3 visual paths", "visual sandbox"
+- **Português:** `/Orquestrador`, `/orquestrador`, `/theme-sandbox`, "explora variações", "manda pro stitch", "sandbox visual", "3 caminhos"
+- **Natural language:** "I have a critique handoff and want 3 mockup options"; "let's explore before porting"
 
 Orchestrator. Não chama Stitch direto — delega ao agent **Atelier**. Não compõe prompt — delega ao **`/theme-prompt`**. Não critica — delega ao **`/theme-critique`** depois. O job é amarrar o pipeline:
 
@@ -151,7 +148,7 @@ Quando user escolhe (ex: "B"):
 Suggested: /theme-port --from-stitch .claude/handoffs/atelier-cache/<ts>/cupom-bento-stack.html target=<target>
 ```
 
-Esse modo `--from-stitch` do `/theme-port` (extrai widths/heights/hierarquia do HTML, descarta Tailwind classes, aplica tema Fitio) é o passo 5 do plano sandbox e ainda não existe. Por enquanto, abrir o HTML no browser e usar como referência manual pro `/theme-port` regular.
+Esse modo `--from-stitch` do `/theme-port` (extrai widths/heights/hierarquia do HTML, descarta Tailwind classes, aplica o tema do projeto) é o passo 5 do plano sandbox e ainda não existe. Por enquanto, abrir o HTML no browser e usar como referência manual pro `/theme-port` regular.
 
 ### Step 7 — Report
 
@@ -192,7 +189,7 @@ Hard cap default 3. Aceitar `--variants 5` só quando user pede explícito. **Nu
 - ❌ Spawn Atelier sem validar `/theme-prompt`. Brief ruim = créditos queimados.
 - ❌ Pular cache local. URLs Stitch expiram (24h). Cache `.claude/handoffs/atelier-cache/` é canônico.
 - ❌ Esquecer de marcar critique input `consumed: true` após sandbox completar. Atelier deveria fazer; sandbox confirma.
-- ❌ Tentar portar HTML class-by-class. HTML Stitch é **estrutural**; cores e fonts vêm do tema Fitio via `/theme-port`.
+- ❌ Tentar portar HTML class-by-class. HTML Stitch é **estrutural**; cores e fonts vêm do tema do projeto via `/theme-port`.
 - ❌ Rodar sandbox em telas onde fix é óbvio (rename, swap token, ajuste de spacing). Sandbox é pra exploração estrutural, não polish.
 - ❌ Aceitar `--variants 6+`. Cap é 5 — força disciplina criativa em cima de budget e atenção do user.
 

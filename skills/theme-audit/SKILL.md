@@ -1,22 +1,15 @@
 ---
 name: theme-audit
-license: Complete terms in LICENSE.txt
-description: Audita o uso do design system Fitio em `lib/`. Detecta hardcode de cores (`Color(0xFF...)`, `Colors.X`), fontSize/fontWeight literais, spacing/radius fora da escala, valida contraste WCAG das combinações semânticas atuais, e mede cobertura por feature. Também funciona como triagem por solicitação visual do usuário — aceita screenshot + descrição de problema visual e roteia para a skill correta. Use quando o usuário pedir auditoria do tema, reportar problema visual ("baixo contraste", "ícone fraco", "cor errada"), ou após `/theme-port` para validar o que foi portado.
-triggers:
-  - /theme-audit
-  - /Lupa
-  - /lupa
-  - audita(r)? (o )?tema
-  - revis(a|ar)? cobertura (do )?design system
-  - viola(ç|c)(õ|o)es (de )?tema
-  - verifica(r)? hardcode
-  - (baixo|pouco) contraste
-  - (ícone|icone).*(fraco|pequeno|desalinhado|errado|sumindo)
-  - cor.*(errada|fraca|apagada|sumindo)
-  - n(ã|a)o (usa|está usando) (o )?tema
+description: Audits design-system usage in a Flutter app's `lib/`. Detects hardcoded colors (`Color(0xFF...)`, `Colors.X`), literal fontSize/fontWeight, spacing/radius off-scale, validates WCAG contrast for current semantic combinations, and measures feature coverage. Also acts as visual-request triage — accepts screenshot + natural-language description and routes to the right skill. Use when the user asks for `/Auditor`, `/Lupa`, `/theme-audit`, "audita o tema", "audit the theme", "verify hardcoded colors", "check WCAG", or reports a visual issue ("baixo contraste", "ícone fraco", "cor errada"), or after `/theme-port` to validate what was ported.
 ---
 
-# Skill: fitio-theme-audit (`/theme-audit`) — persona **Lupa**
+# Skill: theme-audit (`/theme-audit`) — persona **Lupa** (English: **Auditor**)
+
+## Triggers
+
+- **English:** `/Auditor`, `/audit-theme`, "audit the theme", "scan hardcoded colors", "check WCAG", "verify theme coverage"
+- **Português:** `/Lupa`, `/lupa`, `/theme-audit`, "audita o tema", "verifica hardcode", "baixo contraste", "ícone fraco", "cor errada", "não usa o tema"
+- **Natural language:** screenshot + descrição de problema visual; "WCAG fail in dark mode"; "the icon looks weak"
 
 Diagnostica saúde do design system. Dois eixos:
 

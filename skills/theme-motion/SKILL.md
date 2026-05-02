@@ -1,22 +1,17 @@
 ---
 name: theme-motion
-license: Complete terms in LICENSE.txt
-description: Adiciona ou ajusta motion (animações, transições, loops) em widgets Fitio usando tokens AppMotion/AppCurves e flutter_animate. Decide se uma tela merece motion antes de implementar — recusa motion-por-motion. Use quando o usuário pedir "anima essa tela", "dá vida pra esse card", "transição entre rotas", ou após `/theme-critique` apontar tela "estática demais" em contexto de comemoração. NOT for: criação de palette, port de Figma, ajuste de copy, validação WCAG.
-triggers:
-  - /theme-motion
-  - /Jack
-  - /jack
-  - anima(r)? (essa|esta|a) tela
-  - d(á|a) vida (pra|para) (esse|este|essa|esta)
-  - motion (em|para|pra)
-  - transi(ç|c)(ã|a)o entre rotas
-  - shimmer
-  - press feedback
+description: Adds or tunes motion (animations, transitions, loops) in Flutter widgets using `AppMotion`/`AppCurves` tokens and `flutter_animate`. Decides whether a screen deserves motion before implementing — refuses motion-for-motion. Use when the user asks for `/Choreographer`, `/Jack`, `/theme-motion`, "anima essa tela", "animate this screen", "give this card life", "route transition", or after `/theme-critique` flags a screen "too static" in a celebration context. NOT for: palette creation, Figma port, copy tweaks, WCAG validation.
 ---
 
-# Skill: fitio-theme-motion (`/theme-motion`) — invoca **Jack**
+# Skill: theme-motion (`/theme-motion`) — invokes **Jack** (English: **Choreographer**)
 
-Decide o que merece motion no Fitio e implementa via `flutter_animate` + tokens `AppMotion`/`AppCurves`. Não é gerador de animação genérica — é coreógrafo que recusa frame supérfluo.
+## Triggers
+
+- **English:** `/Choreographer`, `/theme-motion`, "animate this screen", "give this card life", "route transition", "shimmer", "press feedback"
+- **Português:** `/Jack`, `/jack`, `/theme-motion`, "anima essa tela", "dá vida pra esse card", "motion em X", "transição entre rotas", "shimmer", "press feedback"
+- **Natural language:** static celebration; missing press feedback; loading without shimmer
+
+Decides what deserves motion and implements via `flutter_animate` + `AppMotion`/`AppCurves` tokens. Not a generic animation generator — a choreographer that refuses superfluous frames.
 
 ## Persona — Jack, o Coreógrafo
 

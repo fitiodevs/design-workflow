@@ -1,23 +1,15 @@
 ---
 name: theme-critique
-license: Complete terms in LICENSE.txt
-description: Crítica de design de uma tela/feature do Fitio. Vai além do `/theme-audit` (que só checa hardcode estrutural) — pontua Nielsen 0–4 × 10 heurísticas, emite veredicto AI-slop, faz walkthrough de personas Fitio, conta cognitive load, mapeia P0–P3 issues pra próximas skills. Aceita path Flutter, screenshot (imagem) ou descrição visual do usuário como input. Use após `/theme-port`, em screen review, ou quando usuário mostra/descreve problema visual.
-triggers:
-  - /theme-critique
-  - /Júri
-  - /Juri
-  - /júri
-  - /juri
-  - critica(r)? (essa|esta|a) tela
-  - design review (do |da )?
-  - heur(í|i)stica de Nielsen
-  - este design (est(á|a) bom|tem problemas)
-  - o que (está|está) errado (nessa|nesta|com essa) tela
-  - analisa(r)? (essa|esta) (tela|imagem|screenshot)
-  - (veja|olha|analisa).*(screenshot|imagem|foto|captura)
+description: Design critique of a screen/feature in your Flutter app. Goes beyond `/theme-audit` (which only checks structural hardcoding) — scores Nielsen 0–4 × 10 heuristics, emits AI-slop verdict, runs persona walkthroughs, counts cognitive load, maps P0–P3 issues to next skills. Accepts a Flutter path, a screenshot, or a natural-language description as input. Use after `/theme-port`, in screen review, or when the user shows/describes a visual issue. Triggers: `/Critic`, `/Júri`, `/theme-critique`, "critique this screen", "design review", "Nielsen heuristic".
 ---
 
-# Skill: fitio-theme-critique (`/theme-critique`) — invoca **Júri**
+# Skill: theme-critique (`/theme-critique`) — invokes **Júri** (English: **Critic**)
+
+## Triggers
+
+- **English:** `/Critic`, `/theme-critique`, "critique this screen", "design review", "Nielsen heuristic", "is this design good?", "review this screenshot"
+- **Português:** `/Júri`, `/Juri`, `/júri`, `/juri`, `/theme-critique`, "critica essa tela", "design review", "heurística de Nielsen", "o que está errado nessa tela", "analisa essa imagem"
+- **Natural language:** path to a feature dir; pasted screenshot; "is this AI-slop?"
 
 Avalia se um design **merece shippar**. `/theme-audit` responde "tem hardcode?". Esta skill responde "isto é bom?".
 
@@ -206,7 +198,9 @@ Próximo passo sugerido (escolha 1):
 
 **Nunca** auto-rodar a próxima skill. Usuário escolhe. Quando rodar, marca handoff `consumed: true`.
 
-## Personas Fitio (consumidas no walkthrough)
+## Project personas (consumed in the walkthrough)
+
+> Below are reference personas (originated in a fitness-app context). Adapt names/profiles to your project's `docs/product.md` §3 — the protocol is what matters: 1 recurrent + 1 beginner + 1 passive-presence persona, each with concrete trip-ups.
 
 Derivadas de `docs/product.md` §3:
 
@@ -222,7 +216,7 @@ Derivadas de `docs/product.md` §3:
 
 ### Patrocinador — Presença (terciária)
 - Não é usuário, mas a marca dele aparece em cupom/banner.
-- Trava em: cupom de marca virou ad slot visual destacado; não tem peso visual igual ao cupom Fitio (fere princípio §8.3).
+- Trava em: branded item virou ad slot visual destacado; não tem peso visual igual ao item próprio do app (fere princípio de visual parity §8.3).
 
 ## Anti-patterns desta skill
 

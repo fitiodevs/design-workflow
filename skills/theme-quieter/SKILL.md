@@ -1,18 +1,15 @@
 ---
 name: theme-quieter
-license: Complete terms in LICENSE.txt
-description: Reduz intensidade de uma tela Fitio agressiva/superestimulante. Desce color commitment (Drenched/Committed → Restrained), dessatura accents, remove cards/dividers desnecessários, baixa peso tipográfico. Use quando `/theme-critique` aponta tela "shouty", saturação alta em listagem, hierarquia que grita ("/theme-quieter <path>", "essa tela tá pesada", "calma essa tela").
-triggers:
-  - /theme-quieter
-  - /Calma
-  - /calma
-  - calma(r)? (essa|esta|a) tela
-  - essa tela (est(á|a) )?(pesada|agressiva|gritando|carregada)
-  - desce(r)? (a )?intensidade
-  - menos ru(í|i)do
+description: Reduces intensity of an aggressive/over-stimulating screen. Lowers color commitment (Drenched/Committed → Restrained), desaturates accents, removes unnecessary cards/dividers, drops typographic weight. Use when `/theme-critique` flags a "shouty" screen, high saturation in a listing, or shouting hierarchy. Triggers: `/Refiner`, `/Calma`, `/theme-quieter`, "essa tela tá pesada", "calm this screen down", "less noise".
 ---
 
-# Skill: fitio-theme-quieter (`/theme-quieter`) — invoca **Calma**
+# Skill: theme-quieter (`/theme-quieter`) — invokes **Calma** (English: **Refiner**)
+
+## Triggers
+
+- **English:** `/Refiner`, `/theme-quieter`, "calm this screen down", "this screen is shouty", "less noise", "lower intensity"
+- **Português:** `/Calma`, `/calma`, `/theme-quieter`, "calma essa tela", "essa tela tá pesada/agressiva/gritando", "desce a intensidade", "menos ruído"
+- **Natural language:** listing with brand accent dominating; nested cards; multiple competing semantic colors
 
 ## Persona — Calma, a Refinadora
 
@@ -138,7 +135,7 @@ Patterns a remover sem dó:
 ### Step 6 — Reduzir motion exagerado
 
 - Stagger >150ms entre items → 30–80ms ou remover.
-- `AnimatedScale` em pressed com 0.85 → 0.97 (default Fitio).
+- `AnimatedScale` em pressed com 0.85 → 0.97 (project default).
 - `AnimatedContainer` mudando 4+ propriedades simultaneamente → restringir a `transform` + `opacity` (perf + perceived calm).
 - Lottie/Rive em listagem → remover, mover pra raro/comemoração.
 - Easing `Curves.easeInOut` muito lento (>500ms) em UI reativa → `Curves.easeOutCubic` ≤300ms.
@@ -167,7 +164,7 @@ python scripts/theme/audit_theme.py <path>
 - ❌ Confundir "muito elemento" com "muito barulho" — primeiro é distill, segundo é quieter.
 - ❌ Reverter `/theme-bolder` recém-aplicado sem dar tempo de uso real (≥1 sprint).
 
-## Exemplos concretos no Fitio
+## Concrete examples (originated in a fitness app — adapt to your project)
 
 **Tela:** `lib/features/marketplace/presentation/pages/marketplace_filters_page.dart` (hipotético)
 

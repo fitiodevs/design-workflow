@@ -1,19 +1,15 @@
 ---
 name: theme-port
-license: Complete terms in LICENSE.txt
-description: Porta um frame do Figma OU HTML do Stitch para widgets Flutter Fitio. Source fornece SOMENTE estrutura (widths, heights, radii, spacing, hierarquia de texto); cores e fontes vêm do tema (light/dark + A/A+/A++). Use quando o usuário pedir para implementar/portar/migrar um frame ou tela ("porta esse frame", "implementa a tela X do figma", "/theme-port", "/figma-port", "/theme-port --from-stitch <html>").
-triggers:
-  - /theme-port
-  - /figma-port
-  - /Arquiteto
-  - /arquiteto
-  - porta(r)? (esse|este|o) frame
-  - implementa(r)? (a tela|a feature|o design) .* figma
-  - migra(r)? .* figma .* flutter
-  - --from-stitch
+description: Ports a Figma frame OR Stitch HTML into Flutter widgets in your project. The source provides ONLY structure (widths, heights, radii, spacing, text hierarchy); colors and fonts come from your theme (light/dark + A/A+/A++ font scale). Use when the user asks for `/Architect`, `/Arquiteto`, `/theme-port`, `/figma-port`, `/theme-port --from-stitch <html>`, "porta esse frame", "implement that frame from Figma", "migrate from Figma to Flutter".
 ---
 
-# Skill: fitio-theme-port (`/theme-port`) — persona **Arquiteto**
+# Skill: theme-port (`/theme-port`) — persona **Arquiteto** (English: **Architect**)
+
+## Triggers
+
+- **English:** `/Architect`, `/theme-port`, `/figma-port`, `/theme-port --from-stitch`, "port this frame", "implement design from Figma", "migrate Figma to Flutter"
+- **Português:** `/Arquiteto`, `/arquiteto`, `/theme-port`, `/figma-port`, "porta esse frame", "implementa a tela X do figma", "migra do figma pro flutter"
+- **Natural language:** Figma URL/node-id; Stitch HTML path; "build the screen from this design"
 
 Lê um frame Figma **ou HTML do Stitch** e produz Flutter widget usando **tokens existentes** do `AppColors` / `AppSpacing` / `AppRadius` / `TextTheme`. Filosofia: **source = wireframe P&B**. Estrutura da source, identidade do tema.
 
@@ -85,7 +81,7 @@ Ao terminar o port, **sempre** sugira rodar `/theme-audit` na feature recém-por
    - `transition`, `hover:`, animations — não portar.
    - SVGs decorativos sem semântica (placeholders Stitch). Manter só ícones com label.
 
-5. **Mapeamento Tailwind → escala Fitio (referência):**
+5. **Tailwind → project spacing/radius scale (reference):**
 
    | Tailwind | Aprox px | AppSpacing |
    |---|---|---|
@@ -153,7 +149,7 @@ Antes de escrever, mapear para design system (`lib/core/widgets/widgets.dart`):
 
 - Tap target com label → `AppButton(variant: primary|secondary|ghost|danger|social)`.
 - Input → `AppTextField`.
-- **2+ inputs no mesmo bloco lógico → `AppFormGroup`** (regra do Fitio, ver abaixo).
+- **2+ inputs no mesmo bloco lógico → `AppFormGroup`** (project convention, see below).
 - Card → `Card` com defaults do tema.
 - Scaffold completo → `AppScaffold` + `AppAppBar`.
 - Estado vazio → `AppEmptyState`.
@@ -164,7 +160,7 @@ Custom só se nenhum component cobre. Coloca em `lib/features/<feature>/presenta
 
 #### Regra: agrupamento de inputs (`AppFormGroup`)
 
-**Sempre que houver 2+ campos de formulário** (`AppTextField`, dropdown, toggle) que pertencem ao mesmo bloco lógico, envolva em `AppFormGroup`. O resultado visual é **um único card bordado com os campos empilhados separados por dividers** (mesma anatomia de `ProfileSectionContainer` em Configurações).
+**Sempre que houver 2+ campos de formulário** (`AppTextField`, dropdown, toggle) que pertencem ao mesmo bloco lógico, envolva em `AppFormGroup`. O resultado visual é **um único card bordado com os campos empilhados separados por dividers** (same anatomy as `ProfileSectionContainer` in Settings — adapt to your app's equivalent grouped-field container).
 
 Spec do `AppFormGroup`:
 - `bgSurface` como fill,
@@ -207,15 +203,15 @@ Visualmente:
 ### Step 5 — Implement
 
 - Path: `lib/features/<feature>/presentation/{pages,widgets}/`.
-- Import: `package:fitio/core/widgets/widgets.dart`.
-- Texto: `Theme.of(context).textTheme.<role>` (ou `context.cappedTextTheme.<role>` para elementos fixos — pills, tabs, badges, texto descritivo de "Cupom disponível" e "Sobre").
+- Import: `package:<your_app>/core/widgets/widgets.dart`.
+- Texto: `Theme.of(context).textTheme.<role>` (ou `context.cappedTextTheme.<role>` para elementos fixos — pills, tabs, badges, texto descritivo curto de hero/captions de marca).
 - Cores: `context.colors.<role>`.
 - Spacing/Radius: `AppSpacing.<t>` / `AppRadius.<t>`.
 - Sizes (w/h literal) OK — são estruturais.
 - Copy pt-BR; identifiers em inglês.
 
 **Elementos que DEVEM usar `cappedTextTheme` (cap A+):**
-Badges, pills, tabs de navegação inferior, títulos de navbar (MARKETPLACE/CUPONS/ARENA), label "Cupom disponível", texto Sobre do patrocinador, chips de status, selo "Grátis", rótulos de ponto/pontos.
+Badges, pills, bottom-nav tabs, navbar section titles, status chips, short label/caption text, point/score labels — anything where uncapped scaling at A++ would break the fixed layout.
 
 ### Step 6 — Validate
 
@@ -240,7 +236,7 @@ Terminar com relatório curto:
 - ❌ `fontSize:` ou `fontWeight:` literal em widget.
 - ❌ Importar Figma Variables via `get_variable_defs`.
 - ❌ Copiar Tailwind classes literal (`bg-blue-500`, `text-#FFF`) — descartar, não traduzir cor.
-- ❌ Copiar texto em inglês do Stitch — Stitch gera EN; copy final é pt-BR (do handoff Júri / product.md §4).
+- ❌ Copiar texto em inglês do Stitch — Stitch gera EN; copy final é pt-BR (do handoff Júri / `docs/product.md` §4).
 - ❌ Portar SVG decorativo placeholder do Stitch. Manter só ícone com role semântico.
 - ❌ Criar token novo direto aqui — isso é job do `/theme-extend`.
 - ❌ Pular `flutter analyze` antes de reportar done.

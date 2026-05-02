@@ -1,15 +1,15 @@
 ---
 name: theme-prompt
-license: Complete terms in LICENSE.txt
-description: Compõe um Stitch prompt estruturado (Content + Style + Layout) a partir de handoff Júri + docs/product.md + docs/design-tokens.md. Sub-skill puro prompt-engineering — sem chamadas MCP, sem geração. Output é o `intent.brief_prompt` que `/theme-sandbox` envia ao Atelier. Use quando o usuário quer revisar ou ajustar o prompt antes de gastar créditos Stitch ("/theme-prompt critique-...yaml", "monta o prompt sandbox da tela X", "preview Stitch prompt").
-triggers:
-  - /theme-prompt
-  - monta(r)? (o )?prompt (do |pra |para )?stitch
-  - preview stitch prompt
-  - prompt sandbox
+description: Composes a structured Stitch prompt (Content + Style + Layout) from a Critic handoff plus `docs/product.md` plus `docs/design-tokens.md`. Pure prompt-engineering sub-skill — no MCP calls, no generation. Output is the `intent.brief_prompt` that `/theme-sandbox` sends to the Atelier agent. Use when reviewing or tuning the prompt before spending Stitch credits. Triggers: `/theme-prompt`, "monta o prompt sandbox", "compose stitch prompt", "preview stitch prompt".
 ---
 
-# Skill: fitio-theme-prompt (`/theme-prompt`)
+# Skill: theme-prompt (`/theme-prompt`)
+
+## Triggers
+
+- **English:** `/theme-prompt`, "compose the stitch prompt", "preview stitch prompt", "build sandbox brief"
+- **Português:** `/theme-prompt`, "monta o prompt do stitch", "preview stitch prompt", "prompt sandbox"
+- **Natural language:** "review the brief before we burn credits"; "build the prompt from this critique handoff"
 
 Sub-skill estática. Pega 3 fontes (handoff Júri, product.md, design-tokens.md) e devolve **prompt Stitch** com 3 seções obrigatórias: Content + Style + Layout. Anti-AI-slop por construção: anti-references explícitas, color commitment axis nomeado, scene sentence ancorada.
 
@@ -71,7 +71,7 @@ STYLE
 - Tipografia: hierarquia <display|headline|title|body|label> dominante. Hero é <elemento>.
 - Densidade: <compact|comfortable|spacious>.
 - Anti-references (não imitar): <lista §7>.
-- IMPORTANT: este é wireframe estrutural. Sem cores hex específicas. O tema Fitio aplica cores depois via /theme-port.
+- IMPORTANT: este é wireframe estrutural. Sem cores hex específicas. O tema do projeto aplica cores depois via /theme-port.
 
 LAYOUT
 - Container: mobile single column, viewport 360×800 (deviceType=MOBILE).
@@ -128,7 +128,7 @@ Output (resumido):
 
 ```
 CONTENT
-- Tela: Home Fitio (feed) pós-login
+- Tela: Home (feed) pós-login
 - Cena: Maria, 6h30, chega na academia, abre app esperando reforço imediato
 - Acima da dobra:
   1. Pontos acumulados (hero — leitura <1s, contexto: "X moedas" não só número)
@@ -142,7 +142,7 @@ STYLE
 - Tipografia: pontos é hero displayMedium-ish; cupom é titleMedium; resto bodyMedium.
 - Densidade: comfortable (não compact — Maria não lê micro-text correndo).
 - Anti-references: não Strava (nenhum verde-limão hero metric template), não Duolingo (sem mascote, sem vocativo), não banking dashboard (sem saudação horária), não fitness influencer (sem motivação aspiracional).
-- Wireframe estrutural. Sem hex. Tema Fitio aplica cores depois.
+- Wireframe estrutural. Sem hex. Tema do projeto aplica cores depois.
 
 LAYOUT
 - Mobile single column 360×800.
@@ -187,4 +187,4 @@ O `frontend-design` é fonte de **direção estética**, não de código a copia
 
 Quando o output final for alimentar `/theme-port --from-stitch`, o HTML gerado por
 `frontend-design` deve usar viewport 360px e `px` explícito em layout (ver SKILL.md de
-`frontend-design` § Pipeline Fitio).
+`frontend-design` § Pipeline integration).

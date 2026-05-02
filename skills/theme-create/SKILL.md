@@ -1,25 +1,22 @@
 ---
 name: theme-create
-license: Complete terms in LICENSE.txt
-description: Cria uma palette completa do zero (brand + semantic + neutral) ou uma identidade visual alternativa (ex: sub-brand, modo sazonal, tema patrocinador). Usa OKLCH para escalas perceptualmente uniformes, valida WCAG automaticamente, emite `AppColors` pronto + rationale anti-AI-slop + ficha de referência em `docs/themes/`. Use quando nenhum ajuste incremental serve e é preciso redesenhar a identidade ("/theme-create", "cria palette nova", "nova identidade visual", "sub-brand do X").
-triggers:
-  - /theme-create
-  - /Compositor
-  - /compositor
-  - cria(r)? palette
-  - nova identidade visual
-  - (sub-)?brand (novo|novo tema)
-  - palette do zero
+description: Creates a complete palette from scratch (brand + semantic + neutral) or an alternative visual identity (sub-brand, seasonal mode, sponsor skin) for a Flutter app. Uses OKLCH for perceptually-uniform scales, validates WCAG automatically, emits a ready-to-paste `AppColors` plus anti-AI-slop rationale plus reference sheet in `docs/themes/`. Use when no incremental tweak fits and identity must be redesigned. Triggers: `/Composer`, `/Compositor`, `/theme-create`, "cria palette nova", "nova identidade visual", "create a new palette", "sub-brand for X".
 ---
 
-# Skill: fitio-theme-create (`/theme-create`) — persona **Compositor**
+# Skill: theme-create (`/theme-create`) — persona **Compositor** (English: **Composer**)
 
-Cria uma palette completa do zero. **Use com moderação** — o tema do Fitio já existe (29 tokens NavyBlue/DarkBlue) e na maioria dos casos `/theme-extend` é suficiente. Cenários legítimos:
+## Triggers
 
-- Sub-brand (Fitio Arena, Fitio Marketplace B2B) com identidade distinta.
-- Modo sazonal (Black Friday, Copa do Mundo) com skin temporária.
-- Skin de patrocinador (evento branded).
-- Refresh total (raro — coordenar com design).
+- **English:** `/Composer`, `/theme-create`, "create a new palette", "new visual identity", "sub-brand", "palette from scratch"
+- **Português:** `/Compositor`, `/compositor`, `/theme-create`, "cria palette nova", "nova identidade visual", "sub-brand", "palette do zero"
+- **Natural language:** seasonal skin (Black Friday); sponsor branded event; full identity refresh
+
+Creates a complete palette from scratch. **Use sparingly** — most projects already have a base theme (e.g. ~29 semantic tokens organized as light/dark instances) and `/theme-extend` covers most needs. Legitimate scenarios:
+
+- Sub-brand (vertical/sub-product with distinct identity).
+- Seasonal mode (Black Friday, Copa do Mundo) with a temporary skin.
+- Sponsor skin (branded event).
+- Full refresh (rare — coordinate with design).
 
 ## Filosofia (anti-AI-slop)
 
@@ -40,7 +37,7 @@ Princípios não-negociáveis:
 1. **Purpose / domínio** — Fitness? Evento? Patrocinador? Sub-vertical? Que problema visual resolve?
 2. **Audiência** — Mesma do app principal ou nicho específico? O que ela já consome?
 3. **Tone / mood** — Pegue um extremo da lista abaixo. Genéricos como "moderno/clean/profissional" são bandeira vermelha.
-4. **Invariantes de marca** — Algo fixo do Fitio que precisa aparecer (ex: `brandDefault` #0817A1 como base, `gameAccent` âmbar)?
+4. **Invariantes de marca** — Algo fixo do projeto que precisa aparecer (ex: `brandDefault` como base, `gameAccent` decorativo)?
 5. **Differentiation** — Em uma frase: **o que torna esse tema inesquecível?** Qual é a UMA coisa que alguém vai lembrar? (Sem resposta concreta = palette genérica.)
 6. **Coexistência** — Substitui o tema atual ou é alternativo por contexto/rota?
 7. **Color strategy commitment** (`docs/product.md` §5.3) — Restrained, Committed, Full palette ou Drenched? Surface por surface, mas a palette tem que suportar todos os 4 níveis.
@@ -85,7 +82,7 @@ Descrever a palette em 3-5 palavras concretas **antes** de escolher cores. Exemp
 
 Ponto de partida tem 3 fontes válidas:
 
-- **A.** Existente da marca: `brandDefault` (#0817A1), `gameAccent` (#F59E0B), ou hex de marca histórica do Fitio.
+- **A.** Existente da marca: `brandDefault`, `gameAccent`, ou hex histórico já estabelecido do projeto.
 - **B.** Cor de uma referência real (foto, cultura, material físico). Extrair manualmente, informar hex + a referência.
 - **C.** Cor proposta pelo usuário/design.
 
