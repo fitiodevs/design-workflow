@@ -60,6 +60,57 @@ Iteration history before final: first sweep flagged 8 frontmatter parse errors (
 ## Open spec features
 
 - `.specs/features/skill-creator-alignment/` — completed 2026-05-01 in 3 commits (Onda 1/2/3). All 8 REQs verified. Acceptance criteria met.
+- `.specs/features/onda-a-discovery/` — completed 2026-05-02 in 3 commits (Onda A.1/A.2/A.3). All 6 REQs verified end-to-end via SKILL.md + 5 references + detect_mode.py + 5 evals. Critique mode preserved byte-perfect.
+
+---
+
+## Onda A — Discovery (2026-05-02)
+
+### Decisões locked
+
+- **D-A1 — Discovery extends `theme-critique`, NÃO nova skill.** Persona Júri é uma só; trigger `/juri` é único. Nova skill quebraria unicidade. Discovery vive em `theme-critique/SKILL.md` via dispatch table + `references/discovery-*.md`.
+- **D-A2 — Dispatch por shape do argumento.** `/juri` (no args) → discovery; `/juri <flutter-path>` → critique; `/juri --discuss` → placeholder; `/juri --resume <feature>` → resume. Resolution: flag → path → discovery default.
+- **D-A3 — `detect_mode.py` é determinístico.** Heurística greenfield: commits<10 AND dart_files<5 AND no docs/product.md (>2KB). Brownfield caso contrário. LLM não decide sizing.
+- **D-A4 — Override (`--mode`) sempre vence detecção.** Se discrepa em >1 nível, Júri loga warning antes de prosseguir.
+- **D-A5 — Vague-words list + 2 retries.** 12 termos PT-BR + 12 EN. 3 retry templates. Após 2 retries → persiste `quality: weak`, segue. Nunca trava.
+- **D-A6 — Skeletons inline em Markdown, não Python.** `discovery-doc-templates.md` carrega templates com placeholders `{{var}}`. Júri substitui via Write tool.
+- **D-A7 — `.design-spec/` é runtime; `.specs/` é planning.** Discovery escreve em `.design-spec/features/<feature>/`. STATE.md continua em `.specs/project/`.
+- **D-A8 — Resume valida frontmatter strict.** Status `in_progress` obrigatório. Idade >14d → warning (Onda A); regra mais firme em Onda C.
+- **D-A9 — Routing schema é YAML em `discovery.md`, não JSON separado.** Human-first. Onda B/D parsam via `yaml.safe_load`.
+- **D-A10 — Critique mode preservado byte-perfect.** Nenhuma seção do workflow original alterada; apenas seções novas adicionadas acima dele.
+- **D-A11 — Discuss mode (`--discuss`) é placeholder em Onda A.** Imprime mensagem informativa e sai. Comportamento socrático em Onda C.
+- **D-A12 — `audit_theme.py` ganha consumer adicional `theme-critique`** (brownfield pre-scan). `_sync.sh` atualizado.
+- **D-A13 — Evals discovery + critique** consolidados em 1 `evals.json` no `theme-critique/`. 5 evals (2 critique-regression, 3 discovery scenarios).
+
+### Validation runs
+
+#### 2026-05-02 — Onda A acceptance
+
+- `python3 detect_mode.py` em repo design-workflow: returns valid JSON `{"mode": "greenfield", "tier_recommended": "greenfield", ...}`.
+- `bash scripts/_sync.sh`: synced 9 script copies into skills/{theme-audit,theme-critique,theme-extend,theme-create}/scripts/.
+- `quick_validate.py skills/theme-critique`: **Skill is valid!** (no errors).
+- `wc -l skills/theme-critique/SKILL.md`: 331 lines (≤400 target, ≤500 hard cap).
+- `jq '.evals | length' skills/theme-critique/evals/evals.json`: 5.
+- Critique-mode regression: SKILL.md §Workflow/Setup gates/Inputs/Persona blocks intact; only new sections inserted before §Persona — Júri.
+- `find skills/theme-critique/references/`: nielsen-rubric.md + 5 discovery-*.md = 6 files (target ≥6).
+
+## Deferred (Onda A → consumed in B/C)
+
+### Discuss-mode completo (REQ-C2)
+- **Status:** scaffolding apenas em Onda A (placeholder mensagem).
+- **Why:** complexidade do socratic dialog merece onda dedicada (Onda C — productivity).
+- **Next step:** Onda C — `/juri discuss <topic>` informal, zero file diffs, transição com consent para `specify`.
+
+### Cross-feature pause/resume (REQ-C1)
+- **Status:** Onda A só implementa `--resume <feature>` da entrevista atual. Pause global de feature em qualquer fase fica para Onda C.
+- **Next step:** Onda C — `/design-spec pause` + `pause-state.yaml`.
+
+### Decisões tracking (`decisions.md`) — REQ-B4
+- **Status:** Júri Discovery escreve respostas-decisão em `discovery.md` (e.g. axis = drenched). Formato `decisions.md` formal com schema `{id, decision, reason, date, supersedes?}` é Onda B.
+- **Next step:** Onda B — refining skills (Brasa/Calma/Lâmina/Jack) leem `decisions.md` antes de propor mudança.
+
+### Stack-agnostic adapter
+- **Status:** Onda A é Flutter-first hard-coded (`detect_mode.py` busca `lib/*.dart`). Adapter para React Native / SwiftUI / web fica para Onda E pós-v1.0.
 
 ## Conventions reminder
 
