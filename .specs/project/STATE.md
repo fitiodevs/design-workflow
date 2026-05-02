@@ -158,6 +158,37 @@ Iteration history before final: first sweep flagged 8 frontmatter parse errors (
 
 - **Cycle detection no resume** quando ramos de discovery foram superseded mas ainda referenciados em decisions.md (Onda D budget+audit fortalece).
 
+## Onda D — Ralph autonomy (2026-05-02)
+
+### Decisões locked
+
+- **D-D1 — Skill `ralph-loop/` é skill nova, não modo de skill existente** (alinhado com memory `decision_ralph_separate_skill.md`). Thin orchestrator; gating + budget + audit são primários.
+- **D-D2 — Loop é dumb, prompt é smart, halts são duros.** `ralph_tick.py` é skeleton determinístico; spawn da skill via harness model.
+- **D-D3 — `.design-spec/halt` é checked PRIMEIRO em cada tick.** Antes de budget. Antes de tudo. Halt-file = exit imediato.
+- **D-D4 — Tier 2 e Tier 3 NUNCA auto-merge.** Sempre PR draft. Hard rule (REQ-D4.4). Mesma regra para Tier 2 (não só Tier 3).
+- **D-D5 — `budget.yaml` é human-set, Ralph nunca muta.** 100% halt; 80% warn. Per-tier overrides opcionais.
+- **D-D6 — Audit log é JSONL append-only.** `loop-log/<YYYY-MM-DD>.jsonl` por feature. Greppable + DuckDB-friendly. Ops gerencia retention.
+- **D-D7 — Persona injection per tick.** `voice_dna` re-loaded da SKILL.md spawned, sem confiar contexto. Drift detection a cada 10 ticks.
+- **D-D8 — Cycle detection com janela de 3 ticks.** Operator + file tuple; oscilação Brasa↔Calma halts.
+- **D-D9 — 3 GH Workflow templates** em `skills/ralph-loop/workflows/` (não em `.github/workflows/` direto — adopters copiam).
+- **D-D10 — Mínimo YAML reader nativo no `ralph_tick.py`** para evitar PyYAML dep. Suporta caps + per-tier overrides.
+
+### Validation runs (2026-05-02)
+
+- `quick_validate skills/ralph-loop`: valid.
+- SKILL.md = 148 linhas.
+- 5 references (budget, halt-conditions, persona-injection, cycle-detection, audit-log-schema).
+- 3 workflow templates (watch / pre-merge / sprint).
+- 2 scripts (ralph_tick.py, ralph_budget.py) sincronizados.
+- 5 evals (3 tier scenarios + halt-file + cycle-detection).
+- `python scripts/ralph_budget.py`: roda em <1s, output esperado quando log vazio.
+
+### Deferred (Onda D → pós-v1.0)
+
+- **Persona drift quantitative threshold tuning.** Marcado em `persona-injection.md`; baseline empírico depende de dados de produção.
+- **Cost calibration por modelo.** Estimates em `budget-protocol.md` são para Sonnet-class; Opus/Haiku bumps deferred.
+- **Stack-agnostic adapter.** Onda E pós-v1.0.
+
 ## Conventions reminder
 
 - Source of truth for scripts: `<repo>/scripts/<name>.py`. Edit there, then re-run `bash scripts/_sync.sh`.

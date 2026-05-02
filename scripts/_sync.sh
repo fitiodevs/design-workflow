@@ -17,6 +17,8 @@ declare -A USAGE=(
   [oklch_to_hex.py]="theme-create theme-extend"
   [detect_mode.py]="theme-critique"
   [design_state.py]="productivity"
+  [ralph_tick.py]="ralph-loop"
+  [ralph_budget.py]="ralph-loop"
 )
 
 count=0
