@@ -3,7 +3,7 @@
 > Curate ~20 of open-design's 71 `DESIGN.md` brand systems into our `design-systems/` folder, build a translator from DESIGN.md (CSS custom properties) to AppColors (Flutter), and add `--inspired-by <slug>` plus `--browse [<category>]` flags to `/theme-create` so palette creation starts from a characterized reference instead of a blank page.
 
 **Status:** Draft (ready for execution)
-**Target release:** v1.2.0
+**Target release:** v1.3.0 (pushed back from v1.2.0 on 2026-05-06 — multi-stack-adapter pulled forward to v1.2.0 per user urgency on Next.js+Tailwind)
 **Sized:** Large (multi-component, ~6-8h, translator + library + skill integration)
 **Owner:** fitiodev
 **Created:** 2026-05-05

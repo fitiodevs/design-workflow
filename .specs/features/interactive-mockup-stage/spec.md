@@ -3,7 +3,7 @@
 > Convert Clara's HTML mockup output from "static artifact → re-prompt loop" to "interactive exploration → final pick". Ship 3 components: (1) a new `tweaks` skill that wraps any HTML with a side panel of live CSS-custom-property knobs persisted to localStorage; (2) refit `frontend-design` to emit "tweaks-ready" HTML (CSS custom properties as the source of all visual decisions); (3) add `theme-critique --mode 5dim` flag for evidence-based scoring across 5 dimensions with a single-file HTML report (radar chart + Keep/Fix/Quick-wins).
 
 **Status:** Draft (ready for execution)
-**Target release:** v1.3.0
+**Target release:** v1.4.0 (pushed back from v1.3.0 on 2026-05-06 — multi-stack-adapter pulled forward to v1.2.0 per user urgency on Next.js+Tailwind)
 **Sized:** Large (3 sub-features, ~10-12h, mix of skill creation + script + skill refit)
 **Owner:** fitiodev
 **Created:** 2026-05-05
