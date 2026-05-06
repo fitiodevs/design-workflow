@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Auditor de tema Fitio. Varre `lib/` e reporta violações de tokens semânticos
+Auditor de tema. Varre `lib/` e reporta violações de tokens semânticos
 e anti-patterns de copy/layout (regras de `docs/product.md`).
 
 Detecta (estrutural):

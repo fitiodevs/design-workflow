@@ -1,24 +1,24 @@
 ---
 name: theme-port
-description: Ports a Figma frame OR Stitch HTML into Flutter widgets in your project. The source provides ONLY structure (widths, heights, radii, spacing, text hierarchy); colors and fonts come from your theme (light/dark + A/A+/A++ font scale). Use when the user asks for `/Architect`, `/Arquiteto`, `/theme-port`, `/figma-port`, `/theme-port --from-stitch` plus an HTML path, "porta esse frame", "implement that frame from Figma", or "migrate from Figma to Flutter".
+description: Ports a structural source (Figma frame OR HTML mockup from any tool — frontend-design, Figma export, Sketch, Penpot, Stitch, hand-written) into Flutter widgets in your project. The source provides ONLY structure (widths, heights, radii, spacing, text hierarchy); colors and fonts come from your theme (light/dark plus A/A+/A++ font scale). Use when the user asks for `/Architect`, `/Arquiteto`, `/theme-port`, `/figma-port`, `/theme-port --from-html` plus an HTML path, "porta esse frame", "implement that frame from Figma", "convert this mockup to Flutter", or "migrate from Figma to Flutter".
 ---
 
 # Skill: theme-port (`/theme-port`) — persona **Arquiteto** (English: **Architect**)
 
 ## Triggers
 
-- **English:** `/Architect`, `/theme-port`, `/figma-port`, `/theme-port --from-stitch`, "port this frame", "implement design from Figma", "migrate Figma to Flutter"
-- **Português:** `/Arquiteto`, `/arquiteto`, `/theme-port`, `/figma-port`, "porta esse frame", "implementa a tela X do figma", "migra do figma pro flutter"
-- **Natural language:** Figma URL/node-id; Stitch HTML path; "build the screen from this design"
+- **English:** `/Architect`, `/theme-port`, `/figma-port`, `/theme-port --from-html`, "port this frame", "implement design from Figma", "convert this HTML mockup to Flutter", "migrate Figma to Flutter"
+- **Português:** `/Arquiteto`, `/arquiteto`, `/theme-port`, `/figma-port`, "porta esse frame", "implementa a tela X", "converte esse mockup pra Flutter", "migra do figma pro flutter"
+- **Natural language:** Figma URL/node-id; HTML mockup path; "build the screen from this design"
 
-Lê um frame Figma **ou HTML do Stitch** e produz Flutter widget usando **tokens existentes** do `AppColors` / `AppSpacing` / `AppRadius` / `TextTheme`. Filosofia: **source = wireframe P&B**. Estrutura da source, identidade do tema.
+Lê uma fonte estrutural (Figma frame **ou** HTML mockup de qualquer origem) e produz Flutter widget usando **tokens existentes** do `AppColors` / `AppSpacing` / `AppRadius` / `TextTheme`. Filosofia: **source = wireframe P&B**. Estrutura da source, identidade do tema.
 
 **Dois modos de input:**
 
 | Modo | Trigger | Source |
 |---|---|---|
 | Figma | `/theme-port` (default) | figma-bridge MCP |
-| Stitch | `/theme-port --from-stitch <html>` | HTML local (gerado por `/theme-sandbox`) |
+| HTML | `/theme-port --from-html <path>` | qualquer arquivo `.html` (frontend-design / Clara, export de Figma/Sketch/Penpot, Stitch, hand-written) |
 
 Ambos seguem o mesmo pipeline Step 2–7. Só o Step 1 muda.
 
@@ -35,19 +35,22 @@ Ao terminar o port, **sempre** sugira rodar `/theme-audit` na feature recém-por
 
 - **`docs/product.md` carregado.** Source of truth de tom, anti-references, scene sentence, color strategy axis. Se ausente/vazio (<2KB), parar e pedir ao usuário criar antes de portar — sem isso o port cai em category-reflex (verde Strava, preto+laranja Nike). Não sintetizar tom a partir do prompt.
 - **Modo Figma:** MCP `figma-bridge` conectado. Se `claude mcp list` mostrar ✗, pedir o usuário abrir o Figma em figma-linux e rodar `Plugins → Development → Claude Figma Bridge`. Tools figma-bridge são deferred. Antes da primeira chamada: `ToolSearch` com `select:mcp__figma-bridge__get_selection,mcp__figma-bridge__get_design_context,mcp__figma-bridge__get_node,mcp__figma-bridge__get_screenshot,mcp__figma-bridge__save_screenshots`.
-- **Modo Stitch:** path do HTML local existe. Tipicamente `.claude/handoffs/atelier-cache/<ts>/<variation>.html` gerado por `/theme-sandbox`. Sem MCP — só Read.
+- **Modo HTML:** path do arquivo `.html` existe. Sem MCP — só `Read`. Screenshot irmão (`.png` com mesmo basename) é opcional mas recomendado quando disponível — ajuda a calibrar proporção de elementos cuja largura/altura não está explícita no HTML.
 
 ## Inputs
 
 **Modo Figma (default):**
+
 - **Sem argumento** → lê seleção atual via `get_selection`.
 - **Node ID** (`1:234`) → passa para `get_node` / `get_design_context`.
 - **Figma URL** → extrai `node-id`, normaliza `-` → `:`.
 - **Descrição natural** ("a tela de check-in") → pede para selecionar no Figma, depois segue com `get_selection`.
 
-**Modo Stitch:**
-- **`--from-stitch <html-path>`** → lê HTML local. Se path for diretório, listar `*.html` e pedir escolha. Se input for handoff atelier YAML, ler `variations[].cached_at` correspondente.
-- **`--from-stitch <html-path> target=<lib-path>`** → declara onde escrever o widget Flutter (path da feature).
+**Modo HTML (`--from-html`):**
+
+- **`--from-html <path>`** → lê o `.html` apontado. Se path for diretório, listar `*.html` e perguntar qual.
+- **`--from-html <path> target=<lib-path>`** → declara onde escrever o widget Flutter (path da feature).
+- **Screenshot pair (opcional):** se existir `<basename>.png` ao lado do `.html`, ler também — referência visual ajuda em casos onde a largura/altura literal não está nos atributos.
 
 ## Workflow
 
@@ -60,10 +63,10 @@ Ao terminar o port, **sempre** sugira rodar `/theme-audit` na feature recém-por
 3. `mcp__figma-bridge__get_screenshot` em `scale: 1` para referência visual.
 4. **NÃO** chamar `get_variable_defs` nem `get_styles`. Tokens do Figma são ignorados — tema é source of truth.
 
-**Modo Stitch (`--from-stitch`):**
+**Modo HTML (`--from-html`):**
 
-1. Read do HTML local. Se path foi handoff atelier YAML, resolver `variations[].cached_at` correspondente; se foi diretório, listar `*.html` e perguntar.
-2. Read do `.png` irmão (mesmo basename) pra referência visual — Stitch sempre exporta os dois lado a lado em `atelier-cache/<ts>/`.
+1. `Read` do HTML local. Se path for diretório, listar `*.html` e perguntar qual.
+2. Se existir um `.png` com mesmo basename ao lado, `Read` ele também — referência visual opcional pra calibrar proporção.
 3. **Parser HTML** (sem dependências; regex/string ops bastam pra extrair estrutura):
 
    | Extrair | De | Como |
@@ -79,7 +82,7 @@ Ao terminar o port, **sempre** sugira rodar `/theme-audit` na feature recém-por
    - `font-family` — tema cuida.
    - `box-shadow` — só anota presença/ausência; valor vem do tema.
    - `transition`, `hover:`, animations — não portar.
-   - SVGs decorativos sem semântica (placeholders Stitch). Manter só ícones com label.
+   - SVGs decorativos sem semântica (placeholders comuns de geradores HTML). Manter só ícones com label.
 
 5. **Tailwind → project spacing/radius scale (reference):**
 
@@ -111,7 +114,7 @@ Ao terminar o port, **sempre** sugira rodar `/theme-audit` na feature recém-por
 Para cada container/leaf extrair:
 
 - **Width / height**: px literal (são estruturais).
-- **Border radius**: snap para `AppRadius.{sm:6, md:10, lg:14, xl:20, pill:999}`. Se Figma estiver >2px de todo token, reportar ao usuário.
+- **Border radius**: snap para `AppRadius.{sm:6, md:10, lg:14, xl:20, pill:999}`. Se source estiver >2px de todo token, reportar ao usuário.
 - **Padding / gap**: snap para `AppSpacing.{xxs:2, xs:4, sm:8, md:12, lg:16, xl:20, xxl:24, xxxl:32, huge:48}`. Mesma regra.
 - **Texto**: capturar ordem relativa de font-size (maior → menor) no frame. Mapear para roles semânticos. **Nunca** copiar `fontSize` / `fontWeight` literal. Para a tabela completa de roles + bases + regras de hierarquia (ratio adjacente ≥1.25, anchor único, `cappedTextTheme` para layout fixo), leia `references/text-hierarchy.md`.
 
@@ -177,12 +180,11 @@ Terminar com relatório curto:
 - ❌ `fontSize:` ou `fontWeight:` literal em widget.
 - ❌ Importar Figma Variables via `get_variable_defs`.
 - ❌ Copiar Tailwind classes literal (`bg-blue-500`, `text-#FFF`) — descartar, não traduzir cor.
-- ❌ Copiar texto em inglês do Stitch — Stitch gera EN; copy final é pt-BR (do handoff Júri / `docs/product.md` §4).
-- ❌ Portar SVG decorativo placeholder do Stitch. Manter só ícone com role semântico.
+- ❌ Copiar texto em inglês do source — copy final é pt-BR (do handoff Júri / `docs/product.md` §4); se o HTML veio de gerador EN-only, traduzir.
+- ❌ Portar SVG decorativo placeholder do source. Manter só ícone com role semântico.
 - ❌ Criar token novo direto aqui — isso é job do `/theme-extend`.
 - ❌ Pular `flutter analyze` antes de reportar done.
 - ❌ Rodar port modo Figma sem figma-bridge conectado — não chuta o design.
-- ❌ Rodar port modo Stitch sem ler o `.png` irmão — texto puro do HTML perde proporção.
 - ❌ Rodar port sem `docs/product.md` — copy/tom cai em filler/vocativo cliché.
 - ❌ Esquecer `cappedTextTheme` em elementos de layout fixo.
 - ❌ Usar copy slop (banidos em `docs/product.md` §4.2: "Eleve seu jogo", "Jornada fitness", "atleta!", "campeão!") em strings hardcoded.

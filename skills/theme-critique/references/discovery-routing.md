@@ -46,8 +46,6 @@ plan:
 - `/theme-quieter`
 - `/theme-distill`
 - `/theme-motion`
-- `/theme-prompt`
-- `/theme-sandbox`
 - `/frontend-design`
 - `/pena` (alias `/ux-writing`)
 
@@ -71,14 +69,12 @@ Use estas heurísticas para preencher `plan`:
 | Brownfield + audit achou hex_count > 20                                | `/theme-audit` (re-rodar visível) + `/theme-extend` | "drift estrutural — substituir literais por tokens existentes" |
 | Brownfield + falha de contraste em ≥1 par token                        | `/theme-extend`                | "ajustar token X para passar WCAG AA em dark" |
 | Greenfield, sem mockup ainda, multiple visual options no ar            | `/frontend-design`              | "explorar 2-3 mockups da {{tela_alvo}} antes de portar" |
-| Greenfield com Stitch credits + axis "drenched warm"                   | `/theme-sandbox`                | "rodar 3 variações Stitch antes de port — economiza ciclo" |
-| Mockup pronto (Figma URL ou HTML)                                      | `/theme-port`                   | "porta {{frame}} para Flutter usando tokens" |
+| Mockup pronto (Figma URL/node-id ou HTML local)                        | `/theme-port [--from-html <path>]` | "porta {{frame}} para Flutter usando tokens" |
 | Tela específica precisa juízo agora                                    | `/theme-critique <path>`        | "rodar critique sobre {{path}} antes de refino" |
 | Cognitive load alto na tela primária                                   | `/theme-distill`                | "≥4 opções num ponto de decisão — precisa enxugar" |
 | Tela agressiva/saturada                                                | `/theme-quieter`                | "intensidade visual passa do alvo para essa persona" |
 | Copy fraca/genérica reportada na entrevista                            | `/pena`                         | "tom em P2 vs copy atual divergem — reescrever labels-chave" |
 | Estática reportada como problema                                      | `/theme-motion`                 | "feedback de press / transição entre rotas ausente" |
-| Stitch prompt precisa ser revisado antes de gerar                      | `/theme-prompt`                 | "preview Stitch prompt antes de gastar créditos" |
 
 ## Como escolher o ranking
 

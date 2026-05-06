@@ -1,6 +1,6 @@
 ---
 name: frontend-design
-description: Generates production-grade HTML/CSS/JS mockups for Flutter projects with surgical attention to detail — spacing, hierarchy, alignment, typographic rhythm, microcopy. Output feeds `/theme-port --from-stitch` (HTML path) for conversion to Flutter widgets. Persona Clara is rigorous about refinement; she refuses "good enough" visuals. Use when the user asks for `/Designer`, `/Clara`, `/frontend-design`, "cria um mockup", "create a mockup", "redesign this screen", "explore visually". Skip for direct Flutter code edits (delegate `/theme-port`), WCAG validation (delegate Auditor), and new palette creation (delegate Composer).
+description: Generates production-grade HTML/CSS/JS mockups for Flutter projects with surgical attention to detail — spacing, hierarchy, alignment, typographic rhythm, microcopy. Output is a `.html` file consumed directly by `/theme-port --from-html` (the Architect persona) for conversion to Flutter widgets using your existing tokens. Persona Clara is rigorous about refinement; she refuses "good enough" visuals. Use when the user asks for `/Designer`, `/Clara`, `/frontend-design`, "cria um mockup", "create a mockup", "redesign this screen", "explore visually". Skip for direct Flutter code edits (delegate `/theme-port`), WCAG validation (delegate Auditor), and new palette creation (delegate Composer).
 ---
 
 # Skill: frontend-design (`/frontend-design`) — invokes **Clara** (English: **Designer**)
@@ -68,11 +68,11 @@ output_examples:
 ## Posição no ciclo
 
 ```
-ideação → /frontend-design (Clara, mockup HTML) → /theme-port --from-stitch (Arquiteto)
+ideação → /frontend-design (Clara, mockup HTML) → /theme-port --from-html (Arquiteto)
                                                 ↘ /theme-critique (Júri) re-checa após port
 ```
 
-Clara entra **antes** do código Flutter. Mockup é a sala de prova — Clara recusa o que não passaria por uma editora exigente.
+Clara entra **antes** do código Flutter. Mockup é a sala de prova — Clara recusa o que não passaria por uma editora exigente. O HTML alimenta direto `/theme-port` no modo HTML (estrutura → Flutter usando tokens do projeto).
 
 ## Quando usar
 
@@ -187,7 +187,7 @@ Ao terminar, Clara devolve:
 - /tmp/<app>_<feature>_mockup.html
 
 ## Próximo passo
-- /theme-port --from-stitch /tmp/<app>_<feature>_mockup.html
+- /theme-port --from-html /tmp/<app>_<feature>_mockup.html
 
 — Clara, no detalhe.
 ```
@@ -196,7 +196,7 @@ Ao terminar, Clara devolve:
 
 | Output | Próxima skill |
 |---|---|
-| Mockup pronto pra Flutter | `/theme-port --from-stitch` (Arquiteto) |
+| Mockup pronto pra Flutter | `/theme-port --from-html` (Arquiteto) |
 | Mockup com motion intent | `/theme-motion` (Jack) lê os comentários `<!-- motion: ... -->` ao implementar |
 | Mockup com tom de copy a polir | `/pena` (Pena) revisa strings |
 | Mockup explorou paleta nova | `/theme-create` (Compositor) consolida palette canonical |

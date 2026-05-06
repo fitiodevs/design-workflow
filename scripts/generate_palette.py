@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Gerador de paletas para o Fitio com saída pronta pra `AppColors`.
+Gerador de paletas com saída pronta pra `AppColors` (estrutura Flutter).
 
 Usage:
     # Escala Tailwind 50..950 a partir de uma base

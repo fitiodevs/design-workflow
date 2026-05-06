@@ -3,8 +3,8 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "/theme-create — preciso de uma palette para sub-brand 'Fitio Arena' (sub-vertical de duelo competitivo). Quero algo neon, dark-first, anti-Strava.",
-      "expected_output": "Responde 8 pré-condições (purpose, audiência, tone — escolhe extremo tipo 'Retro-futuristic' ou 'Brutalist/raw', invariantes, differentiation explícita, coexistência, color strategy commitment, anti category-reflex check). Mood board verbal antes de cor. Escolhe base color (não default Tailwind). Roda oklch_to_hex.py para escala. Estratégia complementar (alto contraste). Monta 29 tokens light+dark seguindo references/oklch-recipes.md. Valida WCAG dos 24 pares obrigatórios. Roda checklist anti-AI-slop. Emite snippet Dart AppColors + ficha em docs/themes/fitio-arena.md + plano de rollout coexistente (3ª instância em AppColors).",
+      "prompt": "/theme-create — preciso de uma palette para sub-brand '<app> Arena' (sub-vertical de duelo competitivo). Quero algo neon, dark-first, anti-Strava.",
+      "expected_output": "Responde 8 pré-condições (purpose, audiência, tone — escolhe extremo tipo 'Retro-futuristic' ou 'Brutalist/raw', invariantes, differentiation explícita, coexistência, color strategy commitment, anti category-reflex check). Mood board verbal antes de cor. Escolhe base color (não default Tailwind). Roda oklch_to_hex.py para escala. Estratégia complementar (alto contraste). Monta 29 tokens light+dark seguindo references/oklch-recipes.md. Valida WCAG dos 24 pares obrigatórios. Roda checklist anti-AI-slop. Emite snippet Dart AppColors + ficha em docs/themes/<slug>-arena.md + plano de rollout coexistente (3ª instância em AppColors).",
       "files": [],
       "assertions": [
         {"text": "Output picks ONE extreme tone from the vocabulary table (not 'moderno/clean/profissional') and names it explicitly", "type": "qualitative"},

@@ -20,7 +20,7 @@
         {"text": "tasks.md frontmatter has status: draft and compose_ref", "type": "regex_match"},
         {"text": "Each task has id matching T-\\d{2}", "type": "regex_match"},
         {"text": "Each task has at least 1 verify item that is shell-runnable or assertion-style", "type": "qualitative"},
-        {"text": "Skill names ⊂ {/theme-create, /theme-extend, /theme-port, /theme-audit, /theme-critique, /theme-bolder, /theme-quieter, /theme-distill, /theme-motion, /theme-prompt, /theme-sandbox, /frontend-design, /pena, /design-spec compose, /design-spec sequence, /design-spec ship}", "type": "qualitative"},
+        {"text": "Skill names ⊂ {/theme-create, /theme-extend, /theme-port, /theme-audit, /theme-critique, /theme-bolder, /theme-quieter, /theme-distill, /theme-motion, /frontend-design, /pena, /design-spec compose, /design-spec sequence, /design-spec ship}", "type": "qualitative"},
         {"text": "No task estimate exceeds 30min", "type": "qualitative"}
       ]
     },

@@ -49,8 +49,8 @@ a skill adequada.
 | "coisa demais", "confuso", "carregado", "não sei onde olhar" | Cognitive load | `/theme-critique` → `/theme-distill` |
 | "precisa de novo token", "cor faltando para X" | Token ausente | `/theme-extend` direto |
 | "tela veio do Figma, porta" | Port | `/theme-port` (Figma) |
-| "quero ver variações antes de portar" | Exploração | `/theme-sandbox` |
-| "preciso de um mockup novo" | Criação | `/frontend-design` → `/theme-port` |
+| "tenho um HTML / mockup pronto, porta" | Port (HTML) | `/theme-port --from-html <path>` |
+| "preciso de um mockup novo" | Criação | `/frontend-design` (Clara) → `/theme-port --from-html` |
 
 ### Processamento de screenshot
 

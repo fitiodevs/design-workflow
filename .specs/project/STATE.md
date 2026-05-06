@@ -9,6 +9,11 @@ Persistent state across feature ciclos. Read at session start.
 - **D-03 — Scripts copy strategy.** Single source of truth in `<repo>/scripts/`. `scripts/_sync.sh` copies into each consuming skill's `scripts/` subdir; copies are committed so `git clone` + manual use works without running `_sync.sh`. Symlinks rejected (Windows/iCloud sync issues). Date: 2026-05-01.
 - **D-04 — Description colon discipline.** YAML frontmatter parsing breaks when descriptions contain "Triggers:", "Persona:", "NOT for:" — colons are interpreted as YAML mapping. Use "Triggered by", "Invokes the X persona", "Skip for" instead. Discovered via `quick_validate.py` after Onda 1. Date: 2026-05-01.
 - **D-05 — Description angle-bracket ban.** `quick_validate.py` rejects `<...>` inside descriptions (interpreted as placeholder leakage). Substitute with quoted strings or descriptive prose ("`/theme-port --from-stitch` plus an HTML path"). Date: 2026-05-01.
+- **D-06 — Brand sweep extends to script bodies.** REQ-02 originally scoped only SKILL.md frontmatter+body. 2026-05-05 sweep extended de-branding to script comments (`audit_theme.py`, `check_contrast.py`, `generate_palette.py`) and the `theme-create/evals/evals.json` example prompt ("Fitio Arena" → "<app> Arena"). Rationale: scripts ship in the marketplace install — public users read them. Provenance lines (README §What changed in v1.0, marketplace.json author "Fitio") preserved as attribution. Date: 2026-05-05.
+- **D-07 — Personas ship globally as PT+EN pair.** `~/.claude/CLAUDE.md` persona table now lists EN aliases alongside PT names (Lupa/Auditor, Compositor/Composer, Júri/Critic, etc.) so squads multilíngues invocam o mesmo cara. Public-repo SKILL.md descriptions já mencionam ambos por persona. Date: 2026-05-05.
+- **D-08 — Stitch-specific naming retired; HTML mode preserved and generalized.** Removed `skills/theme-prompt/` and `skills/theme-sandbox/` (both were Stitch-orchestration-only). On `theme-port`, the flag `--from-stitch` was renamed `--from-html` and the tool-specific assumptions were stripped (no Atelier cache directory expectation; sibling `.png` is now optional, not required). Reason: `theme-port`'s job is "structural source → Flutter using project tokens" — the HTML parser (regex extracts widths/heights/border-radius/padding/gap, maps Tailwind to AppSpacing/AppRadius, discards colors/box-shadow/transitions) is generic and valuable for any HTML mockup source (`/frontend-design`, Figma's HTML export, Penpot, Stitch, hand-written). The two skills removed were truly Stitch-specific and would not generalize without becoming hollow. Affected callers cleaned: `theme-port` SKILL+evals, `frontend-design`, `theme-audit`, `theme-critique/references/discovery-routing.md`, `sequence/evals/evals.json`, `docs/personas.md`, `docs/theme-manager.md`. Date: 2026-05-05.
+- **D-09 — Atlas trio promoted to public, paths generalized.** `fitio-status`, `fitio-promote`, `fitio-atlas-save` (private, hardcoded `Fitio/fitio/.specs/` paths and 3-repo monorepo assumption) became public `status`, `promote`, `atlas-save`. Generalizations: `repo` frontmatter is optional (single-repo projects skip the column); Obsidian export is opt-in (`OBSIDIAN_VAULT` env var or `.atlas-save.yaml`); `flutter analyze` references generalized to "the project verify gate". Helper scripts (~1.3k LOC of Python) deferred to v1.2 — v1.1 ships SKILL.md only; the model reads `.specs/` / `docs/backlog/` / `memory/active_work.md` directly. Date: 2026-05-05.
+- **D-10 — `promote` recommends but does not depend on tlc lifecycle.** After writing the spec triplet, `promote` recommends `/tlc-spec-driven specify <name>` (refine) and `/tlc-closure <name>` (verify dependency closure). If those skills are not installed, the recommendation degrades to a manual-review hint. Reason: keep `design-workflow` self-contained while making the integrated path obvious. Date: 2026-05-05.
 
 ## Validation runs
 
@@ -36,7 +41,63 @@ Result: **13/13 valid**, zero errors, zero warnings.
 
 Iteration history before final: first sweep flagged 8 frontmatter parse errors (colons inside descriptions) and 2 angle-bracket errors (`<path>`, `<html>`). Fixed in commit Onda 3 by rephrasing descriptions per D-04 / D-05.
 
+### 2026-05-05 — quick_validate.py (v1.1 sweep, 19 skills, post Stitch retirement + Atlas promotion)
+
+Result: **19/19 valid**, zero errors, zero warnings. Reflects v1.1.0 state: 11 atomic operators (theme-* minus theme-prompt/theme-sandbox + frontend-design + ux-writing), 5 orchestration layer skills (compose, sequence, ship, productivity, ralph-loop), 3 productivity helpers promoted from Atlas trio (status, promote, atlas-save).
+
+```
+atlas-save: Skill is valid!
+compose: Skill is valid!
+frontend-design: Skill is valid!
+productivity: Skill is valid!
+promote: Skill is valid!
+ralph-loop: Skill is valid!
+sequence: Skill is valid!
+ship: Skill is valid!
+status: Skill is valid!
+theme-audit: Skill is valid!
+theme-bolder: Skill is valid!
+theme-create: Skill is valid!
+theme-critique: Skill is valid!
+theme-distill: Skill is valid!
+theme-extend: Skill is valid!
+theme-motion: Skill is valid!
+theme-port: Skill is valid!
+theme-quieter: Skill is valid!
+ux-writing: Skill is valid!
+```
+
+### 2026-05-05 — quick_validate.py (full sweep, 18 skills, post brand-sweep)
+
+Result: **18/18 valid**, zero errors, zero warnings. Includes the 5 layer skills shipped in v1.0 (compose, sequence, ship, productivity, ralph-loop) plus the 13 originals after the script-comment + evals brand sweep (D-06).
+
+```
+compose: Skill is valid!
+frontend-design: Skill is valid!
+productivity: Skill is valid!
+ralph-loop: Skill is valid!
+sequence: Skill is valid!
+ship: Skill is valid!
+theme-audit: Skill is valid!
+theme-bolder: Skill is valid!
+theme-create: Skill is valid!
+theme-critique: Skill is valid!
+theme-distill: Skill is valid!
+theme-extend: Skill is valid!
+theme-motion: Skill is valid!
+theme-port: Skill is valid!
+theme-prompt: Skill is valid!
+theme-quieter: Skill is valid!
+theme-sandbox: Skill is valid!
+ux-writing: Skill is valid!
+```
+
 ## Deferred
+
+### Atlas trio helper scripts (v1.2)
+- **Status:** deferred from v1.1.
+- **Why:** The originating Fitio repo has ~1.3k LOC of Python supporting the Atlas trio (`scan_active_work.py`, `mark_task.py`, `normalize_tasks.py`, `save_session.py`). Porting them generically (config-driven repo discovery, no Fitio-specific path assumptions, no monorepo-specific marker code) is a half-day effort and was scoped out of v1.1 to keep the release small. v1.1 ships SKILL.md only — the model executes the algorithm by reading `.specs/`/`docs/backlog/`/`memory/active_work.md` directly with `Read` + `Bash`.
+- **Next step:** port the 4 scripts to `skills/{status,promote,atlas-save}/scripts/` with config-driven repo discovery; ship as v1.2.
 
 ### Auto-improvement loop (`improve_description.py`)
 - **Status:** deferred to next ciclo.

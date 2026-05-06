@@ -44,11 +44,10 @@ A friendly walkthrough of the design pipeline. Read this if you're new to the wo
 ### "I'm starting a new app"
 
 ```
-/theme-create        # Composer: palette from scratch
-/theme-prompt        # generates Stitch prompt from product brief
-/theme-sandbox       # 3 visual variations via Stitch
-/theme-port          # picks one, ports to Flutter
-/theme-audit         # measures coverage
+/theme-create                    # Composer: palette from scratch
+/frontend-design                 # Designer: HTML mockup of the first screens
+/theme-port --from-html <path>   # Architect: HTML → Flutter using tokens
+/theme-audit                     # Auditor: measures coverage
 ```
 
 ### "I have a Figma frame and need it implemented"
@@ -77,10 +76,14 @@ It returns scored Nielsen heuristics + AI-slop verdict + persona walkthrough + c
 ### "Mockup looks great but Flutter version doesn't match"
 
 ```
-/theme-port --from-stitch <html>
+# 1. Generate the mockup
+/frontend-design
+
+# 2. Port the HTML directly (no Figma round-trip needed)
+/theme-port --from-html /tmp/<feature>_mockup.html
 ```
 
-`frontend-design` (Designer / Clara) generates HTML mockups; `theme-port` converts them to widgets using your tokens. The Designer + Architect handoff is intentional — Designer obsesses over typography rhythm, alignment, microcopy; Architect translates structure to code.
+`frontend-design` (Designer / Clara) generates HTML mockups; `theme-port` (Architect / Arquiteto) converts them — or any other HTML source, or a Figma frame — into widgets using your tokens. The Designer + Architect handoff is intentional: Designer obsesses over typography rhythm, alignment, microcopy; Architect translates structure to code. Same skill handles HTML from Stitch, Penpot, Figma's HTML export, or hand-written.
 
 ## How personas refuse work
 

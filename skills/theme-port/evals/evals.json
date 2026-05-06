@@ -17,13 +17,13 @@
     },
     {
       "id": 2,
-      "prompt": "/theme-port --from-stitch .claude/handoffs/atelier-cache/2026-04-28T16-30/cupom-bento-stack.html target=lib/features/coupons/",
-      "expected_output": "Modo Stitch: lê HTML local + screenshot irmão (.png), parser regex extrai widths/heights/border-radius/padding/gap/text-Nxl, mapeia Tailwind para AppSpacing/AppRadius via tabela, descarta cores hex/font-family/box-shadow/transitions/SVGs decorativos, mapeia tipo de elemento (<button>→AppButton, <input>→AppTextField, etc), compõe widget em lib/features/coupons/, roda flutter analyze.",
+      "prompt": "/theme-port --from-html /tmp/coupons-bento.html target=lib/features/coupons/",
+      "expected_output": "HTML mode: Read on the .html (and the sibling .png if it exists for visual reference), regex parser extracts widths/heights/border-radius/padding/gap/text-Nxl, maps Tailwind classes to AppSpacing/AppRadius via the reference table, discards hex colors / font-family / box-shadow / transitions / decorative SVG placeholders, maps element type (button -> AppButton, input -> AppTextField, etc), composes the widget in lib/features/coupons/, runs flutter analyze.",
       "files": [],
       "assertions": [
-        {"text": "Read tool reads BOTH the .html and the sibling .png file", "type": "tool_use"},
+        {"text": "Read tool reads the .html file at the given path", "type": "tool_use"},
         {"text": "Output explicitly mentions discarding Tailwind color classes (bg-blue-500, text-#FFF) without translating them", "type": "qualitative"},
-        {"text": "Generated Dart code uses AppSpacing.<token> and AppRadius.<token> (not literal px)", "type": "regex_match"},
+        {"text": "Generated Dart code uses AppSpacing.<token> and AppRadius.<token> (not literal px outside structural width/height)", "type": "regex_match"},
         {"text": "Bash tool runs `flutter analyze` before reporting done", "type": "tool_use"},
         {"text": "Generated Dart code does NOT contain literal `Color(0xFF...)` in the widget", "type": "regex_match"}
       ]

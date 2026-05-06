@@ -1,5 +1,17 @@
 # Tasks: skill-creator-alignment
 
+> **Status: ✅ closed 2026-05-05 — absorvido em v1.0.0.**
+>
+> Trabalho de Onda 1/2/3 (T-01..T-37) **absorvido nos commits de v1.0 antes de 2026-05-05**:
+> `9969713 refactor(skills): progressive disclosure + scripts per skill` (Onda 2),
+> `0f663dd feat(skills): add minimal evals + bump v0.2.0` (Onda 3),
+> e validação `quick_validate.py` 13/13 valid em STATE.md §Validation runs.
+>
+> Sweep residual em 2026-05-05 (commit `<este>`): de-Fitiozar comments dos scripts (`audit_theme.py`, `check_contrast.py`, `generate_palette.py`) + eval `Fitio Arena → <app> Arena`. Ver STATE.md D-06.
+>
+> **Tag rollback:** `pre-alignment` (criada em T-00, ainda apontando pra `8d5e617`).
+> Spec mantida abaixo como histórico — não rodar de novo.
+
 > Atomic, sequenced. Cada task ≤30 min de trabalho. Cada task tem critério de verificação binário.
 > Lê depois de spec.md + design.md.
 

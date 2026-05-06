@@ -53,9 +53,9 @@ After all 4 ondas, `design-spec-driven` v1.0 should:
 
 ## 3. Non-goals
 
-- **Not** a replacement for design tools (Figma, Stitch). It orchestrates around them.
+- **Not** a replacement for design tools (Figma). It orchestrates around them.
 - **Not** a CMS for design tokens. Tokens live in the project's repo (`AppColors`, etc) — design-spec-driven reads/writes them, doesn't host them.
-- **Not** a free-tier consumer product. Enterprise positioning includes paid LLM API + Stitch credits + CI minutes. Cost model is part of the value, not a bug.
+- **Not** a free-tier consumer product. Enterprise positioning includes paid LLM API + CI minutes. Cost model is part of the value, not a bug.
 - **Not** auto-merging Ralph PRs. Tier 3 always opens PR draft; humans approve merges always. Hard rule.
 - **Not** a generic SDLC tool. Stays focused on design system lifecycle. If someone wants generic spec-driven, they use `tlc-spec-driven`.
 - **Not** discarding the 13 atomic skills. They remain usable standalone (`/theme-extend` direct works) — design-spec-driven is the orchestration layer above them.
@@ -91,10 +91,10 @@ After all 4 ondas, `design-spec-driven` v1.0 should:
 └──────────────────────────────────────────────────────────────┘
                           ↓
 ┌──────────────────────────────────────────────────────────────┐
-│  ATOMIC OPERATORS (existing — v0.2.0, untouched)              │
+│  ATOMIC OPERATORS (v1.1)                                      │
 │  theme-create · theme-extend · theme-audit · theme-port       │
 │  theme-critique · bolder · quieter · distill · motion         │
-│  theme-prompt · theme-sandbox · frontend-design · ux-writing  │
+│  frontend-design · ux-writing                                 │
 └──────────────────────────────────────────────────────────────┘
                           ↕
 ┌──────────────────────────────────────────────────────────────┐

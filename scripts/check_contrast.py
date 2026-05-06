@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-WCAG contrast validator for Fitio semantic tokens.
+WCAG contrast validator for design system semantic tokens.
 
 Usage:
     # Single pair
     python scripts/check_contrast.py #1E272E #FFFFFF [normal|large]
 
-    # All theme pairs (default Fitio semantic combinations, light + dark)
+    # All theme pairs (default semantic combinations, light + dark)
     python scripts/check_contrast.py --theme
 
     # Specific role on both light and dark
@@ -47,8 +47,9 @@ def compliance(ratio: float, size: str = "normal") -> Dict[str, bool]:
     return {"aa": ratio >= 4.5, "aaa": ratio >= 7.0, "ui": ratio >= 3.0}
 
 
-# ---- Fitio theme registry ----------------------------------------------------
-# Fonte canônica: lib/core/theme/app_colors.dart. Mantenha sincronizado.
+# ---- Theme registry ----------------------------------------------------
+# Default illustrative tokens. Override by editing this dict or pointing at
+# your project's color file (e.g. `lib/core/theme/app_colors.dart`).
 
 LIGHT = {
     "brand": "#08179F", "brandMuted": "#E6E9FA", "surface": "#F9FAFB",
