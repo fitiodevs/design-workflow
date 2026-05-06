@@ -116,7 +116,12 @@ Apache 2.0 — see [LICENSE.txt](LICENSE.txt). Each skill folder also carries a 
 
 ## Status
 
-**v1.1.1** — patch release: `craft/` layer adopted. 5 universal design rule docs forked verbatim from `nexu-io/open-design` (Apache-2.0; originally derived from `referodesign/refero_skill`, MIT). 5 skills (`theme-critique`, `theme-create`, `theme-port`, `theme-bolder`, `frontend-design`) now declare `metadata.dw.craft.requires:` in frontmatter and load the docs at runtime via a "Craft references" body section. 19/19 skills still pass `quick_validate.py`. Extracted from production use in the [Fitio](https://fitio.app) Flutter app. Stack-agnostic adapter is the next-major roadmap item (Onda E).
+**v1.1.2** — patch release: fixes a v1.1.1 deployment bug where `install.sh` didn't bundle `craft/`, leaving the 5 wired skills pointing at a project-relative path that wouldn't resolve when invoked from any other cwd. Now `install.sh` copies `craft/*.md` to `~/.claude/craft/` and rewrites the 16 references in the installed wired-skill copies to absolute paths. 19/19 skills still pass `quick_validate.py`. Extracted from production use in the [Fitio](https://fitio.app) Flutter app. Stack-agnostic adapter is the next-major roadmap item (Onda E).
+
+## What changed in v1.1.2
+
+- **`install.sh` bundles `craft/` and rewrites refs.** Copies `craft/*.md` → `~/.claude/craft/` then `sed`-rewrites `` `craft/<doc>.md` `` → `` `~/.claude/craft/<doc>.md` `` in the 5 wired SKILL.md copies post-install. Source SKILL.md stays project-relative so users who clone the repo and work inside it still see clean references.
+- **STATE.md D-13 logged.** Deployment bug + fix documented in `.specs/project/STATE.md`.
 
 ## What changed in v1.1.1
 
