@@ -1,0 +1,46 @@
+{
+  "skill_name": "theme-create",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/theme-create — preciso de uma palette para sub-brand '<app> Arena' (sub-vertical de duelo competitivo). Quero algo neon, dark-first, anti-Strava.",
+      "expected_output": "Responde 8 pré-condições (purpose, audiência, tone — escolhe extremo tipo 'Retro-futuristic' ou 'Brutalist/raw', invariantes, differentiation explícita, coexistência, color strategy commitment, anti category-reflex check). Mood board verbal antes de cor. Escolhe base color (não default Tailwind). Roda oklch_to_hex.py para escala. Estratégia complementar (alto contraste). Monta 29 tokens light+dark seguindo references/oklch-recipes.md. Valida WCAG dos 24 pares obrigatórios. Roda checklist anti-AI-slop. Emite snippet Dart AppColors + ficha em docs/themes/<slug>-arena.md + plano de rollout coexistente (3ª instância em AppColors).",
+      "files": [],
+      "assertions": [
+        {"text": "Output picks ONE extreme tone from the vocabulary table (not 'moderno/clean/profissional') and names it explicitly", "type": "qualitative"},
+        {"text": "Bash tool invokes oklch_to_hex.py and check_contrast.py", "type": "tool_use"},
+        {"text": "Output reports contrast ratios for all 12 mandatory pairs × 2 modes (24 total) using pattern '\\d+\\.\\d+:1'", "type": "regex_match"},
+        {"text": "Generated palette explicitly avoids #6366F1, #8B5CF6, #F97316, #14B8A6 (purple-blue and orange-teal AI defaults)", "type": "qualitative"},
+        {"text": "Output includes a docs/themes/<name>.md ficha with mandatory sections 'Anti-patterns evitados' and 'Inspiração'", "type": "qualitative"},
+        {"text": "Final report suggests `/theme-audit` global as the next step", "type": "qualitative"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Cria um modo natalino temporário (skin para dezembro) — base do tema atual + accents festivos sem virar cliché Coca-Cola.",
+      "expected_output": "Cenário sazonal: usa brandDefault existente como base, escolhe estratégia analógica ou complementar com 1 accent festivo (não vermelho-Coca puro — variar hue), gera dark com personalidade própria (não inversão), valida WCAG, gera snippet AppColors.natalino + AppColors.darkNatalino, plano de rollout coexistente via Theme(data:, child:) em rotas específicas durante dezembro, ficha em docs/themes/natalino.md citando anti-references.",
+      "files": [],
+      "assertions": [
+        {"text": "Output preserves existing brandDefault as a base color (B from Step 2: 'existente da marca')", "type": "qualitative"},
+        {"text": "Output explicitly anti-references Coca-Cola red/Christmas cliché in the rationale", "type": "qualitative"},
+        {"text": "Bash tool invokes oklch_to_hex.py and check_contrast.py", "type": "tool_use"},
+        {"text": "Rollout plan is coexistente (3rd AppColors instance + Theme widget on specific routes), NOT substituir tema atual", "type": "qualitative"},
+        {"text": "Output includes the docs/themes/natalino.md ficha with traceable inspiration (real reference, not generic 'holidays')", "type": "qualitative"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Refresh total de identidade — saio do navy atual para algo Editorial/Magazine. Substitui o tema.",
+      "expected_output": "Cenário substituir tema atual: tone Editorial/magazine (typography dominante, cor minimalista, cream + ink + 1 accent jewel). Base color cream off-white + ink off-black + 1 saturated jewel (não default). Estratégia monocromática + neutral. 29 tokens light+dark com low chroma majority + 1 accent. WCAG validado nos 24 pares. Snippet substitui AppColors.navyBlue. Plano de rollout: precedido de audit completo + review screen-by-screen. Sugestão obrigatória de /theme-audit global após.",
+      "files": [],
+      "assertions": [
+        {"text": "Output picks the 'Editorial / magazine' tone explicitly from the vocabulary table", "type": "qualitative"},
+        {"text": "Generated bgBase is NOT pure #FFFFFF and bgBase dark is NOT pure #000000", "type": "regex_match"},
+        {"text": "Output uses monocromática + neutral strategy (Step 4 option A)", "type": "qualitative"},
+        {"text": "Bash tool invokes check_contrast.py --theme to validate the 24 mandatory pairs", "type": "tool_use"},
+        {"text": "Rollout plan is 9a 'Substituir o tema atual' and warns about the global impact + need for screen-by-screen review", "type": "qualitative"},
+        {"text": "Final report mandatorily suggests /theme-audit global", "type": "qualitative"}
+      ]
+    }
+  ]
+}

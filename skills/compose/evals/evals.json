@@ -1,0 +1,38 @@
+{
+  "skill_name": "compose",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/design-spec compose coupon-unlocked (where discovery.md exists with status: draft)",
+      "expected_output": "Compose refuses to start with a clear message naming the current status and pointing to the approval action. No files are written.",
+      "files": [],
+      "assertions": [
+        {"text": "Output contains 'status' and 'approved' words referring to the gate", "type": "regex_match"},
+        {"text": "No new file under .design-spec/features/<feature>/compose.md is created", "type": "tool_use"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "/design-spec compose coupon-unlocked (discovery.md status: approved, project is greenfield)",
+      "expected_output": "Compose runs /theme-create then /frontend-design (1-3 mockups), Clara reviews each, writes compose.md with status: draft including palette decisions, mockup paths, Clara review per mockup, and appends 1+ entries to .design-spec/project/decisions.md.",
+      "files": [],
+      "assertions": [
+        {"text": "compose.md frontmatter has status: draft and discovery_ref pointing back at discovery.md", "type": "regex_match"},
+        {"text": "compose.md lists at least 1 mockup with path and direction", "type": "qualitative"},
+        {"text": "Each mockup section in compose.md contains all 4 review axes (anti-ref, voice, persona, axis)", "type": "qualitative"},
+        {"text": "decisions.md has at least 1 new entry with id, decision, reason, date, phase: compose", "type": "regex_match"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "/design-spec compose coupon-unlocked but axis was already locked as 'drenched warm' in D-007. /theme-create returns a restrained palette.",
+      "expected_output": "Clara review surfaces the conflict between proposed restrained palette and locked drenched axis (D-007), refuses to mark the mockup as ship, and asks the user to either re-run /theme-create with corrected brief or supersede D-007.",
+      "files": [],
+      "assertions": [
+        {"text": "Output references D-007 explicitly when surfacing the conflict", "type": "regex_match"},
+        {"text": "Clara's verdict for the conflicting mockup is 'reject' or 'revise', never 'ship'", "type": "qualitative"},
+        {"text": "User is asked to confirm a supersede before any decisions.md write happens", "type": "qualitative"}
+      ]
+    }
+  ]
+}

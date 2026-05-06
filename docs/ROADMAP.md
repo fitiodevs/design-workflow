@@ -73,9 +73,37 @@ Every 3 months a background agent should:
 
 When this repo has a remote and a few external users, set this up via `/schedule` with cadence "every 3 months".
 
+## Current execution plan (v1.x)
+
+> Live tracker. v1.0.0 + v1.1.x shipped. v1.2.0 next.
+
+| Version | Feature | Status |
+|---|---|---|
+| v1.0.0 | design-spec-driven workflow (4 ondas A–D) | ✅ shipped 2026-05-02 |
+| v1.1.0 | Atlas trio public, Stitch retired | ✅ shipped 2026-05-05 |
+| v1.1.1 | `craft/` adoption from open-design | ✅ shipped 2026-05-06 |
+| v1.1.2 | `install.sh` bundles `craft/` + rewrites refs | ✅ shipped 2026-05-06 |
+| **v1.2.0** | **multi-stack-adapter (Flutter + Next.js/Tailwind)** | ⬜ next — pulled forward from v1.4 per user urgency 2026-05-06 |
+| v1.3.0 | inspiration-library (was v1.2 pre-reorder) | ⬜ pending |
+| v1.4.0 | interactive-mockup-stage (was v1.3 pre-reorder) | ⬜ pending |
+| v1.5.0+ | adapter-migration-phase-2 + additive stacks (RN, Vue+TW, Svelte+TW, SwiftUI, plain-React) + design-school-library + wireframe-sketch | ⬜ backlog |
+
+## v1.2 Adapter system — concrete additive stacks (post-launch backlog)
+
+Once v1.2 ships, each new adapter is ~1 day, additive, no skill changes:
+
+- [ ] `adapters/react-native/` — RN+StyleSheet variant of Flutter widget tree paradigm.
+- [ ] `adapters/vue-tailwind/` — Vue 3 SFC + Tailwind, similar to Next.js but with `<script setup>` + `<template>`.
+- [ ] `adapters/svelte-tailwind/` — SvelteKit + Tailwind, single-file components.
+- [ ] `adapters/react-tailwind/` — plain React (Vite/CRA) + Tailwind, no Next.js conventions.
+- [ ] `adapters/swiftui/` — SwiftUI native iOS, similar paradigm to Flutter.
+- [ ] `adapters/angular-tailwind/` — Angular 17+ + Tailwind (lower priority unless requested).
+
+For each: PR with `adapter.py`, `mappings.py`, `templates/`, `tests/golden/`, `STACK_NOTES.md`. Spec for each is short (~50 lines, mostly mappings).
+
 ## Out of scope
 
-- Web-first design (Tailwind, MUI). Different aesthetic vocabulary; would require a separate `web-design-workflow` repo.
+- ~~Web-first design (Tailwind, MUI). Different aesthetic vocabulary; would require a separate `web-design-workflow` repo.~~ **Reversed 2026-05-06 in v1.2.0** — adapter pattern enabled web stacks in-repo. See `.specs/features/multi-stack-adapter/`.
 - Generic Material Design 3 helpers. M3 has its own opinions; we prefer to override them with brand-committed tokens.
 - A/B testing copy generation. Out of `ux-writing`'s scope.
 - Auto-generation of mockups from product requirements (vs from existing screens). Different problem.

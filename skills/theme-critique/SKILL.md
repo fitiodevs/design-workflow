@@ -1,23 +1,113 @@
 ---
 name: theme-critique
-license: Complete terms in LICENSE.txt
-description: Crítica de design de uma tela/feature do Fitio. Vai além do `/theme-audit` (que só checa hardcode estrutural) — pontua Nielsen 0–4 × 10 heurísticas, emite veredicto AI-slop, faz walkthrough de personas Fitio, conta cognitive load, mapeia P0–P3 issues pra próximas skills. Aceita path Flutter, screenshot (imagem) ou descrição visual do usuário como input. Use após `/theme-port`, em screen review, ou quando usuário mostra/descreve problema visual.
-triggers:
-  - /theme-critique
-  - /Júri
-  - /Juri
-  - /júri
-  - /juri
-  - critica(r)? (essa|esta|a) tela
-  - design review (do |da )?
-  - heur(í|i)stica de Nielsen
-  - este design (est(á|a) bom|tem problemas)
-  - o que (está|está) errado (nessa|nesta|com essa) tela
-  - analisa(r)? (essa|esta) (tela|imagem|screenshot)
-  - (veja|olha|analisa).*(screenshot|imagem|foto|captura)
+description: Júri persona — dual-mode design orchestrator. Without args, runs Discovery interview (4 blocks Produto/Tom/Identidade/Stack, brownfield pre-scan, generates discovery.md + PRD/skeletons, emits priority-ordered routing plan). With a Flutter path, runs Critique (Nielsen 0–4 × 10 heuristics, AI-slop verdict, persona walkthroughs, cognitive load, P0–P3 issues mapped to next skills). Triggered by `/Critic`, `/Júri`, `/theme-critique`, "critique this screen", "design review", "Nielsen heuristic", "/juri" alone for project discovery.
+metadata:
+  dw:
+    craft:
+      requires: [anti-ai-slop, color, state-coverage, typography]
 ---
 
-# Skill: fitio-theme-critique (`/theme-critique`) — invoca **Júri**
+# Skill: theme-critique (`/theme-critique`) — invokes **Júri** (English: **Critic**)
+
+## Triggers
+
+- **English:** `/Critic`, `/theme-critique`, "critique this screen", "design review", "Nielsen heuristic", "is this design good?", "review this screenshot", "start a design discovery", "interview me about this project"
+- **Português:** `/Júri`, `/Juri`, `/júri`, `/juri`, `/theme-critique`, "critica essa tela", "design review", "heurística de Nielsen", "o que está errado nessa tela", "analisa essa imagem", "começar discovery", "entrevista de design"
+- **Natural language:** path to a feature dir; pasted screenshot; "is this AI-slop?"; bare `/juri` to start project discovery.
+
+## Craft references
+
+Before generating critique output, read these craft references — they encode universal design rules independent of any project:
+
+- `craft/anti-ai-slop.md` — cardinal sins (P0 verdicts).
+- `craft/color.md` — palette structure and accent discipline (Nielsen #4, #8).
+- `craft/state-coverage.md` — required states for every interactive surface (Nielsen #1, #5).
+- `craft/typography.md` — type scale, line height, letter spacing (Nielsen #4, #8).
+
+These are upstream from any project's design system; the project's own tokens (`AppColors`, `docs/product.md`) override only when they explicitly contradict.
+
+## Mode dispatch
+
+Júri opera em 2 modos. Decide pelo shape do argumento — **antes** de carregar qualquer reference pesada.
+
+| Invocation                    | Mode      | Loads                                                                  |
+|-------------------------------|-----------|------------------------------------------------------------------------|
+| `/juri` (sem argumentos)      | discovery | `references/discovery-sizing.md` + `references/discovery-protocol.md`  |
+| `/juri specify <feature>`     | discovery (slug-aware) | mesmo que acima, com `<feature>` pré-definido               |
+| `/juri <flutter-path>`        | critique  | `references/nielsen-rubric.md` (existente, fluxo abaixo)               |
+| `/juri discuss <topic>`       | discuss   | `references/discovery-discuss.md` (Socratic, stateless, sem file diffs)|
+| `/juri --discuss <topic>`     | discuss   | alias do anterior                                                       |
+| `/juri --resume <feature>`    | resume    | `references/discovery-resume.md` + retoma `discovery.md`               |
+| `/juri --mode <tier>`         | discovery override | `references/discovery-sizing.md` (override do tier auto-detectado) |
+
+**Resolution order:** flag (`--`) → caminho existente em `lib/` ou arquivo `.dart` → discovery default.
+
+**Critique mode preservado byte-perfect.** Quando shape = path, todo o workflow abaixo (Setup gates → Inputs → Workflow → Step 1..5 → Persona walkthroughs) roda idêntico. Discovery-mode adiciona um pré-passo de detecção e desvia para `discovery-protocol.md`.
+
+## Discovery mode (overview)
+
+`/juri` sem argumentos abre o modo Discovery. Júri:
+
+1. Roda `python scripts/detect_mode.py` (greenfield vs brownfield + tier recomendado).
+2. Honra override se usuário passou `--mode`.
+3. Em brownfield, roda silently `python scripts/audit_theme.py lib/` antes da primeira pergunta — números reais alimentam o bloco Stack.
+4. Conduz entrevista de 4 blocos (Produto → Tom → Identidade → Stack) — 1 bloco/turno, recusando respostas vagas. Protocolo completo em `references/discovery-protocol.md`.
+5. Gera artefatos por tier (ver `references/discovery-sizing.md`).
+6. Emite plano de ação priorizado (ver `references/discovery-routing.md`) — **nunca** auto-roda a próxima skill.
+
+Discovery **nunca edita arquivos em `lib/`**. Read-only em código; write-only em `docs/` + `.design-spec/features/<feature>/`.
+
+## Discovery — auto-sizing
+
+Tabela tier × deliverables, decision tree, e override semantics em **`references/discovery-sizing.md`**. Carregar antes de iniciar a entrevista — define quantos blocos rodar e quais docs escrever.
+
+## Discovery — workflow
+
+1. **Detect.** Rodar `python scripts/detect_mode.py` da raiz do repo. Capturar JSON. Se usuário passou `--mode <tier>`, honrar override (warning se discrepar do `tier_recommended` em >1 nível).
+2. **Pre-scan (brownfield only).** Rodar `python scripts/audit_theme.py lib/` silently. Armazenar stdout para uso em Bloco 4 (Stack) e apêndice em `discovery.md`.
+3. **Interview.** Carregar `references/discovery-protocol.md`. Conduzir 4 blocos em ordem fixa (Produto → Tom → Identidade → Stack), 1 bloco/turno, recusando respostas vagas (lista em `references/discovery-vague-words.md`). Cap 2 retries por pergunta — após, persiste `quality: weak` e segue.
+4. **Persist incremental.** Escrever em `.design-spec/features/<feature>/discovery.md` após **cada bloco completo** (não só no fim). Frontmatter inicia com `status: in_progress`; vira `draft` quando todos os blocos completam.
+5. **Generate docs.** Carregar `references/discovery-doc-templates.md`. Por tier:
+   - `quick`: só `discovery.md` (mini, 3 perguntas).
+   - `light`: `discovery.md` completo + `docs/PRD.md` curto.
+   - `full`: + `docs/PRD.md` completo + append em `docs/design.md` se existir (greenfield-friendly se `docs/` vazio).
+   - `greenfield`: + 4 skeletons completos em `docs/` (`product.md`, `design.md`, `design-tokens.md`, `PRD.md`). Confirmar antes de sobrescrever existentes.
+6. **Route.** Carregar `references/discovery-routing.md`. Compor `plan` YAML (≤5 itens), apendar a `discovery.md` na seção `## Action plan`, ecoar prosa numerada pro usuário escolher próxima skill. **Nunca** auto-rodar.
+
+## Discovery — outputs
+
+| Tier         | discovery.md     | PRD              | docs skeletons (greenfield)                                  | Pre-scan |
+|--------------|------------------|------------------|---------------------------------------------------------------|----------|
+| `quick`      | mini             | não              | não                                                           | não      |
+| `light`      | completo         | curto            | não                                                           | brownfield only |
+| `full`       | completo         | completo         | append a docs existentes; não cria do zero                   | brownfield only |
+| `greenfield` | completo         | completo         | cria 4 skeletons (`product/design/design-tokens/PRD.md`)     | n/a      |
+
+`discovery.md` sempre nasce com `status: draft`. Aprovação humana muda para `approved` (manual ou via `/design-spec approve discovery <feature>` na Onda B).
+
+## Discovery — resume
+
+`/juri --resume <feature>` retoma entrevista parcial. Ver `references/discovery-resume.md` para validação strict, mensagens de erro e algoritmo find-first-incomplete-block.
+
+## Discovery — anti-patterns
+
+- ❌ Auto-rodar a próxima skill após emitir plan. Júri **sempre** para no plan e devolve ao usuário.
+- ❌ Despejar todas as perguntas de uma vez. 1 bloco/turno, sem exceção.
+- ❌ Aceitar resposta vaga (lista canônica em `discovery-vague-words.md`). Recusa + retry, cap 2.
+- ❌ Editar arquivos em `lib/`. Read-only em código; write-only em `docs/` + `.design-spec/`.
+- ❌ Sobrescrever `docs/product.md` existente em greenfield sem confirmar.
+- ❌ Inventar resposta quando usuário disse "não sei". Persistir `<!-- não respondido -->` + `quality: weak`.
+- ❌ Misturar discovery e critique no mesmo turno. Modo escolhido no dispatch é mantido até o fim.
+
+## Discuss mode (Onda C)
+
+`/juri discuss <topic>` (também `/juri --discuss <topic>`) abre modo informal: Socratic, stateless, sem file diffs, voz Júri preservada. Transition para `/juri specify <feature>` por consent. Protocolo completo em `references/discovery-discuss.md`.
+
+## Specify mode (Onda C)
+
+`/juri specify <feature>` é alias formal para `/juri` (sem args) com feature slug pré-definido. Mesmo workflow de discovery. Útil quando vindo de discuss e o feature slug já é claro.
+
+---
 
 Avalia se um design **merece shippar**. `/theme-audit` responde "tem hardcode?". Esta skill responde "isto é bom?".
 
@@ -206,7 +296,9 @@ Próximo passo sugerido (escolha 1):
 
 **Nunca** auto-rodar a próxima skill. Usuário escolhe. Quando rodar, marca handoff `consumed: true`.
 
-## Personas Fitio (consumidas no walkthrough)
+## Project personas (consumed in the walkthrough)
+
+> Below are reference personas (originated in a fitness-app context). Adapt names/profiles to your project's `docs/product.md` §3 — the protocol is what matters: 1 recurrent + 1 beginner + 1 passive-presence persona, each with concrete trip-ups.
 
 Derivadas de `docs/product.md` §3:
 
@@ -222,7 +314,7 @@ Derivadas de `docs/product.md` §3:
 
 ### Patrocinador — Presença (terciária)
 - Não é usuário, mas a marca dele aparece em cupom/banner.
-- Trava em: cupom de marca virou ad slot visual destacado; não tem peso visual igual ao cupom Fitio (fere princípio §8.3).
+- Trava em: branded item virou ad slot visual destacado; não tem peso visual igual ao item próprio do app (fere princípio de visual parity §8.3).
 
 ## Anti-patterns desta skill
 
@@ -253,7 +345,8 @@ Derivadas de `docs/product.md` §3:
 
 ## Referência rápida
 
+Para o rubric completo Nielsen 0–4 com critério de scoring por heurística + bandas de recomendação + severidade P0–P3 + roteamento fix → próxima skill, leia `references/nielsen-rubric.md` antes de scoring.
+
 - Heurísticas Nielsen: nomes oficiais em inglês (não traduzir no relatório — convenção UX).
-- Severidade P0–P3: P0 = bloqueia tarefa; P1 = causa dificuldade significativa; P2 = anoyance com workaround; P3 = polish.
-- Score bandas: 36–40 ship · 28–35 polish · 20–27 needs work · <20 redesign.
+- Score bandas (resumo): 36–40 ship · 28–35 polish · 20–27 needs work · <20 redesign.
 - Cognitive load threshold: >4 opções visíveis em ponto de decisão = flag.

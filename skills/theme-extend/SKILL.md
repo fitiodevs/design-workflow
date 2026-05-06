@@ -1,21 +1,15 @@
 ---
 name: theme-extend
-license: Complete terms in LICENSE.txt
-description: Adiciona ou ajusta tokens semânticos no design system Fitio (cores, typography roles, spacing, radius). Gera pares light/dark validados por WCAG, atualiza `AppColors`, `docs/design-tokens.md` e sugere onde aplicar. Use para resolver falhas de contraste detectadas por `/theme-audit`, adicionar novo semantic role, ajustar valor existente ("/theme-extend", "adiciona um token", "resolve contraste de X", "melhora o tema").
-triggers:
-  - /theme-extend
-  - /Cirurgião
-  - /Cirurgiao
-  - /cirurgião
-  - /cirurgiao
-  - adiciona(r)? (um )?token
-  - estende(r)? (o )?tema
-  - resolv(er|e) contraste
-  - melhora(r)? (o )?tema
-  - ajusta(r)? cor semantic
+description: Adds or tweaks semantic tokens in the project's design system (colors, typography roles, spacing, radius). Generates WCAG-validated light/dark pairs, updates `AppColors`, `docs/design-tokens.md` and suggests where to apply. Use to resolve contrast failures detected by `/theme-audit`, add a new semantic role, or tune an existing value. Use when the user asks for `/Surgeon`, `/Cirurgião`, `/theme-extend`, "adiciona um token", "add a token", "resolve contraste de X", "fix contrast", "melhora o tema".
 ---
 
-# Skill: fitio-theme-extend (`/theme-extend`) — persona **Cirurgião**
+# Skill: theme-extend (`/theme-extend`) — persona **Cirurgião** (English: **Surgeon**)
+
+## Triggers
+
+- **English:** `/Surgeon`, `/theme-extend`, "add a semantic token", "extend the theme", "resolve contrast for X", "tune semantic color"
+- **Português:** `/Cirurgião`, `/Cirurgiao`, `/cirurgião`, `/cirurgiao`, `/theme-extend`, "adiciona um token", "resolve contraste", "melhora o tema", "ajusta cor semântica"
+- **Natural language:** WCAG fail flagged by audit; "I need a new role for X"; "the success green looks too light"
 
 Modifica o tema de forma cirúrgica. Dois cenários principais:
 
@@ -24,7 +18,7 @@ Modifica o tema de forma cirúrgica. Dois cenários principais:
 
 Nunca toca em widgets — só no theme layer. Widgets depois consomem via `context.colors.<token>`.
 
-**Sistema atual (29 tokens em 7 grupos):** `bg*` (6), `brand*` (5), `text*` (4), `border*` (3), `feedback*` (8 = 4 cores × 2 variantes), `gameAccent*` (3). `AppBrandColors` foi eliminado — não restaurar essa classe; tokens invariantes de feature (chip, running, pass) ficam no `AppColors` mesmo.
+**Reference token system (project-default):** ~29 tokens grouped as `bg*` (6), `brand*` (5), `text*` (4), `border*` (3), `feedback*` (8 = 4 colors × 2 variants), `gameAccent*` (3). Domain-invariant tokens (chip, running, pass) live in `AppColors` itself; do not reintroduce a separate `AppBrandColors` class. Override in `.design-workflow.yaml` when your project's token shape differs.
 
 ## Pré-condições
 

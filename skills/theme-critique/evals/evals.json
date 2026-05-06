@@ -1,0 +1,68 @@
+{
+  "skill_name": "theme-critique",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/juri lib/features/coupons/presentation/pages/coupon_detail_page.dart",
+      "expected_output": "Critique mode runs unchanged: report contains a Veredicto AI-slop verdict, a Nielsen heuristics table (10 rows × scores 0-4), persona walkthroughs (3 personas), priority issues (P0-P3) each mapped to a next skill, and an Action plan with concrete file:line evidence.",
+      "files": [],
+      "assertions": [
+        {"text": "Output contains the literal section headers 'Veredicto AI-slop' and 'Nielsen Heuristics'", "type": "regex_match"},
+        {"text": "Nielsen table has all 10 heuristics with numeric scores 0-4 each", "type": "qualitative"},
+        {"text": "At least one priority issue cites a concrete file path and line number", "type": "qualitative"},
+        {"text": "Each P0/P1 issue is mapped to a recommended next skill (e.g. /theme-bolder, /theme-extend)", "type": "qualitative"},
+        {"text": "No file under lib/ was edited (Júri is read-only on code)", "type": "tool_use"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "essa tela tá fraca [imagine a screenshot of a coupon-detail page with bodyMedium hero number on neutral background]",
+      "expected_output": "Critique mode handles screenshot/description input. Júri identifies the AI-slop verdict, scores Nielsen #8 (Aesthetic & Minimalist) explicitly, and recommends /theme-bolder with reason tying back to product.md axis (drenched/restrained).",
+      "files": [],
+      "assertions": [
+        {"text": "Output explicitly says 'AI-slop' in the verdict section", "type": "regex_match"},
+        {"text": "Nielsen #8 score is justified by hierarchy or visual weight observation", "type": "qualitative"},
+        {"text": "Recommendation cites /theme-bolder or /theme-extend with reason linked to product.md §5.3 axis", "type": "qualitative"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "/juri",
+      "expected_output": "Discovery mode runs in a greenfield Flutter repo. Júri runs detect_mode.py (returns mode=greenfield), then conducts the 4-block interview one block per turn (Produto first), refuses vague answers, and at the end writes discovery.md + 4 skeletons in docs/ + emits priority-ordered plan with skill names from the canonical list.",
+      "files": [],
+      "assertions": [
+        {"text": "First user-facing action is detect_mode.py invocation; second is Bloco 1 — Produto questions", "type": "qualitative"},
+        {"text": "Júri pauses after each block for the user response (not all 11-12 questions in one turn)", "type": "qualitative"},
+        {"text": "Final discovery.md has frontmatter with feature/status/mode/tier/created fields", "type": "regex_match"},
+        {"text": "docs/ directory contains product.md, design.md, design-tokens.md, PRD.md after greenfield run", "type": "tool_use"},
+        {"text": "Action plan YAML has rank+skill+reason+eta+blocks and skill names ⊂ {13 atomic + 3 Onda B}", "type": "qualitative"},
+        {"text": "No file under lib/ was edited", "type": "tool_use"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "/juri (in a brownfield Flutter repo with 47 hex literals in lib/features/marketplace/)",
+      "expected_output": "Discovery brownfield mode runs audit_theme.py silently before the first question, then in Block 4 (Stack) at least one question references concrete numbers from the audit (e.g. '47 hex literals'). The full audit output is appended to discovery.md as a Brownfield audit (pre-scan) section.",
+      "files": [],
+      "assertions": [
+        {"text": "audit_theme.py is invoked before the first interview question (silent pre-scan)", "type": "tool_use"},
+        {"text": "At least one question in Block 4 — Stack cites a concrete number from the audit output", "type": "regex_match"},
+        {"text": "discovery.md contains the section '## Brownfield audit (pre-scan)' with audit stdout in a fenced block", "type": "regex_match"},
+        {"text": "Generated PRD.md focuses on top 3-5 fixes ranked by priority", "type": "qualitative"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "User responds to P2.1 (3 sensações físicas) with 'moderno e clean, profissional'.",
+      "expected_output": "Júri detects the all-vague response, refuses, and re-asks using one of the 3 retry templates from discovery-vague-words.md, demanding 1 concrete ref + 1 physical sensation + 1 anti-ref. After 2 retries with still-vague answers, persists the answer with quality: weak and continues to the next question.",
+      "files": [],
+      "assertions": [
+        {"text": "Júri does not accept the vague answer on first reply (refusal happens)", "type": "qualitative"},
+        {"text": "Retry message includes the literal request for 'ref concreta' OR 'sensação física' OR 'anti-ref'", "type": "regex_match"},
+        {"text": "If 2nd retry still vague, the answer is persisted with quality: weak and Júri moves to next question (no infinite loop)", "type": "qualitative"},
+        {"text": "Final discovery.md contains a comment marker '<!-- weak answer' for the affected question", "type": "regex_match"},
+        {"text": "Final action plan section flags the weak entry (e.g. '⚠️ entrada P2.1 fraca')", "type": "qualitative"}
+      ]
+    }
+  ]
+}

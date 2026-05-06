@@ -1,0 +1,43 @@
+{
+  "skill_name": "theme-extend",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Adiciona um token semântico chamado `chipDisabledBg` para chip selecionado no estado disabled. Light + dark + WCAG validado.",
+      "expected_output": "Cenário A workflow: propõe hue de partida (geralmente derivada do brandMuted), gera par light/dark via OKLCH, valida contraste contra a surface esperada, edita `lib/core/theme/app_colors.dart` em 6 lugares (field, constructor, both light/dark instances, copyWith, lerp), atualiza `docs/design-tokens.md`, e roda flutter analyze + check_contrast.py --theme.",
+      "files": [],
+      "assertions": [
+        {"text": "Output answers the 3 pre-conditions ('por que token existente não serve', 'qual papel semântico', 'onde vai ser usado') before generating", "type": "qualitative"},
+        {"text": "Bash tool invokes oklch_to_hex.py or generate_palette.py", "type": "tool_use"},
+        {"text": "Bash tool invokes check_contrast.py", "type": "tool_use"},
+        {"text": "Edit/Write changes app_colors.dart in 6 locations (field declaration, constructor, both static const instances, copyWith, lerp)", "type": "qualitative"},
+        {"text": "Edit/Write updates docs/design-tokens.md with a new row in the §1 table", "type": "tool_use"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "feedbackSuccess no light está falhando AA (2.18:1 sobre bgBase). Resolve mantendo a hue verde.",
+      "expected_output": "Cenário B workflow: roda oklch_to_hex.py to-oklch para extrair L/C/H atual, gera versão com L menor mantendo hue+chroma, valida com check_contrast.py, verifica impacto lateral via grep dos call sites, edita só o hex no AppColors light (mantém dark), atualiza docs/design-tokens.md.",
+      "files": [],
+      "assertions": [
+        {"text": "Bash tool invokes oklch_to_hex.py at least twice (to-oklch then to-hex)", "type": "tool_use"},
+        {"text": "Output reports the new contrast ratio explicitly (matches pattern '\\d+\\.\\d+:1') and confirms it passes AA (≥4.5)", "type": "regex_match"},
+        {"text": "Bash tool runs `grep -rn` (or equivalent) for the affected token name to assess lateral impact before editing", "type": "tool_use"},
+        {"text": "Edit modifies the hex value in only the light AppColors instance (not dark, since the failure is light-mode only)", "type": "qualitative"},
+        {"text": "Output reminds: copyWith and lerp do NOT change in cenário B", "type": "qualitative"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Resolve contraste de borderDefault em dark mode — está sumindo em cards de surface elevada.",
+      "expected_output": "Diagnóstico via theme-audit do par específico, geração de novo dark value via OKLCH (subir L para dar separação visual sem agredir), validação de contraste relativo card/surface (não AA tradicional, mas separação ≥1.5:1), edit no AppColors dark, sugestão de re-rodar /theme-audit.",
+      "files": [],
+      "assertions": [
+        {"text": "Output recognizes that border tokens are visual cues and don't have a hard AA target — but still validates separation", "type": "qualitative"},
+        {"text": "Bash tool invokes check_contrast.py with the new dark value against bgSurface", "type": "tool_use"},
+        {"text": "Edit only touches the dark AppColors instance (light not changed)", "type": "qualitative"},
+        {"text": "Output suggests `/theme-audit` re-run on the affected scope as final step", "type": "qualitative"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "skill_name": "sequence",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/design-spec sequence coupon-unlocked (compose.md status: draft)",
+      "expected_output": "Sequence refuses to start. No tasks.md is written.",
+      "files": [],
+      "assertions": [
+        {"text": "Output names the current compose status and the approval requirement", "type": "regex_match"},
+        {"text": "No tasks.md is created", "type": "tool_use"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "/design-spec sequence coupon-unlocked (compose.md status: approved, mockup picked, palette ready)",
+      "expected_output": "Sequence emits tasks.md with N atomic tasks (each ≤30min), each task has id (T-NN), task description, skill (from canonical list), verify list (≥1 binary check), blocks list, refs.",
+      "files": [],
+      "assertions": [
+        {"text": "tasks.md frontmatter has status: draft and compose_ref", "type": "regex_match"},
+        {"text": "Each task has id matching T-\\d{2}", "type": "regex_match"},
+        {"text": "Each task has at least 1 verify item that is shell-runnable or assertion-style", "type": "qualitative"},
+        {"text": "Skill names ⊂ {/theme-create, /theme-extend, /theme-port, /theme-audit, /theme-critique, /theme-bolder, /theme-quieter, /theme-distill, /theme-motion, /frontend-design, /pena, /design-spec compose, /design-spec sequence, /design-spec ship}", "type": "qualitative"},
+        {"text": "No task estimate exceeds 30min", "type": "qualitative"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Compose proposes a mockup that requires a delta no atomic skill covers (e.g. native iOS plugin).",
+      "expected_output": "Sequence emits tasks.md normally and adds a '## Coverage gaps' section listing the uncovered delta with a brief description, instead of inventing a skill name.",
+      "files": [],
+      "assertions": [
+        {"text": "tasks.md contains '## Coverage gaps' section", "type": "regex_match"},
+        {"text": "No invented skill names appear in any task's skill: field", "type": "qualitative"}
+      ]
+    }
+  ]
+}

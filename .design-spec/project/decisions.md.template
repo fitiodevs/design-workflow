@@ -1,0 +1,18 @@
+# Project decisions — <project>
+
+> Auto-managed by compose / sequence / ship phases and refining skills.
+> Edit manually only to fix typos; logical changes go through the supersede mechanism.
+> Schema: `skills/compose/references/decisions-schema.md`
+
+## Decisions
+
+```yaml
+- id: D-001
+  decision: "<one-line, present tense>"
+  reason: "<tied to discovery / audit / persona>"
+  date: <YYYY-MM-DD>
+  phase: compose | sequence | ship | refine
+  feature: <slug>
+  supersedes: null
+  locked_by: <skill-name>
+```

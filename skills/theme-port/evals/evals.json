@@ -1,0 +1,44 @@
+{
+  "skill_name": "theme-port",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/theme-port — porta a seleção atual do Figma. URL: https://figma.com/design/abc123/My-App?node-id=12-456",
+      "expected_output": "Modo Figma: extrai fileKey + nodeId (converte '-' → ':'), valida figma-bridge MCP conectado, chama get_design_context (depth 4) + get_screenshot (scale 1), extrai estrutura (widths/heights/radius/spacing/text hierarchy), mapeia para AppColors/AppSpacing/AppRadius/textTheme, compõe widget em lib/features/<feature>/presentation/, roda flutter analyze, sugere /theme-audit no final.",
+      "files": [],
+      "assertions": [
+        {"text": "Output extracts fileKey 'abc123' and nodeId '12:456' (converted from '12-456')", "type": "regex_match"},
+        {"text": "Bash tool runs `flutter analyze` before reporting done", "type": "tool_use"},
+        {"text": "Generated Dart code does NOT contain any literal `Color(0xFF...)` outside of theme files", "type": "regex_match"},
+        {"text": "Generated Dart code does NOT contain literal `fontSize:` or `fontWeight:` in the widget", "type": "regex_match"},
+        {"text": "Final report suggests `/theme-audit lib/features/<feature>` as next step", "type": "qualitative"},
+        {"text": "Output explicitly skips calling get_variable_defs and get_styles (theme is source of truth)", "type": "qualitative"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "/theme-port --from-html /tmp/coupons-bento.html target=lib/features/coupons/",
+      "expected_output": "HTML mode: Read on the .html (and the sibling .png if it exists for visual reference), regex parser extracts widths/heights/border-radius/padding/gap/text-Nxl, maps Tailwind classes to AppSpacing/AppRadius via the reference table, discards hex colors / font-family / box-shadow / transitions / decorative SVG placeholders, maps element type (button -> AppButton, input -> AppTextField, etc), composes the widget in lib/features/coupons/, runs flutter analyze.",
+      "files": [],
+      "assertions": [
+        {"text": "Read tool reads the .html file at the given path", "type": "tool_use"},
+        {"text": "Output explicitly mentions discarding Tailwind color classes (bg-blue-500, text-#FFF) without translating them", "type": "qualitative"},
+        {"text": "Generated Dart code uses AppSpacing.<token> and AppRadius.<token> (not literal px outside structural width/height)", "type": "regex_match"},
+        {"text": "Bash tool runs `flutter analyze` before reporting done", "type": "tool_use"},
+        {"text": "Generated Dart code does NOT contain literal `Color(0xFF...)` in the widget", "type": "regex_match"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Tenho 4 inputs de cadastro (nome, email, CPF, data de nascimento) no Figma agrupados num bloco. Como porto?",
+      "expected_output": "Aplica a regra AppFormGroup (2+ inputs no mesmo bloco lógico): wraps em AppFormGroup com filhos AppTextField(bare: true), bgSurface fill, borderDefault para outline + dividers, AppRadius.lg, sem padding vertical no container. NÃO combina bare:true com prefixIcon. Snippet Dart pronto.",
+      "files": [],
+      "assertions": [
+        {"text": "Output wraps the 4 inputs in `AppFormGroup` (not 4 separate `AppTextField` solto)", "type": "qualitative"},
+        {"text": "All 4 children use `AppTextField(bare: true)` (matches pattern 'bare:\\s*true')", "type": "regex_match"},
+        {"text": "Output references `references/widget-mapping.md` or repeats the AppFormGroup spec (bgSurface, borderDefault, AppRadius.lg)", "type": "qualitative"},
+        {"text": "Output explicitly notes that bare:true must NOT be combined with prefixIcon", "type": "qualitative"}
+      ]
+    }
+  ]
+}

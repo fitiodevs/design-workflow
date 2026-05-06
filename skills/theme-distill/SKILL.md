@@ -1,20 +1,15 @@
 ---
 name: theme-distill
-license: Complete terms in LICENSE.txt
-description: Remove tudo que não ganha o pixel numa tela Fitio. Reduz pontos de decisão para ≤4, elimina elementos sem propósito, força progressive disclosure. Use quando `/theme-critique` aponta cognitive load >4, Nielsen #8 (Aesthetic) baixo, "tela carregada" sem ser visualmente agressiva ("/theme-distill <path>", "essa tela tem coisa demais", "enxuga essa tela").
-triggers:
-  - /theme-distill
-  - /Lâmina
-  - /Lamina
-  - /lâmina
-  - /lamina
-  - enxuga(r)? (essa|esta|a) tela
-  - essa tela tem (coisa|elementos) demais
-  - simplifica(r)? (essa|esta|a) tela
-  - reduz(ir)? cognitive load
+description: Removes everything that doesn't earn its pixel on a screen. Reduces decision points to ≤4, eliminates purposeless elements, forces progressive disclosure. Use when `/theme-critique` flags high cognitive load, low Nielsen #8 (Aesthetic), or a cluttered screen that isn't visually aggressive. Triggered by `/Distiller`, `/Lâmina`, `/theme-distill`, "essa tela tem coisa demais", "strip this screen", "reduce cognitive load".
 ---
 
-# Skill: fitio-theme-distill (`/theme-distill`) — invoca **Lâmina**
+# Skill: theme-distill (`/theme-distill`) — invokes **Lâmina** (English: **Distiller**)
+
+## Triggers
+
+- **English:** `/Distiller`, `/theme-distill`, "strip this screen", "reduce cognitive load", "this screen has too much", "simplify this view"
+- **Português:** `/Lâmina`, `/Lamina`, `/lâmina`, `/lamina`, `/theme-distill`, "enxuga essa tela", "essa tela tem coisa demais", "simplifica essa tela", "reduz cognitive load"
+- **Natural language:** form with 8+ fields in a single step; >4 visible options at one decision point; redundant copy
 
 ## Persona — Lâmina, a Cortadora
 
@@ -57,7 +52,7 @@ Posição no ciclo:
 /theme-critique  →  detectou cognitive load >4 ou Nielsen #8 ≤2  →  /theme-distill
 ```
 
-Filosofia herdada do impeccable: "interfaces should not contain irrelevant or rarely needed information. Every element should serve a purpose." Aplicada ao Fitio onde **frequência > performance** (princípio §8.1 do `product.md`) — usuário no estacionamento às 6h30 não quer ver 12 opções, quer ver 2.
+Filosofia herdada do impeccable: "interfaces should not contain irrelevant or rarely needed information. Every element should serve a purpose." Apply where **frequency > performance** (`docs/product.md` §8.1 by convention) — a recurrent user in a hurry should see 2 options, not 12.
 
 ## Quando usar
 
@@ -96,7 +91,7 @@ Listar **todos** os elementos visíveis na tela alvo. Para cada um, marcar:
 | Elemento | Função | Frequência de uso |
 |---|---|---|
 | ex: Saldo de pontos | Mostrar ganho | Cada abertura |
-| ex: Banner "Compartilhe Fitio" | Aquisição | 1× por user |
+| ex: Banner "Share the app" | Aquisição | 1× por user |
 | ex: Toggle de tema | Setting | <0.1% das aberturas |
 
 Frequência baixa + função tangencial = candidato a corte/disclosure.
@@ -124,14 +119,14 @@ Em cada ponto de decisão visível (CTA agrupados, chips, tabs, items de menu), 
 - **8+ opções**: progressive disclosure obrigatório (drawer, multi-step, search).
 
 Aplicar em:
-- Tab bars (Fitio tem 4 tabs primárias — limite saudável).
+- Tab bars (4 primary tabs is a healthy ceiling).
 - Filter chips em marketplace.
 - Sort options em listagem.
 - Quick actions em perfil.
 
 ### Step 4 — Forçar progressive disclosure
 
-Patterns concretos no Fitio:
+Concrete patterns (originated in a fitness-app context — adapt to your project):
 
 - **Form de cadastro 7-step (já existe)** ✅ — exemplo correto.
 - **Detalhes de cupom**: visível = título, preço em pontos, CTA. Esconder atrás de "Ver detalhes" = descrição longa, condições, validade técnica.
@@ -144,7 +139,7 @@ Patterns concretos no Fitio:
 Patterns que sempre pode cortar:
 
 - **Header que repete o título da AppBar** — AppBar já tem.
-- **Subtítulo que parafraseia o título** ("Cupons Fitio — seus cupons da Fitio").
+- **Subtítulo que parafraseia o título** ("My Coupons — your coupons here").
 - **CTA com helper text redundante** ("Resgatar" + "Clique aqui pra resgatar").
 - **Empty state com 2 mensagens** ("Nenhum item" + "Você ainda não tem itens"). Manter 1.
 - **Loading + skeleton ao mesmo tempo.** Skeleton já é loading.
@@ -189,7 +184,7 @@ E rodar **manualmente** o caminho da persona Maria (recorrente, 6h30, 30s de pac
 - ❌ Aplicar em tela cockpit deliberada (Histórico tabular).
 - ❌ Cortar feedback de sistema (loading, erro, success) — esses são Nielsen #1, sempre presente.
 
-## Exemplos concretos no Fitio
+## Concrete examples (originated in a fitness app — adapt to your project)
 
 **Tela:** Home tab "Explorar"
 

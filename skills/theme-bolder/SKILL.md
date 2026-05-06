@@ -1,18 +1,28 @@
 ---
 name: theme-bolder
-license: Complete terms in LICENSE.txt
-description: Amplifica uma tela Fitio que está blanda/tímida demais. Sobe color commitment (Restrained → Committed/Drenched), quebra simetria por reflexo, aumenta hierarquia tipográfica, intensifica press feedback. Use quando `/theme-critique` aponta tela "AI safe", baixo Nielsen #8 (Aesthetic), ou tela de comemoração que parece form genérico ("/theme-bolder <path>", "essa tela tá fraca", "ampia essa tela").
-triggers:
-  - /theme-bolder
-  - /Brasa
-  - /brasa
-  - amplifica(r)? (essa|esta|a) tela
-  - essa tela (est(á|a) )?(fraca|tímida|blanda|sem força)
-  - sobe(r)? (a )?intensidade
-  - mais punch
+description: Amplifies a screen that's bland/timid. Raises color commitment (Restrained → Committed/Drenched), breaks reflexive symmetry, increases typographic hierarchy, intensifies press feedback. Use when `/theme-critique` flags an "AI safe" screen, a low Nielsen #8 (Aesthetic), or a celebration screen rendered as a generic form. Triggers: `/Amplifier`, `/Brasa`, `/theme-bolder`, "essa tela tá fraca", "amplify this screen", "more punch".
+metadata:
+  dw:
+    craft:
+      requires: [color, anti-ai-slop]
 ---
 
-# Skill: fitio-theme-bolder (`/theme-bolder`) — invoca **Brasa**
+# Skill: theme-bolder (`/theme-bolder`) — invokes **Brasa** (English: **Amplifier**)
+
+## Triggers
+
+- **English:** `/Amplifier`, `/theme-bolder`, "amplify this screen", "this screen is bland", "more punch", "raise intensity"
+- **Português:** `/Brasa`, `/brasa`, `/theme-bolder`, "amplifica essa tela", "essa tela tá fraca/tímida/blanda", "sobe a intensidade", "mais punch"
+- **Natural language:** celebration screen looks like a generic form; CTA drowning in background; flat hero metric
+
+## Craft references
+
+Before amplifying, read these craft references — they encode universal rules independent of any project:
+
+- `craft/color.md` — when to commit (Restrained → Committed → Drenched) and how to keep accent discipline as you raise intensity.
+- `craft/anti-ai-slop.md` — what NOT to reach for as you turn the dial up (purple gradients, glassy reflexes, emoji-as-icon).
+
+These are upstream from any project's design system; the project's own tokens (`AppColors`, `docs/product.md`) override only when they explicitly contradict.
 
 ## Persona — Brasa, o Amplificador
 
@@ -169,7 +179,7 @@ Relatório curto:
 - ❌ Adicionar Rive/Lottie pra "dar vida" — motion é responsabilidade da skill de motion (backlog), não desta.
 - ❌ Pular `flutter analyze` antes de reportar.
 
-## Exemplos concretos no Fitio
+## Concrete examples (originated in a fitness app — adapt to your project)
 
 **Tela:** `lib/features/coupons/presentation/pages/coupon_unlocked_page.dart`
 
