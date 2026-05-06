@@ -13,7 +13,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 0 — Safety net + regression baseline
 
-### T-00 ⬜ Tag rollback + snapshot pre-v1.2 outputs
+### T-00 ✅ Tag rollback + snapshot pre-v1.2 outputs
 - **Action:**
   ```bash
   git tag pre-v1.2.0
@@ -30,13 +30,13 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 1 — Adapter contract (the heart)
 
-### T-01 ⬜ Draft `docs/adapter-protocol.md`
+### T-01 ✅ Draft `docs/adapter-protocol.md`
 - **Action:** write the contract per design §"Adapter Plan format" + §"Architecture". Sections: (1) Why a contract, (2) Plan format with example, (3) Adapter interface (input/output), (4) Conformance test, (5) How to add a new adapter, (6) Path conventions table per stack.
 - **Time-budget:** 2h. If exceeded, escape per spec REQ-A risk: ship Plan with tokens-only, defer widgets/actions to v1.3.
 - **Verify:** `wc -l docs/adapter-protocol.md` between 200–400; sections 1–6 all present.
 - **Refs:** REQ-A.1
 
-### T-02 ⬜ Write `docs/adapter-plan.schema.json`
+### T-02 ✅ Write `docs/adapter-plan.schema.json`
 - **Action:** JSON Schema typed for the Plan format. Top-level: version, kind enum, tokens object (palette/typography/spacing/radius/motion), widgets array, actions array. Use Draft 7 for compat.
 - **Verify:** `python3 -c "import json,jsonschema; jsonschema.validate(json.load(open('docs/adapter-examples/palette.json')), json.load(open('docs/adapter-plan.schema.json')))"` — feed the palette example, expect zero errors.
 - **Refs:** REQ-A.2
