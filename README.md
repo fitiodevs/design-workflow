@@ -44,6 +44,7 @@ These skills are not bundled — they live in their own repos because they're us
 | `tlc-closure` | Walks the task dependency graph after `/promote` + `/tlc-spec-driven`. Lists callers, providers, tests, routes; turns each into a closure subtask; runs auto-RalphLoop until zero loose ends. **Auto-bootstraps `tlc-spec-driven` and `graphify` if not installed.** | `fitiodevs/tlc-closure` |
 | `graphify` | Knowledge-graph any input (code, docs, papers, images) into clustered communities + HTML + JSON + audit report. Used internally by `tlc-closure` to build the dependency graph. | external |
 | `caveman` | Ultra-compressed communication mode (~75% fewer tokens) when you need to ship a long autonomous loop on a budget. | external |
+| `open-design` | **Upstream of `craft/`.** The 5 universal craft docs (`anti-ai-slop`, `color`, `state-coverage`, `typography`, `animation-discipline`) are forked verbatim from `nexu-io/open-design` (Apache-2.0). Sync is manual on demand — see `craft/README.md`. | `nexu-io/open-design` |
 
 If `/tlc-closure` is not installed, `/promote` falls back to a "review the generated files manually" hint. None of these are hard dependencies of `design-workflow`.
 
@@ -115,7 +116,14 @@ Apache 2.0 — see [LICENSE.txt](LICENSE.txt). Each skill folder also carries a 
 
 ## Status
 
-**v1.1.0** — minor release: 19 skills total. Atlas trio promoted to public (`status`, `promote`, `atlas-save`) with Fitio-specific paths generalized. Stitch-specific naming retired from `theme-port` — the HTML pathway is preserved and now generic: `--from-stitch` became `--from-html`, accepting any HTML mockup (`/frontend-design`, Figma's HTML export, Penpot, Stitch, hand-written). The two Stitch-only skills (`theme-prompt`, `theme-sandbox`) were removed as their orchestration was tool-specific. 19/19 skills validated by `quick_validate.py`. Extracted from production use in the [Fitio](https://fitio.app) Flutter app. Stack-agnostic adapter is the next-major roadmap item (Onda E).
+**v1.1.1** — patch release: `craft/` layer adopted. 5 universal design rule docs forked verbatim from `nexu-io/open-design` (Apache-2.0; originally derived from `referodesign/refero_skill`, MIT). 5 skills (`theme-critique`, `theme-create`, `theme-port`, `theme-bolder`, `frontend-design`) now declare `metadata.dw.craft.requires:` in frontmatter and load the docs at runtime via a "Craft references" body section. 19/19 skills still pass `quick_validate.py`. Extracted from production use in the [Fitio](https://fitio.app) Flutter app. Stack-agnostic adapter is the next-major roadmap item (Onda E).
+
+## What changed in v1.1.1
+
+- **`craft/` adoption.** 5 docs (`anti-ai-slop`, `color`, `state-coverage`, `typography`, `animation-discipline`) forked verbatim from upstream `nexu-io/open-design` at SHA `26636384a8dc3e9b36029c3b6299d4a2005d255a` with full attribution chain in each header. Sync is manual on demand.
+- **`metadata.dw.craft.requires:` field wired in 5 skills.** Validator probe (T-07) ruled out top-level `dw:` and chose nesting under the officially-allowed `metadata:` key. See `docs/skill-extensions.md` for the namespace spec.
+- **Per-skill "Craft references" body section.** Each wired skill carries a prose section listing only the docs it declared, near the top of the body so the model loads them before generating output. Project tokens (`AppColors`, `docs/product.md`) still override when they explicitly contradict.
+- **STATE.md D-11 + D-12 logged.** Adoption decision and namespace decision documented in `.specs/project/STATE.md`.
 
 ## What changed in v1.1.0
 

@@ -1,6 +1,10 @@
 ---
 name: theme-create
 description: Creates a complete palette from scratch (brand + semantic + neutral) or an alternative visual identity (sub-brand, seasonal mode, sponsor skin) for a Flutter app. Uses OKLCH for perceptually-uniform scales, validates WCAG automatically, emits a ready-to-paste `AppColors` plus anti-AI-slop rationale plus reference sheet in `docs/themes/`. Use when no incremental tweak fits and identity must be redesigned. Triggered by `/Composer`, `/Compositor`, `/theme-create`, "cria palette nova", "nova identidade visual", "create a new palette", "sub-brand for X".
+metadata:
+  dw:
+    craft:
+      requires: [color, typography, anti-ai-slop]
 ---
 
 # Skill: theme-create (`/theme-create`) — persona **Compositor** (English: **Composer**)
@@ -17,6 +21,16 @@ Creates a complete palette from scratch. **Use sparingly** — most projects alr
 - Seasonal mode (Black Friday, Copa do Mundo) with a temporary skin.
 - Sponsor skin (branded event).
 - Full refresh (rare — coordinate with design).
+
+## Craft references
+
+Before generating any palette, read these craft references — they encode universal rules independent of any project:
+
+- `craft/color.md` — palette structure, accent discipline, semantic-vs-brand separation.
+- `craft/typography.md` — type pairing rules that drive companion font picks.
+- `craft/anti-ai-slop.md` — cardinal sins to avoid (purple gradients, glassy reflexes).
+
+These are upstream from any project's design system; the project's own tokens (`AppColors`, `docs/product.md`) override only when they explicitly contradict.
 
 ## Filosofia (anti-AI-slop)
 

@@ -1,6 +1,10 @@
 ---
 name: theme-critique
 description: Júri persona — dual-mode design orchestrator. Without args, runs Discovery interview (4 blocks Produto/Tom/Identidade/Stack, brownfield pre-scan, generates discovery.md + PRD/skeletons, emits priority-ordered routing plan). With a Flutter path, runs Critique (Nielsen 0–4 × 10 heuristics, AI-slop verdict, persona walkthroughs, cognitive load, P0–P3 issues mapped to next skills). Triggered by `/Critic`, `/Júri`, `/theme-critique`, "critique this screen", "design review", "Nielsen heuristic", "/juri" alone for project discovery.
+metadata:
+  dw:
+    craft:
+      requires: [anti-ai-slop, color, state-coverage, typography]
 ---
 
 # Skill: theme-critique (`/theme-critique`) — invokes **Júri** (English: **Critic**)
@@ -10,6 +14,17 @@ description: Júri persona — dual-mode design orchestrator. Without args, runs
 - **English:** `/Critic`, `/theme-critique`, "critique this screen", "design review", "Nielsen heuristic", "is this design good?", "review this screenshot", "start a design discovery", "interview me about this project"
 - **Português:** `/Júri`, `/Juri`, `/júri`, `/juri`, `/theme-critique`, "critica essa tela", "design review", "heurística de Nielsen", "o que está errado nessa tela", "analisa essa imagem", "começar discovery", "entrevista de design"
 - **Natural language:** path to a feature dir; pasted screenshot; "is this AI-slop?"; bare `/juri` to start project discovery.
+
+## Craft references
+
+Before generating critique output, read these craft references — they encode universal design rules independent of any project:
+
+- `craft/anti-ai-slop.md` — cardinal sins (P0 verdicts).
+- `craft/color.md` — palette structure and accent discipline (Nielsen #4, #8).
+- `craft/state-coverage.md` — required states for every interactive surface (Nielsen #1, #5).
+- `craft/typography.md` — type scale, line height, letter spacing (Nielsen #4, #8).
+
+These are upstream from any project's design system; the project's own tokens (`AppColors`, `docs/product.md`) override only when they explicitly contradict.
 
 ## Mode dispatch
 

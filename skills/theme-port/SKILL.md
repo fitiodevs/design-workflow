@@ -1,6 +1,10 @@
 ---
 name: theme-port
 description: Ports a structural source (Figma frame OR HTML mockup from any tool — frontend-design, Figma export, Sketch, Penpot, Stitch, hand-written) into Flutter widgets in your project. The source provides ONLY structure (widths, heights, radii, spacing, text hierarchy); colors and fonts come from your theme (light/dark plus A/A+/A++ font scale). Use when the user asks for `/Architect`, `/Arquiteto`, `/theme-port`, `/figma-port`, `/theme-port --from-html` plus an HTML path, "porta esse frame", "implement that frame from Figma", "convert this mockup to Flutter", or "migrate from Figma to Flutter".
+metadata:
+  dw:
+    craft:
+      requires: [state-coverage, typography]
 ---
 
 # Skill: theme-port (`/theme-port`) — persona **Arquiteto** (English: **Architect**)
@@ -30,6 +34,15 @@ Esta skill é a **entrada** no ciclo. Após portar, o fluxo natural é:
 ```
 
 Ao terminar o port, **sempre** sugira rodar `/theme-audit` na feature recém-portada para validar cobertura e detectar violações residuais.
+
+## Craft references
+
+Before porting, read these craft references — they encode universal rules independent of any project:
+
+- `craft/state-coverage.md` — every interactive surface needs default/hover/focus/active/disabled/loading/empty/error states. The source rarely shows them all; infer the missing ones from these rules.
+- `craft/typography.md` — type scale, line height, letter spacing. Use to map source font sizes to your `TextTheme` semantic roles instead of porting raw px values.
+
+These are upstream from any project's design system; the project's own tokens (`AppColors`, `docs/product.md`) override only when they explicitly contradict.
 
 ## Prerequisites
 
