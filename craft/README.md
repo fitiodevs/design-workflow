@@ -9,6 +9,7 @@ Universal design-system rules — encoded as project-agnostic prose, forked verb
 - **`state-coverage.md`** — required states (default, hover, focus, active, disabled, loading, empty, error) for every interactive surface.
 - **`typography.md`** — type scale, line height, letter spacing, weight pairing rules.
 - **`animation-discipline.md`** — when motion earns its frame and when it's noise.
+- **`design-context.md`** — 5-tier context hierarchy and the "STOP if no Tier 1-4" refusal rule (authored from scratch v1.2.1, idea inspired by [huashu-design](https://github.com/alchaincyf/huashu-design)).
 
 ## Which skills load which docs
 
@@ -19,6 +20,7 @@ Universal design-system rules — encoded as project-agnostic prose, forked verb
 | `state-coverage.md` | `theme-critique`, `theme-port`, `frontend-design` |
 | `typography.md` | `theme-critique`, `theme-create`, `theme-port`, `frontend-design` |
 | `animation-discipline.md` | `frontend-design` |
+| `design-context.md` | `theme-critique`, `theme-create`, `theme-extend`, `theme-port`, `frontend-design` |
 
 The wiring is declared per-skill via the `dw.craft.requires:` field — see [`docs/skill-extensions.md`](../docs/skill-extensions.md) for the namespace spec. Each wired skill carries a "Craft references" section in its body listing only the docs it declared.
 

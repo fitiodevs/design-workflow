@@ -44,11 +44,15 @@ A friendly walkthrough of the design pipeline. Read this if you're new to the wo
 ### "I'm starting a new app"
 
 ```
-/theme-create                    # Composer: palette from scratch
-/frontend-design                 # Designer: HTML mockup of the first screens
+/theme-create                    # Composer: palette from scratch (or --inspired-by <slug>)
+/frontend-design                 # Designer: tweaks-ready HTML mockup
+/tweaks <path>                   # Tweaker: wrap with knobs, ride 5 sliders, pick a state
+/theme-critique --mode 5dim <path>  # Júri 5dim: radar-chart review of the chosen mockup
 /theme-port --from-html <path>   # Architect: HTML → Flutter using tokens
 /theme-audit                     # Auditor: measures coverage
 ```
+
+The `/tweaks` step is new in v1.4 — it lets you explore variants without re-prompting Clara. Skip it for one-off mockups; use it when you can't articulate the tweak ahead of time. Output is a sibling `<input>.tweaks.html`; original input stays untouched. State persists to localStorage per-file.
 
 ### "I have a Figma frame and need it implemented"
 

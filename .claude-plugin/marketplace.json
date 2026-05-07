@@ -5,13 +5,13 @@
     "email": "fitio.devs@gmail.com"
   },
   "metadata": {
-    "description": "Flutter-first design-spec-driven workflow skills for Claude Code: discovery, compose, sequence, ship, ralph autonomy loop, status/promote/atlas-save productivity helpers, plus 11 atomic theme/critique/refine/copy/mockup operators.",
-    "version": "1.1.2"
+    "description": "Multi-stack design-spec-driven workflow skills for Claude Code: stack-neutral Adapter Plan + Flutter and Next.js/Tailwind reference adapters; discovery, compose, sequence, ship, ralph autonomy loop; status/promote/atlas-save productivity helpers; 12 atomic theme/critique/refine/copy/mockup/tweaks operators (interactive mockup stage shipped in v1.4).",
+    "version": "1.5.0"
   },
   "plugins": [
     {
       "name": "design-workflow",
-      "description": "Full design-spec-driven pipeline — Júri discovery + critique, compose/sequence/ship orchestrators, ralph-loop 3-tier autonomy, productivity helpers (pause/resume/status/approve, status, promote, atlas-save), and 11 atomic operators (theme audit/create/extend/port, bolder/quieter/distill, motion, frontend-design, ux-writing).",
+      "description": "Full design-spec-driven pipeline — Júri discovery + critique (Nielsen 10 + 5dim radar), compose/sequence/ship orchestrators, ralph-loop 3-tier autonomy, productivity helpers (pause/resume/status/approve, status, promote, atlas-save), and 12 atomic operators (theme audit/create/extend/port, bolder/quieter/distill, motion, frontend-design, ux-writing, tweaks).",
       "source": "./",
       "strict": false,
       "skills": [
@@ -33,7 +33,8 @@
         "./skills/ralph-loop",
         "./skills/status",
         "./skills/promote",
-        "./skills/atlas-save"
+        "./skills/atlas-save",
+        "./skills/tweaks"
       ]
     }
   ]

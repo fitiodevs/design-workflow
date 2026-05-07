@@ -12,7 +12,9 @@
         {"text": "Generated Dart code does NOT contain any literal `Color(0xFF...)` outside of theme files", "type": "regex_match"},
         {"text": "Generated Dart code does NOT contain literal `fontSize:` or `fontWeight:` in the widget", "type": "regex_match"},
         {"text": "Final report suggests `/theme-audit lib/features/<feature>` as next step", "type": "qualitative"},
-        {"text": "Output explicitly skips calling get_variable_defs and get_styles (theme is source of truth)", "type": "qualitative"}
+        {"text": "Output explicitly skips calling get_variable_defs and get_styles (theme is source of truth)", "type": "qualitative"},
+        {"text": "An Adapter Plan JSON sidecar is emitted (path matches /tmp/.+-plan\\.json) before the adapter runs", "type": "regex_match"},
+        {"text": "Bash tool invokes `python3 adapters/$STACK/adapter.py` (or equivalent) — emission is delegated to the adapter, skill does not write Dart directly", "type": "tool_use"}
       ]
     },
     {

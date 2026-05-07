@@ -135,7 +135,7 @@ done
 
 ## Rollback
 
-`git tag pre-v1.2.0` before T-00. Single commit at the end.
+`git tag pre-v1.3.0` before T-00. Single commit at the end.
 
 ## Estimate
 

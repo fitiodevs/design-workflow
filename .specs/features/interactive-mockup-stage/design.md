@@ -71,9 +71,9 @@ Each invocation writes a timestamped HTML report. Path: `.design-spec/critique/<
 ├── docs/
 │   ├── personas.md                            # MODIFIED: add Tweaker row
 │   └── theme-manager.md                       # MODIFIED: pipeline includes /tweaks
-├── README.md                                  # MODIFIED: §What changed in v1.3.0
-├── .specs/project/STATE.md                    # MODIFIED: D-15, D-16, D-17
-└── .claude-plugin/marketplace.json            # MODIFIED: add ./skills/tweaks, bump 1.3.0
+├── README.md                                  # MODIFIED: §What changed in v1.4.0
+├── .specs/project/STATE.md                    # MODIFIED: D-19, D-20, D-21
+└── .claude-plugin/marketplace.json            # MODIFIED: add ./skills/tweaks, bump 1.4.0
 ```
 
 ## Panel HTML template structure
@@ -205,7 +205,7 @@ for s in skills/*/; do python3 $VAL $s 2>&1 | tail -1; done
 
 ## Rollback
 
-`git tag pre-v1.3.0` before T-00.
+`git tag pre-v1.4.0` before T-00.
 
 ## Estimate
 

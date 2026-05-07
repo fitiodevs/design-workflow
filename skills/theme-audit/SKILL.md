@@ -66,15 +66,21 @@ a partir de screenshot sem confirmação do usuário. Diagnosticar → propor �
 
 ## Workflow
 
-### Step 1 — Scan estrutural
+### Step 1 — Scan estrutural (stack-aware)
 
 ```bash
-python scripts/theme/audit_theme.py [path]
+# Resolve a stack ativa (STACK env > config.stack > flutter)
+STACK=$(python3 scripts/resolve_stack.py)
+
+# Audit lê o lint set certo automaticamente
+python3 scripts/audit_theme.py --stack $STACK [path]
 ```
 
-Detecta (regex-based, ignora `.g.dart`/`.freezed.dart` e comentários):
+Os padrões regex vivem em `scripts/audit_lint_sets/<stack>.yaml` — adicionar nova stack = adicionar um YAML, sem mexer no script. WCAG (Step 2) é stack-agnostic.
 
-**Estrutural:**
+Detecta (regex-based, ignora suffixes excluídos e comentários):
+
+**Estrutural — `stack: flutter` (ignora `.g.dart`/`.freezed.dart`):**
 
 | Regra | Padrão | Permitido em |
 |-------|--------|--------------|
@@ -84,6 +90,27 @@ Detecta (regex-based, ignora `.g.dart`/`.freezed.dart` e comentários):
 | `font_weight` | `fontWeight: FontWeight.w<NNN>` | Nenhum |
 | `edge_insets_literal` | `EdgeInsets.*(<num>)` fora da escala `AppSpacing` | Nenhum |
 | `radius_literal` | `BorderRadius.circular(<num>)` fora da escala `AppRadius` | Nenhum |
+
+**Estrutural — `stack: nextjs-tailwind` (ignora `.d.ts`, `node_modules/`, `.next/`):**
+
+| Regra | Padrão | Permitido em |
+|-------|--------|--------------|
+| `tailwind_arbitrary_text` | `text-[#...]` | Nenhum |
+| `tailwind_arbitrary_bg` | `bg-[#/rgb/hsl(...)]` | Nenhum |
+| `tailwind_arbitrary_border` | `border-[#...]` | Nenhum |
+| `inline_style_hex` | `style={{ color: '#...' }}` etc. | Nenhum |
+| `gradient_arbitrary_from/to` | `from-[#...]` / `to-[#...]` | Nenhum |
+| `raw_hsl_in_jsx` | `hsl(<n>, ...)` literal em JSX | Nenhum |
+| `hex_in_tsx` | hex `#xxxxxx` em TSX/CSS | `app/globals.css`, `styles/tokens.css`, `tailwind.config.ts` |
+
+**Estrutural — `stack: react-native` (ignora `.d.ts`, `node_modules/`, `ios/`, `android/`, `.expo/`):**
+
+| Regra | Padrão | Permitido em |
+|-------|--------|--------------|
+| `hex_string_literal` | `"#xxxxxx"` ou `'#xxxxxx'` (string com hex) | `src/theme/colors.ts`, `app/theme/colors.ts`, `src/theme/motion.ts`, `app/theme/motion.ts` |
+| `inline_style_hex` | `style={{ color: '#...' }}` etc. em RN | Nenhum |
+| `rgba_inline` | `rgba(...)` / `hsla(...)` literal | Nenhum |
+| `raw_color_const` | `Color(0x...)` (legado Android API copy-paste) | Nenhum |
 
 **Anti-slop (`docs/product.md` §4.2 + §9, ativadas por default; `--no-slop` desliga):**
 

@@ -41,17 +41,17 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Verify:** `python3 -c "import json,jsonschema; jsonschema.validate(json.load(open('docs/adapter-examples/palette.json')), json.load(open('docs/adapter-plan.schema.json')))"` — feed the palette example, expect zero errors.
 - **Refs:** REQ-A.2
 
-### T-03 🅿️ Write `docs/adapter-examples/palette.json`
+### T-03 ✅ Write `docs/adapter-examples/palette.json`
 - **Action:** complete Plan example with `kind: palette` — tokens.palette has the canonical 29 semantic tokens × 2 modes (light/dark). Actions: 1 write to `palette` role.
 - **Verify:** `jsonschema validate` returns 0 errors against schema.
 - **Refs:** REQ-A.3
 
-### T-04 🅿️ Write `docs/adapter-examples/widget-tree.json`
+### T-04 ✅ Write `docs/adapter-examples/widget-tree.json`
 - **Action:** complete Plan with `kind: widget-tree` — a button + form group example (covers both leaf widget and container).
 - **Verify:** schema validates.
 - **Refs:** REQ-A.3
 
-### T-05 🅿️ Write `docs/adapter-examples/motion-set.json`
+### T-05 ✅ Write `docs/adapter-examples/motion-set.json`
 - **Action:** complete Plan with `kind: motion-set` — durations + curves matching current `AppMotion`/`AppCurves`.
 - **Verify:** schema validates.
 - **Refs:** REQ-A.3
@@ -60,7 +60,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 2 — Flutter adapter (reference, byte-equivalent)
 
-### T-06 ⬜ Stub `adapters/flutter/` skeleton
+### T-06 ✅ Stub `adapters/flutter/` skeleton
 - **Action:** create dirs + stubs:
   ```
   adapters/flutter/
@@ -75,17 +75,17 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Verify:** `find adapters/flutter -type f | wc -l` ≥ 6.
 - **Refs:** REQ-B.1
 
-### T-07 ⬜ Implement `mappings.py` + 3 templates
+### T-07 ✅ Implement `mappings.py` + 3 templates
 - **Action:** TOKEN_ROLE_MAP (29 entries: `brandDefault` → `context.colors.brandDefault`); WIDGET_TYPE_MAP (`button` → `AppButton`, etc); 3 string templates capturing current `AppColors._light` / widget file / design-tokens.md format.
 - **Verify:** `python3 -c "from adapters.flutter.mappings import TOKEN_ROLE_MAP; assert len(TOKEN_ROLE_MAP) >= 29"`.
 - **Refs:** REQ-B.1
 
-### T-08 ⬜ Implement `adapter.py` main dispatch
+### T-08 ✅ Implement `adapter.py` main dispatch
 - **Action:** entry function `main(plan_path, dry_run=False) -> int`; dispatch on `plan["kind"]` to `emit_palette` / `emit_widget_tree` / `emit_motion`. Each emit calls templates + writes per `actions[]`.
 - **Verify:** `python3 adapters/flutter/adapter.py docs/adapter-examples/palette.json --dry-run` prints expected paths without writing.
 - **Refs:** REQ-B.1
 
-### T-09 ⬜ Write conformance test + 3 goldens
+### T-09 ✅ Write conformance test + 3 goldens
 - **Action:** for each example, manually craft expected Dart output (golden), commit. `tests/conformance.py`: runs adapter on each example with `--dry-run` capture, diffs against golden, prints PASS/FAIL.
 - **Verify:** `python3 adapters/flutter/tests/conformance.py` prints `PASS: 3/3`.
 - **Refs:** REQ-B.2
@@ -94,12 +94,12 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 3 — Next.js+Tailwind adapter (the new one)
 
-### T-10 ⬜ Stub `adapters/nextjs-tailwind/` skeleton
+### T-10 ✅ Stub `adapters/nextjs-tailwind/` skeleton
 - **Action:** mirror Flutter skeleton structure with `tokens.css.tmpl`, `tailwind.config.ts.tmpl`, `component.tsx.tmpl`, `component-shadcn.tsx.tmpl`, `design_tokens.md.tmpl`.
 - **Verify:** `find adapters/nextjs-tailwind -type f | wc -l` ≥ 8.
 - **Refs:** REQ-C.1
 
-### T-11 ⬜ Implement `mappings.py` + project-detection helpers
+### T-11 ✅ Implement `mappings.py` + project-detection helpers
 - **Action:**
   - TOKEN_ROLE_MAP: 29 entries mapping role → CSS variable name (`brandDefault` → `--brand-default`).
   - WIDGET_TYPE_MAP: with shadcn variants vs plain Tailwind (`button` → `<Button>` vs `<button className=...>`).
@@ -109,7 +109,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Verify:** `python3 -c "from adapters.nextjs_tailwind.mappings import TOKEN_ROLE_MAP, has_shadcn; assert len(TOKEN_ROLE_MAP) >= 29; print(has_shadcn())"` runs without error.
 - **Refs:** REQ-C.1, REQ-C.4
 
-### T-12 ⬜ Implement `adapter.py` for Next.js+Tailwind
+### T-12 ✅ Implement `adapter.py` for Next.js+Tailwind
 - **Action:** entry `main(plan_path, dry_run=False)`. Detects project (shadcn? router?), picks templates accordingly, writes:
   - palette → `app/globals.css` (App Router) or `styles/tokens.css` (Pages) PLUS appends `theme.extend.colors` to `tailwind.config.ts`
   - widget-tree → `components/<feature>/<name>.tsx`
@@ -117,12 +117,12 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Verify:** `python3 adapters/nextjs-tailwind/adapter.py docs/adapter-examples/palette.json --dry-run` prints sensible paths.
 - **Refs:** REQ-C.1, REQ-C.2
 
-### T-13 🅿️ Conformance test + 3 goldens (plain Tailwind variant)
+### T-13 ✅ Conformance test + 3 goldens (plain Tailwind variant)
 - **Action:** craft expected outputs for plain Tailwind mode (no shadcn): `palette.css`, `widget-tree.tsx`, `motion-set.css`. Conformance script forces `shadcn=False`.
 - **Verify:** `python3 adapters/nextjs-tailwind/tests/conformance.py --plain` prints `PASS: 3/3`.
 - **Refs:** REQ-C.3
 
-### T-14 🅿️ Conformance test + 1 shadcn golden (variant detection)
+### T-14 ✅ Conformance test + 1 shadcn golden (variant detection)
 - **Action:** craft `widget-tree-shadcn.tsx` golden using `<Button>` from shadcn. Conformance script forces `shadcn=True`.
 - **Verify:** `python3 adapters/nextjs-tailwind/tests/conformance.py --shadcn` prints `PASS: 3/3` (palette + motion identical, widget-tree picks shadcn variant).
 - **Refs:** REQ-C.3, REQ-C.4
@@ -131,7 +131,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 4 — Stack config + dispatch
 
-### T-15 ⬜ Add `stack:` + `paths:` to `config.example.yaml`
+### T-15 ✅ Add `stack:` + `paths:` to `config.example.yaml`
 - **Action:** edit `config.example.yaml`:
   ```yaml
   # Active stack — selects the adapter for code emission.
@@ -148,7 +148,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Verify:** `grep -E "^stack:" config.example.yaml` returns `stack: flutter`; `paths:` block present (commented).
 - **Refs:** REQ-G.1
 
-### T-16 ⬜ Resolution helper script
+### T-16 ✅ Resolution helper script
 - **Action:** create `scripts/resolve_stack.py` — reads `STACK` env, falls back to `.design-workflow.yaml` `stack:`, falls back to `flutter`. Emits resolved value to stdout. Errors on unknown.
 - **Verify:** `STACK=nextjs-tailwind python3 scripts/resolve_stack.py` prints `nextjs-tailwind`; `STACK=react-native python3 scripts/resolve_stack.py` exits non-zero with "available adapters: flutter, nextjs-tailwind".
 - **Refs:** REQ-B.3
@@ -157,37 +157,37 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 5 — Migrate skills to adapter dispatch
 
-### T-17 ⬜ Refactor `skills/theme-port/SKILL.md` workflow
+### T-17 ✅ Refactor `skills/theme-port/SKILL.md` workflow
 - **Action:** restructure Workflow steps per design §"Migration shape for theme-port". Step 5 becomes "Build Adapter Plan"; new Step 6 "Resolve active stack"; Step 7 "Render via adapter"; Step 7.5 "Verify outputs"; Step 8 "Validate per stack" with branch flutter/nextjs-tailwind.
 - **Verify:** `python3 $VAL skills/theme-port/` valid; `grep -c "Adapter Plan" skills/theme-port/SKILL.md` ≥ 2; `grep -c "stack:" skills/theme-port/SKILL.md` ≥ 1.
 - **Refs:** REQ-D.1, REQ-D.4
 
-### T-18 ⬜ Flutter regression smoke for theme-port
+### T-18 ✅ Flutter regression smoke for theme-port
 - **Action:** with `stack: flutter`, invoke `/theme-port` on the frame snapshotted in T-00. Diff resulting Dart byte-by-byte (modulo whitespace) against snapshot.
 - **Verify:** `diff -r --strip-trailing-cr .design-spec/regression-snapshots/pre-v1.2/flutter/ <new-output>/` returns zero diff.
 - **Refs:** REQ-D.2, REQ-I.3
 
-### T-19 ⬜ Next.js+Tailwind manual smoke for theme-port
+### T-19 ✅ Next.js+Tailwind manual smoke for theme-port
 - **Action:** spin up minimal Next.js + Tailwind project (`npx create-next-app@latest --ts --tailwind --app /tmp/nextjs-smoke`). Set `stack: nextjs-tailwind` in `.design-workflow.yaml`. Invoke `/theme-port` on same Figma frame. Confirm: `app/globals.css` has CSS vars, `tailwind.config.ts` has `theme.extend.colors` from CSS vars, `components/<feature>/<name>.tsx` renders structure. Screenshot saved at `.design-spec/smoke/v1.2.0-nextjs-port.md`.
 - **Verify:** smoke file exists with 3 ✅ checkboxes (CSS vars / Tailwind config / TSX component); manual visual check passed.
 - **Refs:** REQ-D.3, REQ-I.4
 
-### T-20 ⬜ Update theme-port eval
+### T-20 ✅ Update theme-port eval
 - **Action:** add assertion to `skills/theme-port/evals/evals.json`: an Adapter Plan JSON sidecar exists after invocation. Add per-stack expected output checks.
 - **Verify:** eval passes manually on smokes from T-18 + T-19; `python3 $VAL skills/theme-port/` valid.
 - **Refs:** REQ-D.5
 
-### T-21 ⬜ Refactor `skills/theme-extend/SKILL.md`
+### T-21 ✅ Refactor `skills/theme-extend/SKILL.md`
 - **Action:** same shape as theme-port — emit Plan describing token additions, dispatch adapter.
 - **Verify:** `python3 $VAL skills/theme-extend/` valid; `grep -c "Adapter Plan" skills/theme-extend/SKILL.md` ≥ 1.
 - **Refs:** REQ-E.1
 
-### T-22 ⬜ Regression smoke for theme-extend (Flutter)
+### T-22 ✅ Regression smoke for theme-extend (Flutter)
 - **Action:** simulate adding a token (e.g. `feedbackPositive`) with `stack: flutter`. Confirm adapter writes to `lib/core/theme/app_colors.dart` + `docs/design-tokens.md` exactly as pre-v1.2.
 - **Verify:** byte-equivalent against pre-v1.2 baseline (manually captured).
 - **Refs:** REQ-E.2
 
-### T-23 🅿️ Smoke for theme-extend (Next.js)
+### T-23 ✅ Smoke for theme-extend (Next.js)
 - **Action:** same token addition with `stack: nextjs-tailwind`. Confirm CSS var + Tailwind config update + design-tokens.md update.
 - **Verify:** all 3 files updated correctly (manual review logged).
 - **Refs:** REQ-E.1
@@ -196,17 +196,17 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 6 — Stack-aware audit
 
-### T-24 ⬜ Refactor `scripts/audit_theme.py` for `--stack` flag
+### T-24 ✅ Refactor `scripts/audit_theme.py` for `--stack` flag
 - **Action:** accept `--stack <flutter|nextjs-tailwind>`. Read lint regex set from `scripts/audit_lint_sets/<stack>.yaml`. WCAG logic intact.
 - **Verify:** `python3 scripts/audit_theme.py --stack flutter --help` shows the flag; `--stack invalid` errors with available list.
 - **Refs:** REQ-F.2
 
-### T-25 🅿️ Write `audit_lint_sets/flutter.yaml`
+### T-25 ✅ Write `audit_lint_sets/flutter.yaml`
 - **Action:** YAML file with regex patterns currently hardcoded in audit_theme.py (move them).
 - **Verify:** YAML loads cleanly; same patterns as before; audit on Fitio still flags same issues.
 - **Refs:** REQ-F.1
 
-### T-26 🅿️ Write `audit_lint_sets/nextjs-tailwind.yaml`
+### T-26 ✅ Write `audit_lint_sets/nextjs-tailwind.yaml`
 - **Action:** new patterns for Tailwind/JSX:
   - `text-\[#[0-9a-fA-F]+\]` (Tailwind arbitrary value with hex)
   - `bg-\[(#|rgb)` (Tailwind arbitrary bg)
@@ -216,7 +216,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Verify:** YAML loads; manual smoke against `/tmp/nextjs-smoke/` finds at least 0 false positives + 0 missed obvious ones (sample test file with intentional violations).
 - **Refs:** REQ-F.1
 
-### T-27 ⬜ Update `skills/theme-audit/SKILL.md`
+### T-27 ✅ Update `skills/theme-audit/SKILL.md`
 - **Action:** SKILL.md body reads resolved stack and passes `--stack` to script. Documents the per-stack pattern set.
 - **Verify:** `python3 $VAL skills/theme-audit/` valid; `grep -c "stack:" skills/theme-audit/SKILL.md` ≥ 1.
 - **Refs:** REQ-F.1, REQ-F.2
@@ -225,24 +225,24 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 7 — Docs + STATE + version
 
-### T-28 🅿️ Update `docs/ROADMAP.md`
+### T-28 ✅ Update `docs/ROADMAP.md`
 - **Action:** reverse the "Web-first design (Tailwind, MUI). Different aesthetic vocabulary; would require a separate web-design-workflow repo" entry — replace with date-marked note: "**Reversed 2026-05-06 in v1.2.0** — adapter pattern enabled web stacks in-repo, see `.specs/features/multi-stack-adapter/`." Add a v1.3+ adapter backlog list (React Native, Vue+Tailwind, Svelte+Tailwind, plain-React, SwiftUI).
 - **Verify:** `grep -c "Reversed 2026-05-06" docs/ROADMAP.md` = 1; backlog list contains ≥ 4 stacks.
 - **Refs:** REQ-G.3
 
-### T-29 🅿️ Update README §What changed in v1.2.0 + Stack support section
+### T-29 ✅ Update README §What changed in v1.2.0 + Stack support section
 - **Action:**
   - new `## What changed in v1.2.0` (above v1.1.2)
   - new top-level `## Stack support` listing Flutter + Next.js/Tailwind, link to `docs/adapter-protocol.md` for adding stacks
 - **Verify:** `grep -c "What changed in v1.2.0" README.md` = 1; `grep -c "## Stack support" README.md` = 1.
 - **Refs:** REQ-G.2, REQ-G.4
 
-### T-30 🅿️ Append D-14, D-15, D-16 to STATE.md
+### T-30 ✅ Append D-14, D-15, D-16 to STATE.md
 - **Action:** D-14 (adapter contract: 2 reference adapters in v1.2), D-15 (reverse Web-out-of-scope ROADMAP entry), D-16 (roadmap reorder rationale).
 - **Verify:** `grep -c "^- \*\*D-1[456]" .specs/project/STATE.md` = 3.
 - **Refs:** REQ-H
 
-### T-31 🅿️ Bump `marketplace.json` 1.1.2 → 1.2.0
+### T-31 ✅ Bump `marketplace.json` 1.1.2 → 1.2.0
 - **Action:** Edit `version` field; update top-level description to mention multi-stack support.
 - **Verify:** `jq -r '.metadata.version' .claude-plugin/marketplace.json` = `1.2.0`.
 - **Refs:** REQ-I.5
@@ -251,12 +251,12 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 8 — Final validation + ship
 
-### T-32 ⬜ Full validation sweep
+### T-32 ✅ Full validation sweep
 - **Action:** `quick_validate.py` for all 19 skills.
 - **Verify:** 19/19 `Skill is valid!`.
 - **Refs:** REQ-I.1
 
-### T-33 ⬜ Run all conformance + regression smokes
+### T-33 ✅ Run all conformance + regression smokes
 - **Action:**
   ```bash
   python3 adapters/flutter/tests/conformance.py            # PASS: 3/3
@@ -266,7 +266,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Verify:** all green.
 - **Refs:** REQ-I.2, REQ-I.3, REQ-I.4
 
-### T-34 ⬜ Commit + push
+### T-34 ✅ Commit + push
 - **Action:**
   ```bash
   git add adapters/ docs/adapter-protocol.md docs/adapter-plan.schema.json docs/adapter-examples/ \
@@ -279,7 +279,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
   ```
 - **Verify:** push exit 0; `git log -1 --stat` shows expected file list (adapters/ ×2, docs/ ×3, scripts/ ×3, skills/ ×3, etc).
 
-### T-35 ⬜ Tag + GitHub release
+### T-35 ✅ Tag + GitHub release
 - **Action:** `git tag -a v1.2.0 <commit-sha> -m "..."` + push tag + `gh release create v1.2.0 --latest --notes ...`.
 - **Verify:** `gh release list --limit 5` shows v1.2.0 as Latest.
 

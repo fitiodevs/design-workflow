@@ -84,14 +84,68 @@ Each skill has a persona triggerable directly: `/Auditor`, `/Composer`, `/Critic
 
 ## Stack assumptions
 
-These skills are **Flutter-first**:
-- Material 3 + Riverpod
-- Tokens at `lib/core/theme/{app_colors,app_spacing,app_motion,app_curves}.dart`
-- Project doc at `docs/product.md` (used for persona + AI-slop checks)
+These skills emit code through **stack adapters**. v1.2.0 ships two reference adapters:
 
-You can override paths in `config.example.yaml` → copy to your project as `.design-workflow.yaml`. See [docs/customizing.md](docs/customizing.md).
+- **flutter** (default) — Material 3 + Riverpod; tokens at `lib/core/theme/`; widgets at `lib/features/<feature>/presentation/widgets/`.
+- **nextjs-tailwind** — App Router or Pages; tokens as CSS custom properties in `app/globals.css` (or `styles/tokens.css`); Tailwind config snippet for `theme.extend.colors`; shadcn/ui detected via `components.json` or `@radix-ui/*` deps; widgets at `components/<feature>/<name>.tsx`.
 
-A subset of skills (`theme-audit`, `theme-critique`, `theme-create`, `frontend-design`, `ux-writing`) is **stack-agnostic** and works on any codebase that uses tokens.
+Project doc at `docs/product.md` is shared (used for persona + AI-slop checks across stacks).
+
+You can override paths in `config.example.yaml` → copy to your project as `.design-workflow.yaml`. Set `stack: flutter` or `stack: nextjs-tailwind` to select the adapter (default: `flutter`). Override per-invocation with the `STACK` env var. See [docs/customizing.md](docs/customizing.md) and [docs/adapter-protocol.md](docs/adapter-protocol.md).
+
+A subset of skills (`theme-critique`, `theme-create`, `frontend-design`, `ux-writing`) is **stack-agnostic** and works on any codebase that uses tokens.
+
+## Design schools library
+
+`design-systems-schools/` ships **12 hand-authored design philosophy schools** — sibling to the `design-systems/` brand library. Where brands encode *identities* ("look like Apple" with literal hex), schools encode *philosophies* ("follow Müller-Brockmann's discipline" with constraints). The same school applied to two projects produces two different palettes — each respecting the project's brand constraints AND the school's principles.
+
+| Category | Schools |
+|---|---|
+| Flutter-strong (Web ★★★) | `pentagram` · `information-architects` · `brutalism` · `locomotive` |
+| Print-strong (PDF / Cover ★★★) | `muller-brockmann` · `kenya-hara` · `editorial` · `atelier-zero` |
+| AI-gen-strong (AI-image-gen ★★★) | `memphis` · `active-theory` |
+| Versatile (≥4 scenarios ★★★) | `sagmeister-walsh` · `takram` |
+
+**Consumed by** `/theme-create --inspired-by-school <slug>` and `/frontend-design --school <slug>`. The constraint-based translator at `scripts/school_md_to_appcolors.py` reads any school's `SCHOOL.md` and synthesizes a 29-token `AppColors` proposal that satisfies the school's constraints. Each school also ships a 7-column execution-path matrix (Flutter UI / HTML / PPT / PDF / Infographic / Cover / AI-image-gen) — see `docs/design-schools-execution-paths.md` for which external tools to pair with each path.
+
+Schools and brands compose: pick a school for *philosophy* and a brand for *tone*, or pick both from the school library when authoring non-Flutter artifacts.
+
+## Inspiration library
+
+`design-systems/` ships a 20-entry curated subset of [`nexu-io/open-design`](https://github.com/nexu-io/open-design)'s 71 brand `DESIGN.md` references. Each entry is a complete 9-section spec (Visual Theme · Color Palette · Typography · Components · Layout · Depth · Do/Don't · Responsive · Agent Prompt) with full upstream attribution headers (Apache-2.0 / MIT lineage). Pinned at SHA `d4b547c` (2026-05-07).
+
+| Category | Slugs |
+|---|---|
+| AI & LLM | `claude` · `cohere` · `mistral-ai` |
+| Developer Tools | `raycast` · `vercel` |
+| Productivity & SaaS | `cal` · `linear-app` · `notion` |
+| Backend & Data | `sentry` · `supabase` |
+| Design & Creative | `figma` · `framer` |
+| Fintech & Crypto | `revolut` · `stripe` |
+| E-Commerce & Retail | `airbnb` · `nike` |
+| Media & Consumer | `apple` · `spotify` |
+| Automotive | `tesla` |
+| Editorial · Studio | `atelier-zero` |
+
+**Consumed by** `/theme-create --inspired-by <slug>` and `/theme-create --browse [<category>]` via the translator at `scripts/design_md_to_appcolors.py`. The translator emits a `proposal.json` (29 tokens × 2 modes + WCAG report) plus a human-readable `rationale.md` for any of the 20 sources. See `design-systems/README.md` for the file contract and re-sync instructions.
+
+## Stack support
+
+| Stack | Status | Adapter |
+|---|---|---|
+| `flutter` | Stable since v1.0 | `adapters/flutter/` |
+| `nextjs-tailwind` | New in v1.2.0 (App Router + Pages, shadcn/ui aware) | `adapters/nextjs-tailwind/` |
+| `react-native` | New in v1.4.1 (bare RN + Expo detection, `makeStyles(colors)` factory, RN core primitives) | `adapters/react-native/` |
+| `vue-tailwind`, `svelte-tailwind`, `react-tailwind`, `angular-tailwind`, `swiftui` | v1.5+ backlog (additive, one PR each) | — |
+
+Each adapter ships:
+- `adapter.py` (entry point, dispatches by Plan `kind`)
+- `mappings.py` (29-role TOKEN_ROLE_MAP + widget type map)
+- `templates/` (string templates per output type)
+- `STACK_NOTES.md` (path conventions + override hints)
+- `tests/conformance.py` + golden files (CI gate)
+
+To add a new stack, see `docs/adapter-protocol.md` §"How to add a new adapter".
 
 ## Methodology
 
@@ -116,7 +170,68 @@ Apache 2.0 — see [LICENSE.txt](LICENSE.txt). Each skill folder also carries a 
 
 ## Status
 
-**v1.1.2** — patch release: fixes a v1.1.1 deployment bug where `install.sh` didn't bundle `craft/`, leaving the 5 wired skills pointing at a project-relative path that wouldn't resolve when invoked from any other cwd. Now `install.sh` copies `craft/*.md` to `~/.claude/craft/` and rewrites the 16 references in the installed wired-skill copies to absolute paths. 19/19 skills still pass `quick_validate.py`. Extracted from production use in the [Fitio](https://fitio.app) Flutter app. Stack-agnostic adapter is the next-major roadmap item (Onda E).
+**v1.5.0** — design schools library. `design-systems-schools/` (12 hand-authored philosophy schools) ships parallel to `design-systems/` (20 brand systems). Where brands say "look like Apple" with literal hex, schools say "follow Müller-Brockmann's discipline" via constraints (saturation, single-accent, WCAG ≥7:1, polarity). The constraint-based translator at `scripts/school_md_to_appcolors.py` solves the constraints to produce different palettes for different projects under the same school. `/theme-create --inspired-by-school <slug>` and `/frontend-design --school <slug>` are the new flags. The 12 schools cover 4 scenario-strength categories — 4 Flutter-strong (Pentagram, IA, Brutalism, Locomotive), 4 Print-strong (Müller-Brockmann, Kenya Hara, Editorial, Atelier-Zero), 2 AI-gen-strong (Memphis, Active Theory), 2 Versatile (Sagmeister-Walsh, Takram). `docs/design-schools-execution-paths.md` documents the multi-target execution matrix and recommended external tools (Marp, Slidev, Pandoc, Typst, Puppeteer, Midjourney, SDXL). 20/20 skills still pass `quick_validate.py`. Built on v1.4.x (RN adapter + interactive mockup stage), v1.3.0 (inspiration library), v1.2.x (multi-stack adapter + design-context). Extracted from production use in the [Fitio](https://fitio.app) Flutter app.
+
+## What changed in v1.5.0
+
+- **12-entry design-school library** at `design-systems-schools/`. Each `<slug>/SCHOOL.md` is hand-authored under Apache-2.0 with 8 standard sections — Philosophy nucleus · Core characteristics · Prompt DNA · Token implications · Execution-path matrix (7 scenarios × ratings) · Slop traps · Best paired with · Anti-pairs. Idea inspired by `alchaincyf/huashu-design` (Personal Use Only — not forked); structure adapted; prose written from scratch.
+- **Constraint-based translator** at `scripts/school_md_to_appcolors.py` (~485 LOC). Schools encode constraints (`accent ≤10% pixels`, `saturation_min 0.6`, `WCAG ≥7:1`, `polarity dark`, `single_accent`); the translator parses the bullets, synthesizes a palette via OKLCH iteration that satisfies the constraints, validates WCAG, and emits the same `proposal.json` + `rationale.md` shape as the v1.3.0 brand translator. **Validates 12/12 schools** with 9-10/11 WCAG pairs passing per mode.
+- **`/theme-create --inspired-by-school <slug>`** routes to the school translator. Same 4-precondition reduction as `--inspired-by` (purpose / audience / invariants / coexistence; skips the 4 the school encodes).
+- **`/frontend-design --school <slug>`** loads the school's `## Prompt DNA` as system-prompt extension for that mockup; appends the school's `## Slop traps` to the auto-revision checklist; stamps `<!-- school: <slug> -->` in `<head>` for traceability. Sticky session via `.design-spec/features/<feature>/active-school.txt`.
+- **`docs/design-schools-execution-paths.md`** explains how to read the 7-column matrix (Flutter UI · HTML · PPT · PDF · Infographic · Cover · AI-image-gen), when to pick the in-pipeline HTML path vs an external tool, and lists recommended tools per scenario (with last-validated dates). The pattern is **HTML-as-canonical-source** — author HTML once, convert to PPT/PDF/Cover via Marp/Pandoc/Puppeteer.
+- **STATE D-23 + D-24 + D-25 logged.** D-23 documents the schools/brands split (sibling folders, different abstractions); D-24 records the from-scratch authoring under Apache-2.0; D-25 captures the multi-target-matrix-as-reference-only doctrine.
+
+## What changed in v1.4.1
+
+- **`adapters/react-native/` (additive — no skill changes).** New stack adapter follows the same shape as `adapters/flutter/` and `adapters/nextjs-tailwind/` (`adapter.py` + `mappings.py` + `templates/` + `STACK_NOTES.md` + `tests/conformance.py` + 5 frozen goldens). Renders all 3 Plan kinds (palette, motion-set, widget-tree). Conformance: **3/3 green**.
+- **`scripts/resolve_stack.py`** now lists `react-native` alongside `flutter` and `nextjs-tailwind`; `STACK=react-native python3 scripts/resolve_stack.py` exits 0.
+- **`scripts/audit_theme.py`** accepts `--stack react-native`; lint set at `scripts/audit_lint_sets/react-native.yaml` (catches `"#hex"` strings outside `theme/`, inline `style={{ color: '#…' }}`, `rgba()` literals, `Color(0x…)` Android-API copy-paste).
+- **Skill bodies extended** — `theme-port`, `theme-extend`, `theme-audit` add a `react-native` row to their per-stack tables. No new triggers, no behavioural change for existing flutter / nextjs-tailwind users.
+- **What it does NOT ship** — the `useColors()` hook (downstream wires it to `useColorScheme()` or a store), `npx expo install` automation, image source resolution, or Reanimated worklets. See `adapters/react-native/STACK_NOTES.md` for the full non-goal list.
+
+## What changed in v1.4.0
+
+- **`tweaks` skill (new — 20th in the marketplace).** `/tweaks <path>` wraps any tweaks-ready HTML with a fixed side panel of 5 knobs binding to CSS custom properties + localStorage persistence. Output is a sibling `<input>.tweaks.html` (original untouched). Refuses to wrap inputs that bake hex/px outside `:root` and tells the user to re-emit via `/frontend-design`. Vanilla JS, ~250 lines, no framework, no server — single self-contained HTML. Persona: **Tweaker** (functional skill, no PT alias).
+- **Clara refit: tweaks-ready emission contract.** `/frontend-design` (Clara / Designer) now ships HTML where every visual decision is a CSS custom property reference: colors via `var(--accent)`, spacing via `calc(var(--space-unit) * N)`, font-sizes via the multiplicative scale ladder, dark mode via `:root[data-mode="dark"]` overrides, every major section gets `data-od-id`. The auto-revisão checklist gains 5 boolean items. Mockups produced from v1.4 forward pipe directly into `/tweaks` without refit.
+- **`theme-critique --mode 5dim`.** Alternative rubric forked from `nexu-io/open-design` (originating in `huashu-design`) — 5 dimensions scored 0–10 (Philosophy / Visual hierarchy / Detail / Functionality / Innovation), each with evidence + a Keep/Fix/Quick-win bullet. Output is a self-contained HTML report at `.design-spec/critique/<feature>/<timestamp>-5dim.html` with inline-SVG radar chart. Default mode stays Nielsen 10. Use 5dim for early-stage exploration; Nielsen for shipping-readiness.
+- **Pipeline (new step between Clara and Architect):**
+
+  ```
+  /theme-create [--inspired-by]          # palette
+       ↓
+  /frontend-design                       # tweaks-ready HTML mockup
+       ↓
+  /tweaks <path>                         # NEW v1.4 — knob panel, explore N variants
+       ↓
+  /theme-critique --mode 5dim <path>     # NEW v1.4 — radar-chart review of chosen state
+       ↓
+  /theme-port --from-html <path>         # HTML → Flutter using tokens
+  ```
+
+- **STATE D-19 + D-20 + D-21 logged.** D-19 records tweaks-as-wrapper-not-generator; D-20 records `data-od-id` reuse over inventing `data-dw-id`; D-21 records `--mode 5dim` as a flag rather than a separate skill.
+
+## What changed in v1.3.0
+
+- **20-entry curated inspiration library.** `design-systems/<slug>/DESIGN.md` ships forks of 20 reference brand systems from upstream `nexu-io/open-design` — covering AI&LLM (Claude, Cohere, Mistral), Dev Tools (Vercel, Raycast), Productivity (Linear, Notion, Cal), Backend/Data (Supabase, Sentry), Design/Creative (Figma, Framer), Fintech (Stripe, Revolut), E-Commerce (Airbnb, Nike), Media (Apple, Spotify), Automotive (Tesla), and Editorial (Atelier Zero). Each entry retains its full attribution chain (Apache-2.0 / MIT lineage) and is pinned at upstream SHA `d4b547c`.
+- **Translator: DESIGN.md → AppColors.** `scripts/design_md_to_appcolors.py` reads any of the 20 sources and emits a `proposal.json` (29 tokens × 2 modes + WCAG report + decision trace) plus a human-readable `rationale.md` (source citation + mapping table + open questions + Fitio-specific tokens needing input). Inference chain: per-entry name override → section keyword → description hint → WCAG-corrected fallback. Native-mode detection (light vs dark) drives whether the source IS the dark proposal (Linear, Apple, Sentry) or the light one. Industry-standard defaults fill missing feedback colors and are flagged.
+- **`/theme-create --inspired-by <slug>`.** New flag skips 4 of the original 8 pre-conditions (tone, differentiation, color-strategy commitment, anti-category-reflex — the source already encodes them). User answers only purpose, audience, invariants, coexistence. The translator's rationale doc drives the conversation.
+- **`/theme-create --browse [<category>]`.** Discovery wrapper — lists the 20 entries grouped by category, lets the user pick, then drops into `--inspired-by`. With a category arg (`--browse fintech`), filters to that bucket.
+- **STATE D-17 + D-18 logged.** D-17 documents the curation cap and attribution chain; D-18 captures the translator's inference chain priority and the always-flag-failures rule.
+
+## What changed in v1.2.1
+
+- **Design context doctrine.** New `craft/design-context.md` codifies the "blank-page is last resort" rule with a 5-tier context hierarchy (existing design system → codebase → deployed product → external brief → vague description) and a sharp refusal rule: STOP if Tier 1–4 absent. Authored from scratch under Apache-2.0; idea inspired by [huashu-design](https://github.com/alchaincyf/huashu-design).
+- **5 wired skills, 1 net-new wire.** `theme-port`, `theme-create`, `theme-critique`, `frontend-design` get `design-context` appended to existing `dw.craft.requires:`. `theme-extend` becomes wired for the first time (Tier 1 dependency only — extending nothing is meaningless). `theme-port`, `theme-create`, `theme-extend` gain a "Pre-flight context check" section with skill-specific tier checks before Workflow Step 1.
+- **STATE D-11.1 logged.** Sub-decision under D-11 (craft adoption) records the from-scratch authoring + 5-skill wiring.
+
+## What changed in v1.2.0
+
+- **Adapter contract.** New `docs/adapter-protocol.md` + `docs/adapter-plan.schema.json` define a stack-neutral intermediate format ("Adapter Plan"). Skills that emit code now produce a Plan; per-stack adapters render it to native syntax.
+- **Two reference adapters.** `adapters/flutter/` is byte-equivalent to pre-v1.2 output (Fitio dogfood path unchanged). `adapters/nextjs-tailwind/` is new — emits CSS custom properties, Tailwind config snippet, and TSX (shadcn-aware when detected).
+- **`stack:` config field.** Top-level `stack: flutter | nextjs-tailwind` in `.design-workflow.yaml`. Override per-invocation with `STACK` env var. Default `flutter` keeps existing setups working.
+- **Migrated skills.** `theme-port` and `theme-extend` emit Plans and dispatch to the active adapter. Remaining 5 wired skills (`theme-create`, `theme-motion`, `theme-bolder`, `theme-quieter`, `theme-distill`) are deferred to v1.3 phase-2.
+- **Stack-aware audit.** `theme-audit` reads `scripts/audit_lint_sets/<stack>.yaml` for regex sets; Tailwind arbitrary-hex patterns + inline-style hex etc. activate when `stack: nextjs-tailwind`. WCAG contrast logic is shared.
+- **ROADMAP reversed.** "Web-first design out of scope" entry struck through; adapter pattern keeps all stacks in-repo.
 
 ## What changed in v1.1.2
 

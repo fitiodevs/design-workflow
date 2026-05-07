@@ -1,0 +1,37 @@
+# React Native audit lint set.
+
+stack: react-native
+file_extensions: [".tsx", ".ts", ".jsx", ".js"]
+exclude_suffixes: [".d.ts"]
+default_scan: src
+allow_hex_in:
+  - src/theme/colors.ts
+  - app/theme/colors.ts
+  - src/theme/motion.ts
+  - app/theme/motion.ts
+allow_colors_in: []
+slop_skip:
+  - node_modules/
+  - ios/
+  - android/
+  - .expo/
+  - tests/__fixtures__/
+allowed_spacing: []
+allowed_radius: []
+
+structural:
+  # RN doesn't ship CSS-style strings; hex literals show up either as plain
+  # `"#hex"` strings inside StyleSheet entries OR as `Color()` / inline-style
+  # objects. Catch both patterns. Allow them only inside `theme/` files (above).
+  hex_string_literal: '["''']#[0-9a-fA-F]{6}["''']'
+  inline_style_hex: 'style=\{\{[^}]*\b(?:color|backgroundColor|borderColor|tintColor|shadowColor)\s*:\s*[''"]#[0-9a-fA-F]{3,8}'
+  rgba_inline:       '\b(?:rgba?|hsla?)\(\s*\d'
+  raw_color_const:   '\bColor\(\s*0x[0-9a-fA-F]{8}\s*\)'
+
+slop:
+  cliche_vocative: '["''][^"'']*\b(?:athlete|champion|warrior|hustler|grinder)[!,.][^"'']*["'']'
+  generic_placeholder: '["''][^"'']*\b(?:John\s+Doe|Jane\s+Doe|Lorem\s+ipsum|Acme(?:\s+Corp)?|SmartFlow|TestUser)\b[^"'']*["'']'
+
+slop_flags:
+  cliche_vocative: IGNORECASE
+  generic_placeholder: IGNORECASE

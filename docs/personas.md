@@ -18,6 +18,7 @@ Each skill has a persona archetype. Personas accept English **and** Portuguese a
 | `status` | Cartographer | Atlas | Read-only snapshot of active work across `.specs/`, `docs/backlog/`, `memory/active_work.md` | `/Cartographer`, `/Atlas`, `/status` |
 | `promote` | Cartographer Promote | Atlas Promote | Converts a `docs/backlog/` markdown into a `.specs/features/` triplet, recommends `/tlc-spec-driven` + `/tlc-closure` | `/promote`, `/promote-backlog` |
 | `atlas-save` | Cartographer Chronicler | Atlas Cronista | Curated session handoff (decisions, bugs, lessons, playbook) into `memory/sessions/`; opt-in Obsidian mirror | `/save-session`, `/atlas-save` |
+| `tweaks` | Tweaker | — (no PT alias — functional skill) | Wraps any tweaks-ready HTML mockup with a side panel of live CSS-custom-property knobs (accent hue · type scale · density · theme mode · motion) persisting to localStorage; refuses non-tweaks-ready inputs and recommends `/frontend-design` refit | `/tweaks`, `/Tweaker` |
 
 ## Why personas?
 

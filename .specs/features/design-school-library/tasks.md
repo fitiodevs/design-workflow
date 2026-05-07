@@ -13,7 +13,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 0 — Safety net + scope confirm
 
-### T-00 ⬜ Tag rollback + finalize 12-school list
+### T-00 ✅ Tag rollback + finalize 12-school list
 - **Action:**
   ```bash
   git tag pre-v1.5.0
@@ -23,12 +23,12 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Refs:** spec REQ-01.1
 - **Blocks:** all
 
-### T-01 ⬜ Read huashu's `design-styles.md` once for reference
+### T-01 ✅ Read huashu's `design-styles.md` once for reference
 - **Action:** `gh api repos/alchaincyf/huashu-design/contents/references/design-styles.md --jq '.content' | base64 -d > /tmp/huashu-design-styles.md` — read it through carefully, take mental notes per the 12 picked schools. **Close the file before authoring** to avoid prose-similarity.
 - **Verify:** notes captured at top of this file (or in `/tmp/v1.5-notes.md`); decision: each school's philosophy nucleus has been internalized in our own words before authoring.
 - **Refs:** spec §6 risk "huashu license"
 
-### T-02 ⬜ Author SCHOOL.md template
+### T-02 ✅ Author SCHOOL.md template
 - **Action:** create `/tmp/school-template.md` matching design §"SCHOOL.md template". This template gets copied for each school in T-03..T-14.
 - **Verify:** template file exists with all 8 sections + attribution header + matrix scaffold.
 - **Refs:** spec REQ-01.3
@@ -39,46 +39,46 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 > Each school takes ~30-40 min. Pair-author when possible (1 fully done before moving on, to refine the template).
 
-### T-03 ⬜ Author Müller-Brockmann (Swiss grid)
+### T-03 ✅ Author Müller-Brockmann (Swiss grid)
 - **Action:** copy template, fill all 8 sections; this is the canonical "constraint-rich" school — use it to validate the template structure. Time-box 45 min.
 - **Verify:** `wc -l design-systems-schools/muller-brockmann/SCHOOL.md` ≥ 150; all 8 sections present; matrix has 7-column row; constraints in "Token implications" are concrete and parseable.
 - **Refs:** REQ-01.2
 
-### T-04 🅿️ Author Pentagram (Bierut)
+### T-04 ✅ Author Pentagram (Bierut)
 - **Action:** copy template, fill in. Note: typography-led; less constraint-heavy than Müller-Brockmann, more about discipline.
 - **Verify:** mesma checagem.
 
-### T-05 🅿️ Author Kenya Hara (negative space)
+### T-05 ✅ Author Kenya Hara (negative space)
 - **Action:** template + content. Distinct character: Japanese minimalism, ample whitespace, refined neutrals.
 
-### T-06 🅿️ Author Information Architects
+### T-06 ✅ Author Information Architects
 - **Action:** typography-first, data-respect-first.
 
-### T-07 🅿️ Author Brutalism (web brutalist)
+### T-07 ✅ Author Brutalism (web brutalist)
 - **Action:** anti-school → opinionated. Concrete: monospace, raw HTML aesthetic, asymmetric, system fonts, no-radius.
 
-### T-08 🅿️ Author Memphis (postmodern)
+### T-08 ✅ Author Memphis (postmodern)
 - **Action:** color-bold, geometric pattern, 80s-postmodern.
 
-### T-09 🅿️ Author Sagmeister & Walsh (expressive)
+### T-09 ✅ Author Sagmeister & Walsh (expressive)
 - **Action:** type-as-image, hand-rendered moments, color-saturated.
 
-### T-10 🅿️ Author Active Theory (kinetic)
+### T-10 ✅ Author Active Theory (kinetic)
 - **Action:** motion-first, AI-gen-friendly per matrix; heavy on Locomotive-style transitions.
 
-### T-11 🅿️ Author Editorial (Wired/Apple-mag)
+### T-11 ✅ Author Editorial (Wired/Apple-mag)
 - **Action:** magazine pacing, serif headlines, broad imagery, generous spacing.
 
-### T-12 🅿️ Author Locomotive (kinetic-narrative web)
+### T-12 ✅ Author Locomotive (kinetic-narrative web)
 - **Action:** scroll-driven storytelling, parallax, animated entries.
 
-### T-13 🅿️ Author Takram (data-poetic)
+### T-13 ✅ Author Takram (data-poetic)
 - **Action:** data-as-art, calm visualization, narrative diagrams.
 
-### T-14 🅿️ Author Atelier-Zero (collage-editorial — open-design hand-curated)
+### T-14 ✅ Author Atelier-Zero (collage-editorial — open-design hand-curated)
 - **Action:** distinct attribution (open-design's own hand-author, not 3rd-party); collage paper canvas, plaster imagery, oversized italic-mixed display, Roman-numeral markers.
 
-### T-15 ⬜ Write `design-systems-schools/README.md`
+### T-15 ✅ Write `design-systems-schools/README.md`
 - **Action:** category index grouping the 12 by primary scenario strength (Flutter / Print / AI-gen / Versatile); 1-paragraph philosophy per school for the picker.
 - **Verify:** index has 12 rows; grouped by 4 categories.
 - **Refs:** REQ-01.4
@@ -87,32 +87,32 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 2 — Translator
 
-### T-16 ⬜ Stub `scripts/school_md_to_appcolors.py`
+### ### T-16 ⬜ Stub `scripts/school_md_to_appcolors.py`
 - **Action:** scaffolding per design §"Translator design (constraint-based)". Argparse + 5 phase stubs.
 - **Verify:** `python3 scripts/school_md_to_appcolors.py --help` runs; `--dry-run` exits 0.
 - **Refs:** REQ-02.1
 
-### T-17 ⬜ Implement `parse_school_md`
+### ### T-17 ⬜ Implement `parse_school_md`
 - **Action:** parse the 8 sections; extract token-implications bullets specifically.
 - **Verify:** running on Müller-Brockmann returns ≥4 token-implications bullets parsed.
 - **Refs:** REQ-02
 
-### T-18 ⬜ Implement `extract_constraints`
+### ### T-18 ⬜ Implement `extract_constraints`
 - **Action:** translate each token-implications bullet into a Constraint dataclass: {target_token, operator, value} (e.g. `{"target": "brandDefault", "constraint": "saturation_min", "value": 0.8}`).
 - **Verify:** running on Müller-Brockmann returns ≥6 Constraints extracted.
 - **Refs:** REQ-02.2
 
-### T-19 ⬜ Implement `synthesize_palette` constraint solver
+### ### T-19 ⬜ Implement `synthesize_palette` constraint solver
 - **Action:** for each token, OKLCH-iterate values within constraint bounds until WCAG passes. Cap iterations at 5; emit partial + flag if no convergence.
 - **Verify:** running on Müller-Brockmann emits a valid 29-token AppColors proposal with no convergence failures.
 - **Refs:** REQ-02.2, design D-D
 
-### T-20 ⬜ Implement `validate_wcag` + `write_artifacts`
+### T-20 ✅ Implement `validate_wcag` + `write_artifacts`
 - **Action:** reuse `scripts/check_contrast.py`; emit proposal.json + rationale.md per v1.2.0 conventions.
 - **Verify:** files exist; rationale cites school philosophy + which constraints drove which token choices.
 - **Refs:** REQ-02.3, REQ-02.5
 
-### T-21 ⬜ Smoke test on 3 schools
+### T-21 ✅ Smoke test on 3 schools
 - **Action:** run translator on Müller-Brockmann, Brutalism, Editorial. Manual review for: (a) palette character matches school description, (b) no AI-default colors (no Tailwind indigo), (c) WCAG on 12 mandatory pairs all pass.
 - **Verify:** 3 dirs in `/tmp/school-test/`; manual review notes saved; zero "all-neutral-gray fallback" cases.
 - **Refs:** spec §8
@@ -121,7 +121,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 3 — Wire `theme-create` + `frontend-design`
 
-### T-22 ⬜ Add `--inspired-by-school <slug>` to theme-create
+### T-22 ✅ Add `--inspired-by-school <slug>` to theme-create
 - **Action:** edit `skills/theme-create/SKILL.md`:
   - description mentions both `--inspired-by` and `--inspired-by-school`
   - Triggers section adds the new flag
@@ -129,7 +129,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Verify:** `python3 $VAL skills/theme-create/` valid; `grep -c "inspired-by-school" skills/theme-create/SKILL.md` ≥ 3.
 - **Refs:** REQ-03
 
-### T-23 ⬜ Add `--school <slug>` to frontend-design (Clara)
+### T-23 ✅ Add `--school <slug>` to frontend-design (Clara)
 - **Action:** edit `skills/frontend-design/SKILL.md`:
   - Triggers section adds `--school <slug>`
   - new "## --school mode" section explaining: load school's Prompt DNA into system prompt, emit `<!-- school: <slug> -->` HTML comment, sticky session via `.design-spec/features/<feature>/active-school.txt`.
@@ -140,7 +140,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 4 — Execution-path doc
 
-### T-24 ⬜ Write `docs/design-schools-execution-paths.md`
+### T-24 ✅ Write `docs/design-schools-execution-paths.md`
 - **Action:** sections:
   1. How to read the 7-column matrix
   2. When HTML path (in our pipeline) vs external tool
@@ -159,17 +159,17 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 5 — STATE + README + version
 
-### T-25 ⬜ Append D-20, D-21, D-22 to STATE.md
+### T-25 ✅ Append D-23, D-24, D-25 to STATE.md
 - **Action:** 3 decisions per spec REQ-06.
-- **Verify:** `grep -c "^- \*\*D-2[012]" .specs/project/STATE.md` = 3.
+- **Verify:** `grep -c "^- \*\*D-2[345]" .specs/project/STATE.md` = 3.
 - **Refs:** REQ-06
 
-### T-26 ⬜ Update README §What changed in v1.5.0 + Design schools library section
+### T-26 ✅ Update README §What changed in v1.5.0 + Design schools library section
 - **Action:** new release section + new top-level "## Design schools library" section explaining philosophy-vs-brand split + 12-entry table grouped by scenario strength.
 - **Verify:** `grep -c "What changed in v1.5.0" README.md` = 1; `grep -c "Design schools library" README.md` ≥ 1; table has 12 rows.
 - **Refs:** REQ-07.1, REQ-07.2
 
-### T-27 ⬜ Bump `marketplace.json`
+### T-27 ✅ Bump `marketplace.json`
 - **Action:** `1.4.0` → `1.5.0`.
 - **Verify:** `jq -r '.metadata.version' .claude-plugin/marketplace.json` = `1.5.0`.
 - **Refs:** REQ-08.3
@@ -178,17 +178,17 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 6 — Validation + commit
 
-### T-28 ⬜ Full validation sweep
-- **Action:** run `quick_validate.py` for all 21 skills.
+### T-28 ✅ Full validation sweep
+- **Action:** run `quick_validate.py` for all 20 skills.
 - **Verify:** 21 lines `Skill is valid!`.
 - **Refs:** REQ-08.1
 
-### T-29 ⬜ Translator regression sweep
+### T-29 ✅ Translator regression sweep
 - **Action:** run translator against all 12 schools. Confirm each produces a non-empty, WCAG-valid proposal.
 - **Verify:** `python3 scripts/school_md_to_appcolors.py --validate-all` reports 12/12 valid.
 - **Refs:** REQ-08.2
 
-### T-30 ⬜ Commit + push
+### T-30 ✅ Commit + push
 - **Action:**
   ```
   git add design-systems-schools/ scripts/school_md_to_appcolors.py skills/theme-create skills/frontend-design docs/design-schools-execution-paths.md README.md .specs/project/STATE.md .claude-plugin/marketplace.json
@@ -227,8 +227,21 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 3. Próximo `⬜ pending`
 4. Time-check no T-03: if Müller-Brockmann auth excede 60 min, signal that 12-school plan precisa cortar pra 8.
 
-## Confirmed slugs (locked at T-00)
+## Confirmed slugs (locked at T-00 on 2026-05-07)
 
-> Replace this section's content during T-00 execution with the final 12-slug list locked.
+| # | Slug | School name | Primary scenario strength |
+|---|---|---|---|
+| 01 | `pentagram` | Pentagram (Bierut) | Versatile (Web ★★★, HTML ★★★, Cover ★★★) |
+| 02 | `muller-brockmann` | Müller-Brockmann (Swiss grid) | Print-strong (PDF ★★★, Infographic ★★★) |
+| 03 | `kenya-hara` | Kenya Hara (negative space) | Print-strong (PDF ★★★, HTML ★★★) |
+| 04 | `information-architects` | Information Architects (typography) | Flutter-strong (Web ★★★, HTML ★★★) |
+| 05 | `brutalism` | Brutalism (web brutalist) | Flutter-strong (Web ★★★, HTML ★★★) |
+| 06 | `memphis` | Memphis (postmodern) | AI-gen-strong (AI ★★★, Cover ★★★) |
+| 07 | `sagmeister-walsh` | Sagmeister & Walsh (expressive) | Versatile (HTML ★★★, AI ★★★) |
+| 08 | `active-theory` | Active Theory (kinetic) | AI-gen-strong (AI ★★★, Web ★★★) |
+| 09 | `editorial` | Editorial (Wired/Apple-mag) | Versatile (HTML/PPT/PDF/Infographic/Cover all ★★★) |
+| 10 | `locomotive` | Locomotive (kinetic-narrative web) | Flutter-strong (Web ★★★) |
+| 11 | `takram` | Takram (data-poetic) | Versatile (Web/HTML/PPT/PDF all ★★★) |
+| 12 | `atelier-zero` | Atelier-Zero (collage-editorial) | Print-strong (open-design's hand-curated; HTML/PPT/PDF/Cover ★★★) |
 
-(TBD — captured during T-00.)
+12/12 locked. No swaps from spec REQ-01.1 — coverage spread accepted.

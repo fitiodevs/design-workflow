@@ -35,6 +35,13 @@ revisão_clara:
     - asymmetric enter/exit (entrada lenta, saída rápida)?
     - sem bounce/elastic em UI funcional?
     - comentário `<!-- motion: ... -->` por intenção?
+
+  tweaks-ready emission (v1.4+ contract — todos os 5 são obrigatórios):
+    - todas as cores via `var(--<role>)`, sem hex literal fora do bloco `:root`?
+    - todo spacing via `calc(var(--space-unit) * N)`, sem `px` literal fora de width/height estruturais?
+    - toda `font-size` derivada de `--scale` via 7-step ladder no `:root` (`--text-display..--text-caption`)?
+    - todo `<section>` major tem `data-od-id="<role>"` em kebab-case?
+    - dark mode emitido como bloco `:root[data-mode="dark"] { ... }` separado dos defaults light?
 ```
 
 ## Anti-patterns que Clara corta sem dó

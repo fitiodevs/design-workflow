@@ -4,6 +4,22 @@
 # Skills read this file to locate your design tokens, product doc, and
 # scripts. All paths are resolved relative to the project root.
 
+# Active stack — selects the adapter for code emission.
+# Valid values: flutter (default), nextjs-tailwind. Other adapters land in v1.3+.
+# Override per-invocation via the STACK env var.
+stack: flutter
+
+# Optional path overrides per stack. Defaults documented in
+# adapters/<stack>/STACK_NOTES.md.
+# paths:
+#   nextjs_tailwind:
+#     tokens_css: app/globals.css
+#     tailwind_config: tailwind.config.ts
+#     components_root: components
+#   flutter:
+#     app_colors: lib/core/theme/app_colors.dart
+#     widgets_root: lib/features/{feature}/presentation/widgets
+
 # Tokens — Flutter-first defaults
 tokens:
   colors: lib/core/theme/app_colors.dart
@@ -42,9 +58,10 @@ widgets:
 # Locale of user-facing copy (used by ux-writing + theme-port)
 locale: pt_BR
 
-# Stack hints — currently informational; future versions will branch
-# behaviour by stack.
-stack:
+# Framework meta — informational, used by skills to tailor judgment calls
+# (state lib idioms, routing, backend). Distinct from `stack:` above which
+# selects the code-emission adapter.
+framework_meta:
   framework: flutter
   state: riverpod
   routing: go_router

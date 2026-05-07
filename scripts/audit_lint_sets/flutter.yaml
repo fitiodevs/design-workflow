@@ -1,0 +1,41 @@
+# Flutter audit lint set — patterns moved verbatim from scripts/audit_theme.py.
+# WCAG contrast logic stays in scripts/check_contrast.py — stack-agnostic.
+
+stack: flutter
+file_extensions: [".dart"]
+exclude_suffixes: [".g.dart", ".freezed.dart"]
+default_scan: lib
+allow_hex_in:
+  - lib/core/theme/app_colors.dart
+  - lib/core/theme/app_theme.dart
+allow_colors_in: []
+slop_skip:
+  - lib/core/theme/preview/
+  - test/
+  - integration_test/
+allowed_spacing: [0, 1, 2, 4, 8, 12, 16, 20, 24, 32, 48, 64]
+allowed_radius:  [0, 6, 10, 14, 20, 999]
+
+structural:
+  hex_color:           'Color\(0x[0-9A-Fa-f]{8}\)'
+  material_color:      '\bColors\.(?!transparent\b)[a-zA-Z]+'
+  font_size:           '\bfontSize\s*:\s*[0-9]'
+  font_weight:         'fontWeight\s*:\s*FontWeight\.w[0-9]+'
+  edge_insets_literal: 'EdgeInsets\.(?:all|symmetric|only|fromLTRB)\([^)]*\b\d{1,3}(?:\.\d+)?\b'
+  radius_literal:      'BorderRadius\.circular\(\s*\d+(?:\.\d+)?\s*\)'
+
+slop:
+  filler_copy: |
+    ["'][^"']*\b(?:eleve\s+(?:seu|sua)|desbloqueie\s+(?:seu|sua)|liberte\s+(?:o\s+atleta|seu)|otimizad[oa]\s+para|sem\s+fric(?:c|ç)(?:a|ã)o|jornada\s+fitness|transforme\s+sua\s+rotina|pr(?:o|ó)ximo\s+n(?:i|í)vel|conquiste\s+seus?\s+objetivos?|sua\s+melhor\s+vers(?:a|ã)o|continue\s+assim|voc(?:e|ê)\s+(?:e|é)\s+incr(?:i|í)vel|experi(?:e|ê)ncia\s+seamless)\b[^"']*["']
+  cliche_vocative: |
+    ["'][^"']*\b(?:atleta|campe(?:a|ã)o|guerreir[oa])[!,.][^"']*["']
+  generic_placeholder: |
+    ["'][^"']*\b(?:John\s+Doe|Jane\s+Doe|Lorem\s+ipsum|Acme(?:\s+Corp)?|Sarah\s+Chan|SmartFlow)\b[^"']*["']
+  em_dash_in_copy:    '["''][^"'']*—[^"'']*["'']'
+  side_stripe_border: 'BorderSide\([^)]*width\s*:\s*[2-9](?:\.\d+)?\s*[,)]'
+  gradient_text:      'ShaderMask\s*\([^)]*LinearGradient'
+
+slop_flags:
+  filler_copy:        IGNORECASE
+  cliche_vocative:    IGNORECASE
+  generic_placeholder: IGNORECASE

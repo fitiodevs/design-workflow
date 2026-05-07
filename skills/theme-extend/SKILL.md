@@ -1,6 +1,10 @@
 ---
 name: theme-extend
 description: Adds or tweaks semantic tokens in the project's design system (colors, typography roles, spacing, radius). Generates WCAG-validated light/dark pairs, updates `AppColors`, `docs/design-tokens.md` and suggests where to apply. Use to resolve contrast failures detected by `/theme-audit`, add a new semantic role, or tune an existing value. Use when the user asks for `/Surgeon`, `/Cirurgião`, `/theme-extend`, "adiciona um token", "add a token", "resolve contraste de X", "fix contrast", "melhora o tema".
+metadata:
+  dw:
+    craft:
+      requires: [design-context]
 ---
 
 # Skill: theme-extend (`/theme-extend`) — persona **Cirurgião** (English: **Surgeon**)
@@ -27,6 +31,16 @@ Antes de estender, responder:
 - **Por que o token existente não serve?** Se `brand` cobre, não crie `primary`. Evitar proliferação.
 - **Qual o papel semântico?** Descrever em uma frase. Se a descrição é "a cor X tal", está errado — precisa ser um papel (ex: "destaque em card de desafio sponsorado").
 - **Onde vai ser usado?** Listar 2-3 call sites pretendidos. Se só 1, reconsiderar se token é necessário ou se é invariante de marca → `AppBrandColors`.
+
+## Pre-flight context check
+
+Before extending, verify Tier 1 context per `craft/design-context.md`:
+
+- **Tier 1** — existing `AppColors` (Flutter) or `app/globals.css` + Tailwind config (Next.js+Tailwind) MUST exist. Extending nothing makes no sense — there's no neighbor palette to pick a coherent OKLCH value against.
+
+If Tier 1 missing → STOP. Ask the user to seed the palette via `/theme-create` first, then come back with `/theme-extend`.
+
+Tier 4 (`docs/product.md`) is not strictly required for theme-extend — concrete requests like "add a token for disabled state" are self-describing. Vague requests ("make the theme nicer") still trigger STOP.
 
 ## Workflow
 
@@ -60,20 +74,45 @@ Se falhar AA:
 - Clarear a versão dark.
 - Repetir até passar.
 
-#### Step A3 — Editar `lib/core/theme/app_colors.dart`
+#### Step A3 — Build Adapter Plan + dispatch
 
-Adicionar em **6 lugares** (segue o padrão dos campos existentes — o `AppColors` atual tem 29 fields organizados em 7 grupos com comentários `// ── <Grupo> ──`):
+Em vez de editar `app_colors.dart` diretamente, emit um **Adapter Plan** `kind: palette` e delegue ao adapter da stack ativa.
 
-1. Campo: `final Color <novoToken>;` (no grupo apropriado, manter ordem)
-2. Constructor: `required this.<novoToken>,`
-3. `AppColors.navyBlue` (light): `<novoToken>: Color(0xFF...),`
-4. `AppColors.darkBlue` (dark): `<novoToken>: Color(0xFF...),`
-5. `copyWith`: parâmetro opcional + linha `<novoToken>: <novoToken> ?? this.<novoToken>,`
-6. `lerp`: `<novoToken>: Color.lerp(<novoToken>, other.<novoToken>, t)!,`
+```bash
+# 1. Resolve active stack — STACK env > config.stack > flutter
+STACK=$(python3 scripts/resolve_stack.py)
 
-Se o token novo for de feedback (par cor + muted), adicionar **2 fields** seguindo o padrão `feedbackXxx` + `feedbackXxxMuted`. Se for badge novo, adicionar 3 fields no `AppBadgeColors` E uma entrada na factory `fromAppColors()`.
+# 2. Emit Plan (extends current palette with the new role)
+cat > /tmp/extend-<novoToken>-plan.json <<EOF
+{
+  "version": "1.0",
+  "kind": "palette",
+  "tokens": {
+    "palette": {
+      "<novoToken>": {"light": "#XXXXXX", "dark": "#YYYYYY"}
+      /* + outros 29 roles existentes (read from current AppColors / globals.css) */
+    }
+  },
+  "actions": [
+    {"op": "patch",  "role": "palette",       "intent": "tokens"},
+    {"op": "append", "role": "design-tokens", "intent": "doc-summary"}
+  ]
+}
+EOF
 
-O script `generate_palette.py pair` já emite snippet pronto nos passos 1-4.
+# 3. Adapter renders to native:
+python3 adapters/$STACK/adapter.py /tmp/extend-<novoToken>-plan.json
+```
+
+Por stack:
+
+- **flutter:** o adapter atualiza `lib/core/theme/app_colors.dart` (field, constructor, light/dark instances, `copyWith`, `lerp` — os 6 lugares ficam responsabilidade do template). Token de feedback (`feedbackXxx` + `feedbackXxxMuted`) requer **2 entradas** no Plan.
+- **nextjs-tailwind:** o adapter atualiza `app/globals.css` (`:root` + `.dark` blocks) e regenera o snippet `tailwind.config.ts.tmpl` para `theme.extend.colors`.
+- **react-native:** o adapter regrava `src/theme/colors.ts` com o novo role nas duas paletas (`lightColors` + `darkColors`) e na união `ColorRole`. O hook `useColors()` é responsabilidade do projeto (provider + `useColorScheme()`); o adapter **não** o gera. Estilos consumidores via `makeStyles(colors)` pegam o novo role automaticamente.
+
+Se o token novo for badge, manter compat com `AppBadgeColors.fromAppColors()` em Flutter — o adapter ainda não cobre badge derivation (planned v1.3); o Plan declara o role base e o operador faz o passo manual.
+
+O script `generate_palette.py pair` continua útil para gerar o par light/dark hex que vai dentro do Plan.
 
 #### Step A4 — Atualizar `docs/design-tokens.md`
 
