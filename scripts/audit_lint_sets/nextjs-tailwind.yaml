@@ -1,0 +1,35 @@
+# Next.js + Tailwind audit lint set.
+
+stack: nextjs-tailwind
+file_extensions: [".tsx", ".ts", ".jsx", ".js", ".css"]
+exclude_suffixes: [".d.ts"]
+default_scan: .
+allow_hex_in:
+  - app/globals.css
+  - styles/tokens.css
+  - tailwind.config.ts
+allow_colors_in: []
+slop_skip:
+  - node_modules/
+  - .next/
+  - tests/__fixtures__/
+allowed_spacing: []
+allowed_radius: []
+
+structural:
+  tailwind_arbitrary_text: 'text-\[#[0-9a-fA-F]{3,8}\]'
+  tailwind_arbitrary_bg: 'bg-\[(?:#|rgb|hsl)'
+  tailwind_arbitrary_border: 'border-\[#[0-9a-fA-F]{3,8}\]'
+  inline_style_hex: 'style=\{\{[^}]*\b(?:color|background|backgroundColor|borderColor|fill|stroke)\s*:\s*[''"]#[0-9a-fA-F]{3,8}'
+  gradient_arbitrary_from: 'from-\[(?:#|rgb)'
+  gradient_arbitrary_to: 'to-\[(?:#|rgb)'
+  raw_hsl_in_jsx: '\bhsl\(\s*\d'
+  hex_in_tsx: '(?<![\w-])#[0-9a-fA-F]{6}\b'
+
+slop:
+  cliche_vocative: '["''][^"'']*\b(?:athlete|champion|warrior|hustler|grinder)[!,.][^"'']*["'']'
+  generic_placeholder: '["''][^"'']*\b(?:John\s+Doe|Jane\s+Doe|Lorem\s+ipsum|Acme(?:\s+Corp)?|SmartFlow|TestUser)\b[^"'']*["'']'
+
+slop_flags:
+  cliche_vocative: IGNORECASE
+  generic_placeholder: IGNORECASE

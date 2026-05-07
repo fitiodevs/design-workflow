@@ -196,17 +196,17 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 6 — Stack-aware audit
 
-### T-24 ⬜ Refactor `scripts/audit_theme.py` for `--stack` flag
+### T-24 ✅ Refactor `scripts/audit_theme.py` for `--stack` flag
 - **Action:** accept `--stack <flutter|nextjs-tailwind>`. Read lint regex set from `scripts/audit_lint_sets/<stack>.yaml`. WCAG logic intact.
 - **Verify:** `python3 scripts/audit_theme.py --stack flutter --help` shows the flag; `--stack invalid` errors with available list.
 - **Refs:** REQ-F.2
 
-### T-25 🅿️ Write `audit_lint_sets/flutter.yaml`
+### T-25 ✅ Write `audit_lint_sets/flutter.yaml`
 - **Action:** YAML file with regex patterns currently hardcoded in audit_theme.py (move them).
 - **Verify:** YAML loads cleanly; same patterns as before; audit on Fitio still flags same issues.
 - **Refs:** REQ-F.1
 
-### T-26 🅿️ Write `audit_lint_sets/nextjs-tailwind.yaml`
+### T-26 ✅ Write `audit_lint_sets/nextjs-tailwind.yaml`
 - **Action:** new patterns for Tailwind/JSX:
   - `text-\[#[0-9a-fA-F]+\]` (Tailwind arbitrary value with hex)
   - `bg-\[(#|rgb)` (Tailwind arbitrary bg)
@@ -216,7 +216,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Verify:** YAML loads; manual smoke against `/tmp/nextjs-smoke/` finds at least 0 false positives + 0 missed obvious ones (sample test file with intentional violations).
 - **Refs:** REQ-F.1
 
-### T-27 ⬜ Update `skills/theme-audit/SKILL.md`
+### T-27 ✅ Update `skills/theme-audit/SKILL.md`
 - **Action:** SKILL.md body reads resolved stack and passes `--stack` to script. Documents the per-stack pattern set.
 - **Verify:** `python3 $VAL skills/theme-audit/` valid; `grep -c "stack:" skills/theme-audit/SKILL.md` ≥ 1.
 - **Refs:** REQ-F.1, REQ-F.2

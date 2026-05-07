@@ -1,239 +1,221 @@
 #!/usr/bin/env python3
 """
-Auditor de tema. Varre `lib/` e reporta violações de tokens semânticos
-e anti-patterns de copy/layout (regras de `docs/product.md`).
+Stack-aware theme auditor.
 
-Detecta (estrutural):
-  - `Color(0xFF...)` fora de `lib/core/theme/`
-  - `Colors.<name>` (exceto transparent / withValues / utility) em widgets
-  - `fontSize:` literal
-  - `fontWeight: FontWeight.w<NNN>` literal
-  - `EdgeInsets.*(<number>)` com número cru (não token AppSpacing)
-  - `BorderRadius.circular(<number>)` fora da escala AppRadius
+Loads regex pattern sets from `scripts/audit_lint_sets/<stack>.yaml` based
+on the resolved `--stack` flag (or env STACK / config.stack via
+`scripts/resolve_stack.py`). WCAG contrast logic stays in
+`scripts/check_contrast.py` — color math is stack-agnostic.
 
-Detecta (anti-slop, conforme `docs/product.md` §4.2 e §9):
-  - filler words em copy ("Eleve", "Jornada fitness", "Otimizado"...)
-  - vocativos clichê ("atleta!", "campeão!", "guerreiro!")
-  - em-dash decorativo em strings pt-BR
-  - side-stripe borders (border-left/right > 1px)
-  - generic placeholder names ("John Doe", "Acme", "Lorem ipsum")
-  - gradient text decorativo (ShaderMask + LinearGradient + Text)
+Detected (Flutter, default lint set):
+  - Color(0xFF...) outside lib/core/theme/
+  - Colors.<name> in widgets
+  - fontSize / fontWeight literals
+  - EdgeInsets / BorderRadius numbers off-scale
+  - Anti-slop copy patterns (filler, cliche, em-dash, etc.)
+
+Detected (Next.js+Tailwind):
+  - text-[#...], bg-[#...], border-[#...] arbitrary values
+  - inline style={...} with hex
+  - hsl() / hex literals in JSX
+  - Generic placeholder names
 
 Usage:
-    python scripts/audit_theme.py              # relatório completo
-    python scripts/audit_theme.py --summary    # só contagens
-    python scripts/audit_theme.py --fail       # exit 1 se houver violação
-    python scripts/audit_theme.py --no-slop    # só estrutural (legacy)
-    python scripts/audit_theme.py lib/features/marketplace  # subpath
+    python3 scripts/audit_theme.py                          # current stack, defaults
+    python3 scripts/audit_theme.py --stack flutter
+    python3 scripts/audit_theme.py --stack nextjs-tailwind <path>
+    python3 scripts/audit_theme.py --summary
+    python3 scripts/audit_theme.py --fail
+    python3 scripts/audit_theme.py --no-slop
 """
-
+from __future__ import annotations
+import argparse
 import os
 import re
 import sys
 from collections import defaultdict
-from typing import List, Tuple, Dict
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(os.environ.get("PROJECT_ROOT", REPO_ROOT.parent))
+LINT_SETS_DIR = REPO_ROOT / "scripts" / "audit_lint_sets"
+AVAILABLE_STACKS = ("flutter", "nextjs-tailwind")
 
 
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-DEFAULT_SCAN = os.path.join(PROJECT_ROOT, "lib")
-
-# Arquivos onde hex hardcoded é legítimo (source of truth do tema)
-ALLOW_HEX_IN = (
-    "lib/core/theme/app_colors.dart",
-    "lib/core/theme/app_theme.dart",
-)
-
-# Arquivos onde cores Colors.X crua é justificável (cache: avatar patrocinador)
-# Ajuste manual — lista fechada.
-ALLOW_COLORS_IN = (
-    # vazio por enquanto; `Colors.white` para avatar de patrocinador documentado
-)
-
-EXCLUDE_SUFFIXES = (".g.dart", ".freezed.dart")
-
-PATTERNS: Dict[str, re.Pattern] = {
-    "hex_color": re.compile(r"Color\(0x[0-9A-Fa-f]{8}\)"),
-    "material_color": re.compile(r"\bColors\.(?!transparent\b)[a-zA-Z]+"),
-    "font_size": re.compile(r"\bfontSize\s*:\s*[0-9]"),
-    "font_weight": re.compile(r"fontWeight\s*:\s*FontWeight\.w[0-9]+"),
-    "edge_insets_literal": re.compile(
-        r"EdgeInsets\.(?:all|symmetric|only|fromLTRB)\([^)]*\b\d{1,3}(?:\.\d+)?\b"
-    ),
-    "radius_literal": re.compile(r"BorderRadius\.circular\(\s*\d+(?:\.\d+)?\s*\)"),
-}
-
-# Regras anti-slop (product.md §4.2 + §9). Operam sobre conteúdo de strings (entre aspas)
-# ou em decoration. Ativadas por default; desligar com --no-slop.
-SLOP_PATTERNS: Dict[str, re.Pattern] = {
-    # filler words (case-insensitive, substring match dentro de strings literais "..." ou '...')
-    "filler_copy": re.compile(
-        r'''["'][^"']*\b(?:'''
-        r'eleve\s+(?:seu|sua)|'
-        r'desbloqueie\s+(?:seu|sua)|'
-        r'liberte\s+(?:o\s+atleta|seu)|'
-        r'otimizad[oa]\s+para|'
-        r'sem\s+fric(?:c|ç)(?:a|ã)o|'
-        r'jornada\s+fitness|'
-        r'transforme\s+sua\s+rotina|'
-        r'pr(?:o|ó)ximo\s+n(?:i|í)vel|'
-        r'conquiste\s+seus?\s+objetivos?|'
-        r'sua\s+melhor\s+vers(?:a|ã)o|'
-        r'continue\s+assim|'
-        r'voc(?:e|ê)\s+(?:e|é)\s+incr(?:i|í)vel|'
-        r'experi(?:e|ê)ncia\s+seamless'
-        r''')\b[^"']*["']''',
-        re.IGNORECASE,
-    ),
-    # vocativos clichê em copy (com vírgula, exclamação, ou no início)
-    "cliche_vocative": re.compile(
-        r'''["'][^"']*\b(?:atleta|campe(?:a|ã)o|guerreir[oa])[!,.][^"']*["']''',
-        re.IGNORECASE,
-    ),
-    # generic placeholder names em strings
-    "generic_placeholder": re.compile(
-        r'''["'][^"']*\b(?:John\s+Doe|Jane\s+Doe|Lorem\s+ipsum|Acme(?:\s+Corp)?|Sarah\s+Chan|SmartFlow)\b[^"']*["']''',
-        re.IGNORECASE,
-    ),
-    # em-dash em string pt-BR (em copy, decorativo). Strings de comentário e `—` técnico ignorados pela linha-comment-skip
-    "em_dash_in_copy": re.compile(r'''["'][^"']*—[^"']*["']'''),
-    # side-stripe border (border-left/right > 1px usado decorativo)
-    "side_stripe_border": re.compile(
-        r"BorderSide\([^)]*width\s*:\s*[2-9](?:\.\d+)?\s*[,)]"
-    ),
-    # gradient text decorativo: ShaderMask aplicado em Text com LinearGradient explícito
-    # heurística: linha contém ShaderMask E LinearGradient (multi-line ShaderMask escapará — ok, é regra rápida)
-    "gradient_text": re.compile(r"ShaderMask\s*\([^)]*LinearGradient", re.DOTALL),
-}
-
-ALLOWED_SPACING = {0, 1, 2, 4, 8, 12, 16, 20, 24, 32, 48, 64}  # AppSpacing + extras comuns
-ALLOWED_RADIUS = {0, 6, 10, 14, 20, 999}  # AppRadius
-
-# Arquivos onde slop check é desligado (i18n source-of-truth, fixtures de teste com nomes genéricos)
-SLOP_SKIP = (
-    "lib/core/theme/preview/",
-    "test/",
-    "integration_test/",
-)
+def _load_lint_set(stack: str) -> dict:
+    path = LINT_SETS_DIR / f"{stack}.yaml"
+    if not path.exists():
+        raise SystemExit(
+            f"Error: lint set for stack '{stack}' not found at {path}. "
+            f"Available: {', '.join(AVAILABLE_STACKS)}"
+        )
+    try:
+        import yaml  # type: ignore
+    except ModuleNotFoundError:
+        raise SystemExit("Error: PyYAML required. Install with `pip install pyyaml`.")
+    return yaml.safe_load(path.read_text())
 
 
-def relpath(path: str) -> str:
-    return os.path.relpath(path, PROJECT_ROOT).replace(os.sep, "/")
+def _compile(pattern_dict: dict, flags_dict: dict | None = None) -> dict[str, re.Pattern]:
+    flags_dict = flags_dict or {}
+    out: dict[str, re.Pattern] = {}
+    for name, pat in (pattern_dict or {}).items():
+        flag = 0
+        for f in (flags_dict.get(name) or "").split("|"):
+            f = f.strip()
+            if f == "IGNORECASE":
+                flag |= re.IGNORECASE
+            elif f == "MULTILINE":
+                flag |= re.MULTILINE
+            elif f == "DOTALL":
+                flag |= re.DOTALL
+        out[name] = re.compile(pat, flag)
+    return out
 
 
-def is_allowed_for(rule: str, rel_path: str) -> bool:
-    if rule == "hex_color":
-        return any(rel_path.endswith(p) or rel_path == p for p in ALLOW_HEX_IN)
+def _is_allowed(rule: str, rel_path: str, lint: dict) -> bool:
+    if rule in {"hex_color", "tailwind_arbitrary_text", "tailwind_arbitrary_bg",
+                "tailwind_arbitrary_border", "inline_style_hex", "hex_in_tsx"}:
+        return any(rel_path.endswith(p) or rel_path == p for p in lint.get("allow_hex_in", []))
     if rule == "material_color":
-        return any(rel_path.endswith(p) for p in ALLOW_COLORS_IN)
+        return any(rel_path.endswith(p) for p in lint.get("allow_colors_in", []))
     return False
 
 
-def extract_number(s: str) -> List[float]:
+def _extract_numbers(s: str) -> list[float]:
     return [float(n) for n in re.findall(r"\d+(?:\.\d+)?", s)]
 
 
-def filter_literal_spacing(match: str) -> bool:
-    """Retorna True se o literal encontrado contém um número fora da escala."""
-    nums = extract_number(match)
-    return any(n not in ALLOWED_SPACING for n in nums)
+def _filter_off_scale(match: str, allowed: list[float]) -> bool:
+    if not allowed:
+        return True
+    nums = _extract_numbers(match)
+    return any(n not in allowed for n in nums)
 
 
-def filter_literal_radius(match: str) -> bool:
-    nums = extract_number(match)
-    return any(n not in ALLOWED_RADIUS for n in nums)
+def _walk(root: Path, lint: dict):
+    exts = tuple(lint["file_extensions"])
+    bad_suffixes = tuple(lint.get("exclude_suffixes", []))
+    for dirpath, _, files in os.walk(root):
+        rel_dir = Path(dirpath).relative_to(root) if str(dirpath).startswith(str(root)) else Path(dirpath)
+        if any(skip.rstrip("/") in str(rel_dir).split(os.sep) for skip in lint.get("slop_skip", [])
+               if skip.endswith("/")):
+            continue
+        for name in files:
+            if not name.endswith(exts):
+                continue
+            if any(name.endswith(suf) for suf in bad_suffixes):
+                continue
+            yield Path(dirpath) / name
 
 
-def scan_file(path: str, check_slop: bool = True) -> Dict[str, List[Tuple[int, str]]]:
-    hits: Dict[str, List[Tuple[int, str]]] = defaultdict(list)
-    rel = relpath(path)
+def _scan_file(path: Path, scan_root: Path, lint: dict, structural: dict[str, re.Pattern],
+               slop: dict[str, re.Pattern], check_slop: bool) -> dict[str, list[tuple[int, str]]]:
+    hits: dict[str, list[tuple[int, str]]] = defaultdict(list)
+    rel = str(path.relative_to(scan_root)).replace(os.sep, "/")
     try:
-        with open(path, "r", encoding="utf-8") as f:
-            lines = f.readlines()
+        lines = path.read_text(encoding="utf-8").splitlines()
     except (OSError, UnicodeDecodeError):
         return hits
 
-    slop_active = check_slop and not any(skip in rel for skip in SLOP_SKIP)
+    slop_active = check_slop and not any(skip in rel for skip in lint.get("slop_skip", []))
+    allowed_spacing = lint.get("allowed_spacing", [])
+    allowed_radius = lint.get("allowed_radius", [])
 
     for i, line in enumerate(lines, start=1):
-        if line.lstrip().startswith("//"):
+        stripped = line.lstrip()
+        if stripped.startswith(("//", "#")):
             continue
-        for rule, pattern in PATTERNS.items():
-            if is_allowed_for(rule, rel):
+        for rule, pattern in structural.items():
+            if _is_allowed(rule, rel, lint):
                 continue
             for m in pattern.finditer(line):
                 text = m.group(0)
-                if rule == "edge_insets_literal" and not filter_literal_spacing(text):
+                if rule == "edge_insets_literal" and not _filter_off_scale(text, allowed_spacing):
                     continue
-                if rule == "radius_literal" and not filter_literal_radius(text):
+                if rule == "radius_literal" and not _filter_off_scale(text, allowed_radius):
                     continue
                 hits[rule].append((i, line.rstrip()))
         if slop_active:
-            for rule, pattern in SLOP_PATTERNS.items():
+            for rule, pattern in slop.items():
                 if pattern.search(line):
                     hits[rule].append((i, line.rstrip()))
     return hits
 
 
-def walk_dart(root: str):
-    for dirpath, _, files in os.walk(root):
-        for name in files:
-            if not name.endswith(".dart"):
-                continue
-            if any(name.endswith(suf) for suf in EXCLUDE_SUFFIXES):
-                continue
-            yield os.path.join(dirpath, name)
+def _resolve_stack_from_env() -> str:
+    env = os.environ.get("STACK", "").strip()
+    if env:
+        return env
+    return "flutter"
 
 
 def main() -> int:
-    args = sys.argv[1:]
-    summary_only = "--summary" in args
-    fail_on_hit = "--fail" in args
-    no_slop = "--no-slop" in args
-    paths = [a for a in args if not a.startswith("--")]
-    scan_root = paths[0] if paths else DEFAULT_SCAN
-    scan_root = os.path.abspath(scan_root)
+    parser = argparse.ArgumentParser(description="design-workflow stack-aware audit")
+    parser.add_argument("--stack", choices=AVAILABLE_STACKS, default=None,
+                        help="Active stack lint set. Default: STACK env or 'flutter'.")
+    parser.add_argument("--summary", action="store_true")
+    parser.add_argument("--fail", dest="fail_on_hit", action="store_true")
+    parser.add_argument("--no-slop", action="store_true")
+    parser.add_argument("path", nargs="?", default=None)
+    args = parser.parse_args()
 
-    totals: Dict[str, int] = defaultdict(int)
-    per_file: Dict[str, Dict[str, List[Tuple[int, str]]]] = {}
+    stack = args.stack or _resolve_stack_from_env()
+    if stack not in AVAILABLE_STACKS:
+        print(f"Error: unknown stack '{stack}'. Available: {', '.join(AVAILABLE_STACKS)}", file=sys.stderr)
+        return 2
 
-    for path in walk_dart(scan_root):
-        hits = scan_file(path, check_slop=not no_slop)
+    lint = _load_lint_set(stack)
+    structural = _compile(lint.get("structural", {}))
+    slop = _compile(lint.get("slop", {}), lint.get("slop_flags", {}))
+
+    scan_root = Path(args.path).resolve() if args.path else (PROJECT_ROOT / lint.get("default_scan", ".")).resolve()
+    if not scan_root.exists():
+        print(f"Note: scan root {scan_root} does not exist (skill repo without project context). "
+              f"Use --stack and a path arg, or set PROJECT_ROOT.", file=sys.stderr)
+        return 0
+
+    totals: dict[str, int] = defaultdict(int)
+    per_file: dict[str, dict[str, list[tuple[int, str]]]] = {}
+    for path in _walk(scan_root, lint):
+        hits = _scan_file(path, scan_root, lint, structural, slop, check_slop=not args.no_slop)
         if any(hits.values()):
-            per_file[relpath(path)] = hits
+            rel = str(path.relative_to(scan_root)).replace(os.sep, "/")
+            per_file[rel] = hits
             for rule, xs in hits.items():
                 totals[rule] += len(xs)
 
-    print(f"\n=== audit em {relpath(scan_root)} ===\n")
+    rel_root = str(scan_root.relative_to(scan_root.parent) if scan_root != Path("/") else scan_root)
+    print(f"\n=== audit em {rel_root}  [stack: {stack}] ===\n")
 
     if not per_file:
         print("✅ Nenhuma violação encontrada.")
         return 0
 
-    if not summary_only:
+    if not args.summary:
         for rel, hits in sorted(per_file.items()):
             total = sum(len(xs) for xs in hits.values())
             print(f"📄 {rel}  ({total})")
             for rule, xs in hits.items():
                 for line_no, line in xs:
-                    print(f"   {rule:>22}  L{line_no:<5}  {line.strip()[:90]}")
+                    print(f"   {rule:>26}  L{line_no:<5}  {line.strip()[:90]}")
             print()
 
-    print("Totais por regra (estrutural):")
-    for rule in PATTERNS.keys():
-        print(f"  {rule:>22}: {totals.get(rule, 0)}")
+    if structural:
+        print("Totais por regra (estrutural):")
+        for rule in structural:
+            print(f"  {rule:>26}: {totals.get(rule, 0)}")
 
-    if not no_slop:
-        slop_total = sum(totals.get(r, 0) for r in SLOP_PATTERNS.keys())
+    if not args.no_slop and slop:
+        slop_total = sum(totals.get(r, 0) for r in slop)
         if slop_total:
             print("\nTotais por regra (anti-slop):")
-            for rule in SLOP_PATTERNS.keys():
-                print(f"  {rule:>22}: {totals.get(rule, 0)}")
+            for rule in slop:
+                print(f"  {rule:>26}: {totals.get(rule, 0)}")
 
     total_hits = sum(totals.values())
-    total_files = len(per_file)
-    print(f"\n📊 {total_hits} violações em {total_files} arquivos")
-
-    return 1 if (fail_on_hit and total_hits) else 0
+    print(f"\n📊 {total_hits} violações em {len(per_file)} arquivos")
+    return 1 if (args.fail_on_hit and total_hits) else 0
 
 
 if __name__ == "__main__":
