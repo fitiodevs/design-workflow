@@ -41,17 +41,17 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Verify:** `python3 -c "import json,jsonschema; jsonschema.validate(json.load(open('docs/adapter-examples/palette.json')), json.load(open('docs/adapter-plan.schema.json')))"` — feed the palette example, expect zero errors.
 - **Refs:** REQ-A.2
 
-### T-03 🅿️ Write `docs/adapter-examples/palette.json`
+### T-03 ✅ Write `docs/adapter-examples/palette.json`
 - **Action:** complete Plan example with `kind: palette` — tokens.palette has the canonical 29 semantic tokens × 2 modes (light/dark). Actions: 1 write to `palette` role.
 - **Verify:** `jsonschema validate` returns 0 errors against schema.
 - **Refs:** REQ-A.3
 
-### T-04 🅿️ Write `docs/adapter-examples/widget-tree.json`
+### T-04 ✅ Write `docs/adapter-examples/widget-tree.json`
 - **Action:** complete Plan with `kind: widget-tree` — a button + form group example (covers both leaf widget and container).
 - **Verify:** schema validates.
 - **Refs:** REQ-A.3
 
-### T-05 🅿️ Write `docs/adapter-examples/motion-set.json`
+### T-05 ✅ Write `docs/adapter-examples/motion-set.json`
 - **Action:** complete Plan with `kind: motion-set` — durations + curves matching current `AppMotion`/`AppCurves`.
 - **Verify:** schema validates.
 - **Refs:** REQ-A.3

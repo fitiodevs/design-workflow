@@ -1,0 +1,47 @@
+{
+  "$schema": "https://design-workflow.dev/adapter-plan.schema.json",
+  "version": "1.0",
+  "kind": "palette",
+  "tokens": {
+    "palette": {
+      "brandDefault":         {"light": "#c96442", "dark": "#d97757"},
+      "brandMuted":           {"light": "#f5d4c5", "dark": "#5c3a2e"},
+      "brandPressed":         {"light": "#b35530", "dark": "#c46141"},
+      "brandDisabled":        {"light": "#e9c5b6", "dark": "#4a2e25"},
+      "brandOnColor":         {"light": "#ffffff", "dark": "#1a0e08"},
+
+      "bgBase":               {"light": "#f5f4ed", "dark": "#141413"},
+      "bgSurface":            {"light": "#ffffff", "dark": "#1d1d1c"},
+      "bgSurfaceRaised":      {"light": "#fafaf6", "dark": "#262625"},
+      "bgInput":              {"light": "#f0efe8", "dark": "#232322"},
+      "bgOverlay":            {"light": "#00000099", "dark": "#000000cc"},
+      "bgSkeleton":           {"light": "#e8e7e0", "dark": "#2d2d2c"},
+
+      "borderDefault":        {"light": "#d9d8d2", "dark": "#34332f"},
+      "borderStrong":         {"light": "#a3a29e", "dark": "#5c5b56"},
+      "borderFocus":          {"light": "#c96442", "dark": "#d97757"},
+
+      "textPrimary":          {"light": "#1a1a17", "dark": "#f5f4ed"},
+      "textSecondary":        {"light": "#595955", "dark": "#a3a29c"},
+      "textMuted":            {"light": "#8e8d88", "dark": "#6e6d68"},
+      "textOnBrand":          {"light": "#ffffff", "dark": "#1a0e08"},
+
+      "feedbackSuccess":      {"light": "#2f6e3a", "dark": "#5fb872"},
+      "feedbackSuccessMuted": {"light": "#d4ecd9", "dark": "#1f3a25"},
+      "feedbackWarning":      {"light": "#b8731f", "dark": "#d99a40"},
+      "feedbackWarningMuted": {"light": "#f4e3c4", "dark": "#3d2e15"},
+      "feedbackError":        {"light": "#b8332f", "dark": "#e06b66"},
+      "feedbackErrorMuted":   {"light": "#f4d4d2", "dark": "#3a1e1c"},
+      "feedbackInfo":         {"light": "#2c5fa3", "dark": "#5fa3e0"},
+      "feedbackInfoMuted":    {"light": "#d2e1f2", "dark": "#1a2e45"},
+
+      "gameAccent":           {"light": "#6a3fb5", "dark": "#9d7ad9"},
+      "gameAccentMuted":      {"light": "#e2d4f0", "dark": "#2d1e45"},
+      "gameAccentOnColor":    {"light": "#ffffff", "dark": "#f5f4ed"}
+    }
+  },
+  "actions": [
+    {"op": "write", "role": "palette", "intent": "tokens"},
+    {"op": "append", "role": "design-tokens", "intent": "doc-summary"}
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://design-workflow.dev/adapter-plan.schema.json",
+  "version": "1.0",
+  "kind": "widget-tree",
+  "widgets": [
+    {
+      "type": "form-group",
+      "variant": "stacked",
+      "size": "md",
+      "props": {
+        "title": "Resgatar cupom",
+        "description": "Cole o código que você recebeu por e-mail."
+      },
+      "children": [
+        {
+          "type": "input",
+          "variant": "text",
+          "size": "lg",
+          "props": {
+            "name": "couponCode",
+            "label": "Código",
+            "placeholder": "BRASA-2026",
+            "required": true,
+            "autocomplete": "off"
+          }
+        },
+        {
+          "type": "text",
+          "variant": "helper",
+          "size": "sm",
+          "props": {
+            "value": "Maiúsculas e minúsculas contam.",
+            "tone": "muted"
+          }
+        },
+        {
+          "type": "button",
+          "variant": "primary",
+          "size": "lg",
+          "props": {
+            "label": "Resgatar",
+            "fullWidth": true,
+            "onPress": "submitCoupon"
+          }
+        },
+        {
+          "type": "button",
+          "variant": "ghost",
+          "size": "md",
+          "props": {
+            "label": "Cancelar",
+            "fullWidth": true,
+            "onPress": "dismiss"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "op": "write",
+      "role": "widget-tree",
+      "intent": "component",
+      "name": "RedeemCouponForm"
+    }
+  ]
+}

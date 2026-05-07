@@ -1,0 +1,21 @@
+{
+  "$schema": "https://design-workflow.dev/adapter-plan.schema.json",
+  "version": "1.0",
+  "kind": "motion-set",
+  "tokens": {
+    "motion": {
+      "instant":   {"durationMs":   0, "curve": "linear"},
+      "fast":      {"durationMs": 150, "curve": "easeOut"},
+      "normal":    {"durationMs": 250, "curve": "easeInOut"},
+      "slow":      {"durationMs": 400, "curve": "easeInOut"},
+      "enter":     {"durationMs": 300, "curve": "decelerate"},
+      "exit":      {"durationMs": 200, "curve": "easeIn"},
+      "press":     {"durationMs": 120, "curve": "easeOut"},
+      "celebrate": {"durationMs": 600, "curve": "spring"}
+    }
+  },
+  "actions": [
+    {"op": "write",  "role": "motion",         "intent": "tokens"},
+    {"op": "append", "role": "design-tokens",  "intent": "doc-summary"}
+  ]
+}
