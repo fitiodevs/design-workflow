@@ -103,6 +103,15 @@ Detecta (regex-based, ignora suffixes excluídos e comentários):
 | `raw_hsl_in_jsx` | `hsl(<n>, ...)` literal em JSX | Nenhum |
 | `hex_in_tsx` | hex `#xxxxxx` em TSX/CSS | `app/globals.css`, `styles/tokens.css`, `tailwind.config.ts` |
 
+**Estrutural — `stack: react-native` (ignora `.d.ts`, `node_modules/`, `ios/`, `android/`, `.expo/`):**
+
+| Regra | Padrão | Permitido em |
+|-------|--------|--------------|
+| `hex_string_literal` | `"#xxxxxx"` ou `'#xxxxxx'` (string com hex) | `src/theme/colors.ts`, `app/theme/colors.ts`, `src/theme/motion.ts`, `app/theme/motion.ts` |
+| `inline_style_hex` | `style={{ color: '#...' }}` etc. em RN | Nenhum |
+| `rgba_inline` | `rgba(...)` / `hsla(...)` literal | Nenhum |
+| `raw_color_const` | `Color(0x...)` (legado Android API copy-paste) | Nenhum |
+
 **Anti-slop (`docs/product.md` §4.2 + §9, ativadas por default; `--no-slop` desliga):**
 
 | Regra | Detecta |

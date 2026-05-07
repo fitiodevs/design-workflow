@@ -120,7 +120,8 @@ A subset of skills (`theme-critique`, `theme-create`, `frontend-design`, `ux-wri
 |---|---|---|
 | `flutter` | Stable since v1.0 | `adapters/flutter/` |
 | `nextjs-tailwind` | New in v1.2.0 (App Router + Pages, shadcn/ui aware) | `adapters/nextjs-tailwind/` |
-| `react-native`, `vue-tailwind`, `svelte-tailwind`, `react-tailwind`, `angular-tailwind`, `swiftui` | v1.3+ backlog (additive, one PR each) | — |
+| `react-native` | New in v1.4.1 (bare RN + Expo detection, `makeStyles(colors)` factory, RN core primitives) | `adapters/react-native/` |
+| `vue-tailwind`, `svelte-tailwind`, `react-tailwind`, `angular-tailwind`, `swiftui` | v1.5+ backlog (additive, one PR each) | — |
 
 Each adapter ships:
 - `adapter.py` (entry point, dispatches by Plan `kind`)
@@ -154,7 +155,15 @@ Apache 2.0 — see [LICENSE.txt](LICENSE.txt). Each skill folder also carries a 
 
 ## Status
 
-**v1.4.0** — interactive mockup stage: new `tweaks` skill wraps any tweaks-ready HTML mockup with a side panel of live CSS-custom-property knobs (accent hue · type scale · density · theme mode · motion) persisting to localStorage; Clara (`frontend-design`) refit to emit tweaks-ready HTML by contract; `theme-critique --mode 5dim` adds an alternative 5-dimension review (Philosophy / Hierarchy / Detail / Function / Innovation) with a self-contained HTML radar-chart report. 20/20 skills pass `quick_validate.py` (was 19; +1 for `tweaks`). Built on v1.3.0 (inspiration library), v1.2.1 (design-context doctrine), v1.2.0 (multi-stack adapter). Extracted from production use in the [Fitio](https://fitio.app) Flutter app.
+**v1.4.1** — additive React Native adapter. `adapters/react-native/` ships next to `adapters/flutter/` and `adapters/nextjs-tailwind/`, conformance 3/3 against the same Plan goldens. Detects Expo (via `app.json` or `expo-*` deps) and adapts paths (`src/` for bare RN, `app/` for Expo Router). Token roles emitted as TypeScript exports (`lightColors` / `darkColors` / `palettes`); widget-tree renders via RN core primitives plus a `makeStyles(colors)` factory wrapped in `useMemo` (the `useColors()` hook itself stays project-supplied). Slider imports from `@react-native-community/slider`; everything else is RN core. 20/20 skills still pass `quick_validate.py`. Built on v1.4.0 (interactive mockup stage), v1.3.0 (inspiration library), v1.2.x (multi-stack adapter + design-context). Extracted from production use in the [Fitio](https://fitio.app) Flutter app.
+
+## What changed in v1.4.1
+
+- **`adapters/react-native/` (additive — no skill changes).** New stack adapter follows the same shape as `adapters/flutter/` and `adapters/nextjs-tailwind/` (`adapter.py` + `mappings.py` + `templates/` + `STACK_NOTES.md` + `tests/conformance.py` + 5 frozen goldens). Renders all 3 Plan kinds (palette, motion-set, widget-tree). Conformance: **3/3 green**.
+- **`scripts/resolve_stack.py`** now lists `react-native` alongside `flutter` and `nextjs-tailwind`; `STACK=react-native python3 scripts/resolve_stack.py` exits 0.
+- **`scripts/audit_theme.py`** accepts `--stack react-native`; lint set at `scripts/audit_lint_sets/react-native.yaml` (catches `"#hex"` strings outside `theme/`, inline `style={{ color: '#…' }}`, `rgba()` literals, `Color(0x…)` Android-API copy-paste).
+- **Skill bodies extended** — `theme-port`, `theme-extend`, `theme-audit` add a `react-native` row to their per-stack tables. No new triggers, no behavioural change for existing flutter / nextjs-tailwind users.
+- **What it does NOT ship** — the `useColors()` hook (downstream wires it to `useColorScheme()` or a store), `npx expo install` automation, image source resolution, or Reanimated worklets. See `adapters/react-native/STACK_NOTES.md` for the full non-goal list.
 
 ## What changed in v1.4.0
 

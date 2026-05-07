@@ -75,7 +75,7 @@ When this repo has a remote and a few external users, set this up via `/schedule
 
 ## Current execution plan (v1.x)
 
-> Live tracker. v1.0.0 + v1.1.x shipped. v1.2.0 next.
+> Live tracker. v1.0.0 → v1.4.1 shipped.
 
 | Version | Feature | Status |
 |---|---|---|
@@ -83,16 +83,18 @@ When this repo has a remote and a few external users, set this up via `/schedule
 | v1.1.0 | Atlas trio public, Stitch retired | ✅ shipped 2026-05-05 |
 | v1.1.1 | `craft/` adoption from open-design | ✅ shipped 2026-05-06 |
 | v1.1.2 | `install.sh` bundles `craft/` + rewrites refs | ✅ shipped 2026-05-06 |
-| **v1.2.0** | **multi-stack-adapter (Flutter + Next.js/Tailwind)** | ⬜ next — pulled forward from v1.4 per user urgency 2026-05-06 |
-| v1.3.0 | inspiration-library (was v1.2 pre-reorder) | ⬜ pending |
-| v1.4.0 | interactive-mockup-stage (was v1.3 pre-reorder) | ⬜ pending |
-| v1.5.0+ | adapter-migration-phase-2 + additive stacks (RN, Vue+TW, Svelte+TW, SwiftUI, plain-React) + design-school-library + wireframe-sketch | ⬜ backlog |
+| v1.2.0 | multi-stack-adapter (Flutter + Next.js/Tailwind) | ✅ shipped 2026-05-07 |
+| v1.2.1 | design-context craft doctrine | ✅ shipped 2026-05-07 |
+| v1.3.0 | inspiration-library | ✅ shipped 2026-05-07 |
+| v1.4.0 | interactive-mockup-stage (tweaks + 5dim critique) | ✅ shipped 2026-05-07 |
+| **v1.4.1** | **adapters/react-native/ — additive RN adapter** | ✅ shipped 2026-05-07 |
+| v1.5.0+ | adapter-migration-phase-2 + remaining additive stacks (Vue+TW, Svelte+TW, SwiftUI, plain-React, Angular+TW) + design-school-library + wireframe-sketch | ⬜ backlog |
 
 ## v1.2 Adapter system — concrete additive stacks (post-launch backlog)
 
 Once v1.2 ships, each new adapter is ~1 day, additive, no skill changes:
 
-- [ ] `adapters/react-native/` — RN+StyleSheet variant of Flutter widget tree paradigm.
+- [x] `adapters/react-native/` — RN+StyleSheet variant of Flutter widget tree paradigm. **Shipped 2026-05-07 in v1.4.1** (`makeStyles(colors)` factory + RN core primitives + `@react-native-community/slider` for Slider + `app.json`/`expo-*` Expo detection). Conformance 3/3 against same Plan goldens as flutter and nextjs-tailwind. STACK_NOTES.md documents the `useColors()` hook contract (downstream-supplied).
 - [ ] `adapters/vue-tailwind/` — Vue 3 SFC + Tailwind, similar to Next.js but with `<script setup>` + `<template>`.
 - [ ] `adapters/svelte-tailwind/` — SvelteKit + Tailwind, single-file components.
 - [ ] `adapters/react-tailwind/` — plain React (Vite/CRA) + Tailwind, no Next.js conventions.

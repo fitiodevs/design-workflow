@@ -108,6 +108,7 @@ Por stack:
 
 - **flutter:** o adapter atualiza `lib/core/theme/app_colors.dart` (field, constructor, light/dark instances, `copyWith`, `lerp` — os 6 lugares ficam responsabilidade do template). Token de feedback (`feedbackXxx` + `feedbackXxxMuted`) requer **2 entradas** no Plan.
 - **nextjs-tailwind:** o adapter atualiza `app/globals.css` (`:root` + `.dark` blocks) e regenera o snippet `tailwind.config.ts.tmpl` para `theme.extend.colors`.
+- **react-native:** o adapter regrava `src/theme/colors.ts` com o novo role nas duas paletas (`lightColors` + `darkColors`) e na união `ColorRole`. O hook `useColors()` é responsabilidade do projeto (provider + `useColorScheme()`); o adapter **não** o gera. Estilos consumidores via `makeStyles(colors)` pegam o novo role automaticamente.
 
 Se o token novo for badge, manter compat com `AppBadgeColors.fromAppColors()` em Flutter — o adapter ainda não cobre badge derivation (planned v1.3); o Plan declara o role base e o operador faz o passo manual.
 

@@ -217,6 +217,7 @@ O adapter consume o Plan, renderiza via templates, escreve nos paths convenciona
 
 - **flutter:** `lib/features/<feature>/presentation/widgets/<name>.dart` + atualiza `lib/core/theme/app_colors.dart` se kind=palette.
 - **nextjs-tailwind:** `components/<feature>/<name>.tsx` + atualiza `app/globals.css` (App Router) ou `styles/tokens.css` (Pages) se kind=palette.
+- **react-native:** `src/components/<feature>/<name>.tsx` (RN core + `StyleSheet.create()` via `makeStyles(colors)`) + atualiza `src/theme/colors.ts` se kind=palette ou `src/theme/motion.ts` se kind=motion-set. Expo Router projects usam `app/` ao invés de `src/`.
 
 ### Step 7.5 — Verify outputs
 
@@ -228,13 +229,14 @@ Confirmar que cada `action` do Plan resultou num arquivo no path esperado. Lista
 |---|---|---|
 | `flutter` | `flutter analyze` | `No issues found!` (rodar `dart run build_runner build` se `@freezed` foi tocado) |
 | `nextjs-tailwind` | `npx tsc --noEmit && npx eslint <component-path>` | exit 0 |
+| `react-native` | `npx tsc --noEmit && npx eslint <component-path>` | exit 0 (rodar `npx expo install` ou `npm i` se import faltante de `@react-native-community/slider` aparecer) |
 
 Se a validação falhar, **não reportar done** — fix-and-retry ou escalar para o usuário.
 
 ### Step 9 — Report
 
 Terminar com relatório curto:
-- Stack resolvido (`flutter` / `nextjs-tailwind`).
+- Stack resolvido (`flutter` / `nextjs-tailwind` / `react-native`).
 - Plan emitido em `/tmp/<feature>-plan.json` (anexar ao relatório).
 - Arquivos criados/editados pelo adapter (output de Step 7).
 - Tokens reutilizados (lista curta).

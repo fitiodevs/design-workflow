@@ -39,7 +39,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 PROJECT_ROOT = Path(os.environ.get("PROJECT_ROOT", REPO_ROOT.parent))
 LINT_SETS_DIR = REPO_ROOT / "scripts" / "audit_lint_sets"
-AVAILABLE_STACKS = ("flutter", "nextjs-tailwind")
+AVAILABLE_STACKS = ("flutter", "nextjs-tailwind", "react-native")
 
 
 def _load_lint_set(stack: str) -> dict:

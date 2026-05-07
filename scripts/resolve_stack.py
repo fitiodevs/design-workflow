@@ -17,7 +17,7 @@ import os
 import sys
 from pathlib import Path
 
-AVAILABLE = ("flutter", "nextjs-tailwind")
+AVAILABLE = ("flutter", "nextjs-tailwind", "react-native")
 DEFAULT = "flutter"
 CONFIG_NAMES = (".design-workflow.yaml", ".design-workflow.yml", "config.example.yaml")
 

@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Multi-stack design-spec-driven workflow skills for Claude Code: stack-neutral Adapter Plan + Flutter and Next.js/Tailwind reference adapters; discovery, compose, sequence, ship, ralph autonomy loop; status/promote/atlas-save productivity helpers; 12 atomic theme/critique/refine/copy/mockup/tweaks operators (interactive mockup stage shipped in v1.4).",
-    "version": "1.4.0"
+    "version": "1.4.1"
   },
   "plugins": [
     {
