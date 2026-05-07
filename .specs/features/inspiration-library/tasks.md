@@ -196,7 +196,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Verify:** 20/20 produce a valid proposal + rationale.
 - **Refs:** REQ-07.2
 
-### T-29 ⬜ Commit + push
+### T-29 ✅ Commit + push
 - **Action:**
   ```
   git add design-systems/ scripts/design_md_to_appcolors.py skills/theme-create/ .specs/project/STATE.md README.md .claude-plugin/marketplace.json
