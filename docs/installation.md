@@ -3,7 +3,7 @@
 ## Option A — install.sh (manual)
 
 ```bash
-git clone https://github.com/<your-handle>/design-workflow.git ~/code/design-workflow
+git clone https://github.com/fitiodevs/design-workflow.git ~/code/design-workflow
 cd ~/code/design-workflow
 ./install.sh
 ```
@@ -19,7 +19,7 @@ To uninstall:
 ## Option B — Claude Code plugin marketplace
 
 ```
-/plugin marketplace add <your-handle>/design-workflow
+/plugin marketplace add fitiodevs/design-workflow
 /plugin install design-workflow@design-workflow-marketplace
 ```
 

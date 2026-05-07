@@ -51,7 +51,7 @@ If `/tlc-closure` is not installed, `/promote` falls back to a "review the gener
 ## Install
 
 ```bash
-git clone https://github.com/<your-handle>/design-workflow.git ~/code/design-workflow
+git clone https://github.com/fitiodevs/design-workflow.git ~/code/design-workflow
 cd ~/code/design-workflow
 ./install.sh
 ```
@@ -61,7 +61,7 @@ This copies `skills/*` into `~/.claude/skills/` so they become available in Clau
 Or, if you use the Claude Code plugin marketplace:
 
 ```
-/plugin marketplace add <your-handle>/design-workflow
+/plugin marketplace add fitiodevs/design-workflow
 /plugin install design-workflow@design-workflow-marketplace
 ```
 
