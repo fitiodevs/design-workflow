@@ -12,3 +12,4 @@ node_modules/
 
 # design-spec runtime — kill switch is local-only (Onda D)
 .design-spec/halt
+.tmp/

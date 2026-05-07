@@ -1,6 +1,6 @@
 ---
 name: theme-create
-description: Creates a complete palette from scratch (brand + semantic + neutral) or an alternative visual identity (sub-brand, seasonal mode, sponsor skin) for a Flutter app. Uses OKLCH for perceptually-uniform scales, validates WCAG automatically, emits a ready-to-paste `AppColors` plus anti-AI-slop rationale plus reference sheet in `docs/themes/`. Use when no incremental tweak fits and identity must be redesigned. Triggered by `/Composer`, `/Compositor`, `/theme-create`, "cria palette nova", "nova identidade visual", "create a new palette", "sub-brand for X".
+description: Creates a complete palette from scratch (brand + semantic + neutral) or an alternative visual identity (sub-brand, seasonal mode, sponsor skin). Three modes — (1) blank-page with 8 pre-conditions, (2) `--inspired-by [slug]` reading `design-systems/[slug]/DESIGN.md` through the translator at `scripts/design_md_to_appcolors.py` (skips 4 of 8 pre-conditions, source already encodes them), (3) `--browse [category]` listing the curated 20-entry library before dropping into mode 2. Uses OKLCH for perceptually-uniform scales, validates WCAG automatically, emits a ready-to-paste `AppColors` plus anti-AI-slop rationale plus reference sheet in `docs/themes/`. Use when no incremental tweak fits and identity must be redesigned. Triggered by `/Composer`, `/Compositor`, `/theme-create`, `/theme-create --inspired-by stripe`, `/theme-create --browse fintech`, "cria palette nova", "nova identidade visual", "create a new palette", "sub-brand for X", "inspirado no Linear", "inspired by Stripe".
 metadata:
   dw:
     craft:
@@ -12,10 +12,18 @@ metadata:
 ## Triggers
 
 - **English:** `/Composer`, `/theme-create`, "create a new palette", "new visual identity", "sub-brand", "palette from scratch"
+- **English (inspired):** `/theme-create --inspired-by <slug>`, `/theme-create --browse`, `/theme-create --browse <category>`, "inspired by Linear", "start from Stripe"
 - **Português:** `/Compositor`, `/compositor`, `/theme-create`, "cria palette nova", "nova identidade visual", "sub-brand", "palette do zero"
-- **Natural language:** seasonal skin (Black Friday); sponsor branded event; full identity refresh
+- **Português (inspirado):** `/theme-create --inspired-by linear-app`, `/theme-create --browse fintech`, "inspirado no Notion", "começa do Stripe"
+- **Natural language:** seasonal skin (Black Friday); sponsor branded event; full identity refresh; "preciso de algo na pegada da Apple"
 
-Creates a complete palette from scratch. **Use sparingly** — most projects already have a base theme (e.g. ~29 semantic tokens organized as light/dark instances) and `/theme-extend` covers most needs. Legitimate scenarios:
+Creates a complete palette. Three modes — pick by argument shape:
+
+- **From scratch** (no flag) — full 8-precondition gate, OKLCH-driven palette generated from the answers. Original mode.
+- **`--inspired-by <slug>`** — reads `design-systems/<slug>/DESIGN.md` through `scripts/design_md_to_appcolors.py`, presents the translator's `proposal.json`+`rationale.md`, asks only the 4 project-specific preconditions (purpose / audience / invariants / coexistence). Slug must exist under `design-systems/`.
+- **`--browse [<category>]`** — lists the curated 20-entry library (see `design-systems/README.md`) and drops into `--inspired-by` after the user picks. With a category argument (e.g. `--browse fintech`), shows only that bucket.
+
+**Use sparingly** — most projects already have a base theme (e.g. ~29 semantic tokens organized as light/dark instances) and `/theme-extend` covers most needs. Legitimate scenarios:
 
 - Sub-brand (vertical/sub-product with distinct identity).
 - Seasonal mode (Black Friday, Copa do Mundo) with a temporary skin.
@@ -84,7 +92,52 @@ Before generating a palette, verify Tier 1–4 context exists per `craft/design-
 
 If Tier 1 absent and there's no Tier 4 — STOP. Generating from a vague brief produces category-reflex (purple gradient, Tailwind indigo, Strava green). See `craft/design-context.md`.
 
-## Workflow
+## Workflow — --inspired-by mode
+
+When the invocation includes `--inspired-by <slug>` (e.g. `/theme-create --inspired-by stripe`), skip Steps 1–3 of the from-scratch workflow and run this branch instead. The source `design-systems/<slug>/DESIGN.md` already encodes mood, differentiation, color-strategy commitment, and anti-category-reflex (the user picked a non-default reference).
+
+For the dense version of this flow — sample rationale doc shape, edge cases, tweak protocol — `Read skills/theme-create/references/inspiration-flow.md` before answering the user.
+
+1. **Validate slug.** `ls design-systems/<slug>/DESIGN.md` must exist. If missing, halt and offer `/theme-create --browse` instead.
+2. **Run the translator.**
+   ```bash
+   python3 scripts/design_md_to_appcolors.py design-systems/<slug>/DESIGN.md --out-dir .tmp/theme-create/<slug>/
+   ```
+   Outputs `proposal.json` (29 tokens × 2 modes + WCAG report + decisions) and `rationale.md` (source citation + mapping table + WCAG report + open questions + Fitio-specific tokens needing input). Halt and report on translator non-zero exit.
+3. **Present the rationale.** Show the user, in this order: (a) the source visual-theme paragraph (verbatim from `## 1. Visual Theme & Atmosphere`), (b) the 29-token mapping table from `rationale.md`, (c) the WCAG report — call out failures explicitly, (d) the Fitio-specific tokens needing user input (`gameAccent`, `gameAccentMuted`, `gameAccentOnColor`, `badgeNew`, `badgeAlert`, `badgeReward`, `badgeOnline`).
+4. **Ask only the 4 remaining pre-conditions** (skipping 4 of the original 8 — see "skipped" below):
+   - **Purpose** — sub-brand? Seasonal? Sponsor? What's this *theme* for (not what's the brand for)?
+   - **Audience** — same as default theme or a niche?
+   - **Invariants** — anything that must not change vs the default `AppColors`? (Common: keep `gameAccent` constant, swap only brand+surface.)
+   - **Coexistence** — replace default, or add as a 3rd `AppColors` instance loaded by route/context?
+   - **Skipped** — tone/extreme (source's Visual Theme paragraph), differentiation (implicit in source choice), color-strategy commitment (visible in source palette structure), anti-category-reflex (user picked a non-default reference).
+5. **Tweak loop.** Ask whether to accept the proposal as-is or override specific tokens. Common tweaks: pull `borderFocus` toward an explicit accessibility hue, swap `feedbackError` to match the project's existing red, fill the 7 user-input tokens.
+6. **Final emission.** When approved, run the standard from-scratch closing steps from Step 4 onward of the original workflow: anti-AI-slop checklist, ficha at `docs/themes/<slug>.md` (cite the inspiration), rollout plan.
+
+### `--inspired-by` failure modes
+
+- **Translator emits all-defaults rationale (every token marked `<derived>` or `<default>`).** Don't ship — re-fork the source DESIGN.md from upstream and re-run; the source likely has malformed bullet syntax.
+- **WCAG fails on a brand pair** (common with terracotta/coral-on-white). Suggest `borderFocus` darken or shift `textOnBrand` between B/W.
+- **User wants to mood-blend two slugs** (e.g. "Stripe + Linear"). Refuse — that's the deferred `--blend` v1.4 feature; pick one slug or escalate.
+
+## Workflow — --browse mode
+
+When the invocation is `/theme-create --browse` or `/theme-create --browse <category>`, this is a discovery wrapper that ends in `--inspired-by`.
+
+1. **Read the catalog.** Parse `design-systems/README.md` for the category index, OR walk `design-systems/*/DESIGN.md` and extract each `> Category: <name>` line (line 2 of the body, after the attribution header).
+2. **Filter by category if given.** `--browse fintech` → only entries whose category contains "fintech" (case-insensitive). `--browse` alone → show all 20 grouped by category.
+3. **Present as a numbered list** with the title (`# Design System Inspired by …`) and the one-line characterisation (the line under `> Category:`).
+4. **Ask the user to pick** by number or slug. Validate the pick exists.
+5. **Drop into `--inspired-by <picked>`.** Continue from Step 2 of the `--inspired-by` workflow above.
+
+### `--browse` failure modes
+
+- **Unknown category** (`--browse foo`). List the available categories from the index and ask the user to retype.
+- **User picks a slug not in the curated 20.** Refuse and offer the closest match plus `/theme-create --inspired-by <closest>`.
+
+---
+
+## Workflow — from-scratch mode (default, no flag)
 
 ### Step 1 — Mood board verbal
 

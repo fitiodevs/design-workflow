@@ -95,6 +95,25 @@ You can override paths in `config.example.yaml` → copy to your project as `.de
 
 A subset of skills (`theme-critique`, `theme-create`, `frontend-design`, `ux-writing`) is **stack-agnostic** and works on any codebase that uses tokens.
 
+## Inspiration library
+
+`design-systems/` ships a 20-entry curated subset of [`nexu-io/open-design`](https://github.com/nexu-io/open-design)'s 71 brand `DESIGN.md` references. Each entry is a complete 9-section spec (Visual Theme · Color Palette · Typography · Components · Layout · Depth · Do/Don't · Responsive · Agent Prompt) with full upstream attribution headers (Apache-2.0 / MIT lineage). Pinned at SHA `d4b547c` (2026-05-07).
+
+| Category | Slugs |
+|---|---|
+| AI & LLM | `claude` · `cohere` · `mistral-ai` |
+| Developer Tools | `raycast` · `vercel` |
+| Productivity & SaaS | `cal` · `linear-app` · `notion` |
+| Backend & Data | `sentry` · `supabase` |
+| Design & Creative | `figma` · `framer` |
+| Fintech & Crypto | `revolut` · `stripe` |
+| E-Commerce & Retail | `airbnb` · `nike` |
+| Media & Consumer | `apple` · `spotify` |
+| Automotive | `tesla` |
+| Editorial · Studio | `atelier-zero` |
+
+**Consumed by** `/theme-create --inspired-by <slug>` and `/theme-create --browse [<category>]` via the translator at `scripts/design_md_to_appcolors.py`. The translator emits a `proposal.json` (29 tokens × 2 modes + WCAG report) plus a human-readable `rationale.md` for any of the 20 sources. See `design-systems/README.md` for the file contract and re-sync instructions.
+
 ## Stack support
 
 | Stack | Status | Adapter |
@@ -135,7 +154,15 @@ Apache 2.0 — see [LICENSE.txt](LICENSE.txt). Each skill folder also carries a 
 
 ## Status
 
-**v1.2.1** — design-context craft doctrine: new `craft/design-context.md` codifies the 5-tier context hierarchy and a sharp refusal rule. 5 skills wired (`theme-port`, `theme-create`, `theme-extend` NEW, `theme-critique`, `frontend-design`); 3 of them gain a "Pre-flight context check" section. 19/19 skills still pass `quick_validate.py`. Built on v1.2.0 (multi-stack adapter — stack-neutral Plan format + Flutter + Next.js/Tailwind reference adapters). Extracted from production use in the [Fitio](https://fitio.app) Flutter app.
+**v1.3.0** — inspiration library: a curated 20-entry subset of [`nexu-io/open-design`](https://github.com/nexu-io/open-design)'s 71 brand `DESIGN.md` references lives at `design-systems/`, plus a translator at `scripts/design_md_to_appcolors.py` that maps any source's CSS-style palette onto the Fitio 29-token `AppColors`. `/theme-create` gains two flags — `--inspired-by <slug>` (skip 4 of 8 pre-conditions, source already encodes them) and `--browse [<category>]` (discover before picking). 19/19 skills still pass `quick_validate.py`. Built on v1.2.1 (design-context doctrine) and v1.2.0 (multi-stack adapter). Extracted from production use in the [Fitio](https://fitio.app) Flutter app.
+
+## What changed in v1.3.0
+
+- **20-entry curated inspiration library.** `design-systems/<slug>/DESIGN.md` ships forks of 20 reference brand systems from upstream `nexu-io/open-design` — covering AI&LLM (Claude, Cohere, Mistral), Dev Tools (Vercel, Raycast), Productivity (Linear, Notion, Cal), Backend/Data (Supabase, Sentry), Design/Creative (Figma, Framer), Fintech (Stripe, Revolut), E-Commerce (Airbnb, Nike), Media (Apple, Spotify), Automotive (Tesla), and Editorial (Atelier Zero). Each entry retains its full attribution chain (Apache-2.0 / MIT lineage) and is pinned at upstream SHA `d4b547c`.
+- **Translator: DESIGN.md → AppColors.** `scripts/design_md_to_appcolors.py` reads any of the 20 sources and emits a `proposal.json` (29 tokens × 2 modes + WCAG report + decision trace) plus a human-readable `rationale.md` (source citation + mapping table + open questions + Fitio-specific tokens needing input). Inference chain: per-entry name override → section keyword → description hint → WCAG-corrected fallback. Native-mode detection (light vs dark) drives whether the source IS the dark proposal (Linear, Apple, Sentry) or the light one. Industry-standard defaults fill missing feedback colors and are flagged.
+- **`/theme-create --inspired-by <slug>`.** New flag skips 4 of the original 8 pre-conditions (tone, differentiation, color-strategy commitment, anti-category-reflex — the source already encodes them). User answers only purpose, audience, invariants, coexistence. The translator's rationale doc drives the conversation.
+- **`/theme-create --browse [<category>]`.** Discovery wrapper — lists the 20 entries grouped by category, lets the user pick, then drops into `--inspired-by`. With a category arg (`--browse fintech`), filters to that bucket.
+- **STATE D-17 + D-18 logged.** D-17 documents the curation cap and attribution chain; D-18 captures the translator's inference chain priority and the always-flag-failures rule.
 
 ## What changed in v1.2.1
 

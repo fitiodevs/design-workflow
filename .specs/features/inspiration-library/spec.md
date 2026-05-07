@@ -124,7 +124,7 @@ After this feature, `/theme-create` has three modes:
 
 ### REQ-06 — README + theme-create updates
 
-- **REQ-06.1** README §What changed in v1.2.0 documents the library + flags.
+- **REQ-06.1** README §What changed in v1.3.0 documents the library + flags.
 - **REQ-06.2** Add a top-level "Inspiration library" section with the category table.
 - **REQ-06.3** `skills/theme-create/SKILL.md` Triggers section adds the new flags; description mentions both modes.
 
@@ -132,7 +132,7 @@ After this feature, `/theme-create` has three modes:
 
 - **REQ-07.1** `quick_validate.py` 19/19 valid post-changes.
 - **REQ-07.2** Translator unit-tested via at least 3 source samples (claude, linear-app, stripe) — outputs reviewed for sanity.
-- **REQ-07.3** `marketplace.json` bumped 1.1.1 → 1.2.0.
+- **REQ-07.3** `marketplace.json` bumped 1.2.1 → 1.3.0.
 
 ## 5. Out of scope (deferred)
 
@@ -146,7 +146,7 @@ After this feature, `/theme-create` has three modes:
 
 - Upstream repo: `nexu-io/open-design`
 - Upstream branch: `main`
-- Upstream SHA at fork time: **TBD — capture during T-00**
+- Upstream SHA at fork time: **`d4b547caa7cafbf328c262cdf08dd275f5bdc4d6`** (captured T-00 on 2026-05-07)
 - Upstream path: `design-systems/<slug>/DESIGN.md`
 - Original attribution per file: cited in upstream README.md (mostly `bergside/awesome-design-skills` MIT and `VoltAgent/awesome-design-md` via `getdesign@latest` MIT, plus `tw93/kami` MIT).
 
@@ -168,4 +168,4 @@ After this feature, `/theme-create` has three modes:
 - [ ] `theme-create --inspired-by claude` runs end-to-end and produces a Dart `AppColors` snippet
 - [ ] `theme-create --browse fintech` lists 2 entries (stripe, revolut)
 - [ ] STATE.md has D-13 + D-14
-- [ ] Single commit: `feat(release): v1.2.0 — DESIGN.md inspiration library + translator`
+- [ ] Single commit: `feat(release): v1.3.0 — DESIGN.md inspiration library + translator`
