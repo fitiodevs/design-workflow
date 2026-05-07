@@ -253,6 +253,34 @@ ux-writing: Skill is valid!
 - **Cost calibration por modelo.** Estimates em `budget-protocol.md` são para Sonnet-class; Opus/Haiku bumps deferred.
 - **Stack-agnostic adapter.** Onda E pós-v1.0.
 
+## Onda E — Multi-stack adapter (2026-05-07, v1.2.0)
+
+### Decisões locked
+
+- **D-14 — Adapter contract: stack-agnostic Plan + 2 reference adapters in v1.2.** `docs/adapter-protocol.md` + `docs/adapter-plan.schema.json` define an intermediate format (token roles, widget tree, motion intent, file actions). `adapters/flutter/` ships byte-equivalent to pre-v1.2 (Fitio dogfood path unchanged). `adapters/nextjs-tailwind/` is new — emits CSS custom properties + Tailwind config snippet + TSX (shadcn-aware). `theme-port` and `theme-extend` migrated; `theme-create` / `theme-motion` / `theme-bolder` / `theme-quieter` / `theme-distill` deferred to v1.3 phase-2 (`adapter-migration-phase-2`). Other stacks (React Native, Vue, Svelte, plain-React, Angular, SwiftUI) are additive in v1.3+, one PR each.
+- **D-15 — Reverse "Web out of scope" ROADMAP entry.** Original ROADMAP §"Out of scope" rejected Tailwind/MUI on the basis of "different aesthetic vocabulary, would require a separate web-design-workflow repo." That premise was wrong — anti-AI-slop and craft references are the same in JSX as in Dart; only emission syntax differs. Adapter pattern keeps everything in-repo without diluting brand. Entry struck through with date marker; v1.3+ adapter backlog listed.
+- **D-16 — Roadmap reorder: adapter pulled forward 2 versions.** Originally `multi-stack-adapter` was scheduled v1.4.0; user urgency on Next.js+Tailwind pulled it to v1.2.0. Original v1.2 (`inspiration-library`) shifted to v1.3, original v1.3 (`interactive-mockup-stage`) shifted to v1.4. Reason: weak dependency between specs (inspiration-library and interactive-mockup-stage are orthogonal to stack support); user blocked on Next.js work.
+
+### Validation runs (2026-05-07)
+
+- `quick_validate skills/theme-port`: valid; `grep "Adapter Plan"` ≥ 2; `grep "stack:"` ≥ 1.
+- `quick_validate skills/theme-extend`: valid; `grep "Adapter Plan"` ≥ 1.
+- `quick_validate skills/theme-audit`: valid; `grep "stack:"` ≥ 1.
+- `python3 adapters/flutter/tests/conformance.py`: PASS 3/3 (palette + widget-tree + motion-set, byte-equivalent goldens).
+- `python3 adapters/nextjs-tailwind/tests/conformance.py --plain`: PASS 3/3.
+- `python3 adapters/nextjs-tailwind/tests/conformance.py --shadcn`: PASS 3/3 (variant detection switches widget-tree golden; palette + motion stack-mode-invariant).
+- `python3 scripts/audit_theme.py --stack flutter --help` shows `--stack`; `--stack react-native` errors with available list.
+- `python3 scripts/resolve_stack.py` resolves env > config > default flutter; errors on unknown.
+- All 3 example Plans validate against `docs/adapter-plan.schema.json` (zero errors).
+
+### Deferred (Onda E → v1.3+)
+
+- **Migrate remaining 5 wired skills** — `adapter-migration-phase-2`. theme-create / theme-motion / theme-bolder / theme-quieter / theme-distill. v1.2 dogfood feedback informs simplification.
+- **Additive adapters** — React Native, Vue+Tailwind, Svelte+Tailwind, plain-React, Angular+Tailwind, SwiftUI. Each is ~1 PR.
+- **Multi-stack output simultaneously** (one Plan emits both Dart and TSX). v1.4+ candidate once 2 adapters proven.
+- **Adapter discovery via plugin marketplace.** v1.5+ design exercise.
+- **shadcn/ui auto-install.** Adapter detects shadcn but doesn't run `npx shadcn add`. Stays user-driven.
+
 ## Conventions reminder
 
 - Source of truth for scripts: `<repo>/scripts/<name>.py`. Edit there, then re-run `bash scripts/_sync.sh`.

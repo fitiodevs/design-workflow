@@ -225,24 +225,24 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 7 — Docs + STATE + version
 
-### T-28 🅿️ Update `docs/ROADMAP.md`
+### T-28 ✅ Update `docs/ROADMAP.md`
 - **Action:** reverse the "Web-first design (Tailwind, MUI). Different aesthetic vocabulary; would require a separate web-design-workflow repo" entry — replace with date-marked note: "**Reversed 2026-05-06 in v1.2.0** — adapter pattern enabled web stacks in-repo, see `.specs/features/multi-stack-adapter/`." Add a v1.3+ adapter backlog list (React Native, Vue+Tailwind, Svelte+Tailwind, plain-React, SwiftUI).
 - **Verify:** `grep -c "Reversed 2026-05-06" docs/ROADMAP.md` = 1; backlog list contains ≥ 4 stacks.
 - **Refs:** REQ-G.3
 
-### T-29 🅿️ Update README §What changed in v1.2.0 + Stack support section
+### T-29 ✅ Update README §What changed in v1.2.0 + Stack support section
 - **Action:**
   - new `## What changed in v1.2.0` (above v1.1.2)
   - new top-level `## Stack support` listing Flutter + Next.js/Tailwind, link to `docs/adapter-protocol.md` for adding stacks
 - **Verify:** `grep -c "What changed in v1.2.0" README.md` = 1; `grep -c "## Stack support" README.md` = 1.
 - **Refs:** REQ-G.2, REQ-G.4
 
-### T-30 🅿️ Append D-14, D-15, D-16 to STATE.md
+### T-30 ✅ Append D-14, D-15, D-16 to STATE.md
 - **Action:** D-14 (adapter contract: 2 reference adapters in v1.2), D-15 (reverse Web-out-of-scope ROADMAP entry), D-16 (roadmap reorder rationale).
 - **Verify:** `grep -c "^- \*\*D-1[456]" .specs/project/STATE.md` = 3.
 - **Refs:** REQ-H
 
-### T-31 🅿️ Bump `marketplace.json` 1.1.2 → 1.2.0
+### T-31 ✅ Bump `marketplace.json` 1.1.2 → 1.2.0
 - **Action:** Edit `version` field; update top-level description to mention multi-stack support.
 - **Verify:** `jq -r '.metadata.version' .claude-plugin/marketplace.json` = `1.2.0`.
 - **Refs:** REQ-I.5

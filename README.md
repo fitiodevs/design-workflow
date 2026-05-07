@@ -84,14 +84,33 @@ Each skill has a persona triggerable directly: `/Auditor`, `/Composer`, `/Critic
 
 ## Stack assumptions
 
-These skills are **Flutter-first**:
-- Material 3 + Riverpod
-- Tokens at `lib/core/theme/{app_colors,app_spacing,app_motion,app_curves}.dart`
-- Project doc at `docs/product.md` (used for persona + AI-slop checks)
+These skills emit code through **stack adapters**. v1.2.0 ships two reference adapters:
 
-You can override paths in `config.example.yaml` → copy to your project as `.design-workflow.yaml`. See [docs/customizing.md](docs/customizing.md).
+- **flutter** (default) — Material 3 + Riverpod; tokens at `lib/core/theme/`; widgets at `lib/features/<feature>/presentation/widgets/`.
+- **nextjs-tailwind** — App Router or Pages; tokens as CSS custom properties in `app/globals.css` (or `styles/tokens.css`); Tailwind config snippet for `theme.extend.colors`; shadcn/ui detected via `components.json` or `@radix-ui/*` deps; widgets at `components/<feature>/<name>.tsx`.
 
-A subset of skills (`theme-audit`, `theme-critique`, `theme-create`, `frontend-design`, `ux-writing`) is **stack-agnostic** and works on any codebase that uses tokens.
+Project doc at `docs/product.md` is shared (used for persona + AI-slop checks across stacks).
+
+You can override paths in `config.example.yaml` → copy to your project as `.design-workflow.yaml`. Set `stack: flutter` or `stack: nextjs-tailwind` to select the adapter (default: `flutter`). Override per-invocation with the `STACK` env var. See [docs/customizing.md](docs/customizing.md) and [docs/adapter-protocol.md](docs/adapter-protocol.md).
+
+A subset of skills (`theme-critique`, `theme-create`, `frontend-design`, `ux-writing`) is **stack-agnostic** and works on any codebase that uses tokens.
+
+## Stack support
+
+| Stack | Status | Adapter |
+|---|---|---|
+| `flutter` | Stable since v1.0 | `adapters/flutter/` |
+| `nextjs-tailwind` | New in v1.2.0 (App Router + Pages, shadcn/ui aware) | `adapters/nextjs-tailwind/` |
+| `react-native`, `vue-tailwind`, `svelte-tailwind`, `react-tailwind`, `angular-tailwind`, `swiftui` | v1.3+ backlog (additive, one PR each) | — |
+
+Each adapter ships:
+- `adapter.py` (entry point, dispatches by Plan `kind`)
+- `mappings.py` (29-role TOKEN_ROLE_MAP + widget type map)
+- `templates/` (string templates per output type)
+- `STACK_NOTES.md` (path conventions + override hints)
+- `tests/conformance.py` + golden files (CI gate)
+
+To add a new stack, see `docs/adapter-protocol.md` §"How to add a new adapter".
 
 ## Methodology
 
@@ -116,7 +135,16 @@ Apache 2.0 — see [LICENSE.txt](LICENSE.txt). Each skill folder also carries a 
 
 ## Status
 
-**v1.1.2** — patch release: fixes a v1.1.1 deployment bug where `install.sh` didn't bundle `craft/`, leaving the 5 wired skills pointing at a project-relative path that wouldn't resolve when invoked from any other cwd. Now `install.sh` copies `craft/*.md` to `~/.claude/craft/` and rewrites the 16 references in the installed wired-skill copies to absolute paths. 19/19 skills still pass `quick_validate.py`. Extracted from production use in the [Fitio](https://fitio.app) Flutter app. Stack-agnostic adapter is the next-major roadmap item (Onda E).
+**v1.2.0** — multi-stack adapter release: stack-neutral Plan format + two reference adapters (Flutter + Next.js/Tailwind). `theme-port` and `theme-extend` now dispatch through the adapter; Flutter output is byte-equivalent to pre-v1.2. Stack selected via `stack:` field in `.design-workflow.yaml` (default `flutter`). 19/19 skills still pass `quick_validate.py`. Extracted from production use in the [Fitio](https://fitio.app) Flutter app and dogfooded against a fresh Next.js+Tailwind project.
+
+## What changed in v1.2.0
+
+- **Adapter contract.** New `docs/adapter-protocol.md` + `docs/adapter-plan.schema.json` define a stack-neutral intermediate format ("Adapter Plan"). Skills that emit code now produce a Plan; per-stack adapters render it to native syntax.
+- **Two reference adapters.** `adapters/flutter/` is byte-equivalent to pre-v1.2 output (Fitio dogfood path unchanged). `adapters/nextjs-tailwind/` is new — emits CSS custom properties, Tailwind config snippet, and TSX (shadcn-aware when detected).
+- **`stack:` config field.** Top-level `stack: flutter | nextjs-tailwind` in `.design-workflow.yaml`. Override per-invocation with `STACK` env var. Default `flutter` keeps existing setups working.
+- **Migrated skills.** `theme-port` and `theme-extend` emit Plans and dispatch to the active adapter. Remaining 5 wired skills (`theme-create`, `theme-motion`, `theme-bolder`, `theme-quieter`, `theme-distill`) are deferred to v1.3 phase-2.
+- **Stack-aware audit.** `theme-audit` reads `scripts/audit_lint_sets/<stack>.yaml` for regex sets; Tailwind arbitrary-hex patterns + inline-style hex etc. activate when `stack: nextjs-tailwind`. WCAG contrast logic is shared.
+- **ROADMAP reversed.** "Web-first design out of scope" entry struck through; adapter pattern keeps all stacks in-repo.
 
 ## What changed in v1.1.2
 
