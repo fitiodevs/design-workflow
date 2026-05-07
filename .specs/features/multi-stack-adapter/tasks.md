@@ -251,12 +251,12 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 8 — Final validation + ship
 
-### T-32 ⬜ Full validation sweep
+### T-32 ✅ Full validation sweep
 - **Action:** `quick_validate.py` for all 19 skills.
 - **Verify:** 19/19 `Skill is valid!`.
 - **Refs:** REQ-I.1
 
-### T-33 ⬜ Run all conformance + regression smokes
+### T-33 ✅ Run all conformance + regression smokes
 - **Action:**
   ```bash
   python3 adapters/flutter/tests/conformance.py            # PASS: 3/3
