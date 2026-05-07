@@ -95,6 +95,21 @@ You can override paths in `config.example.yaml` → copy to your project as `.de
 
 A subset of skills (`theme-critique`, `theme-create`, `frontend-design`, `ux-writing`) is **stack-agnostic** and works on any codebase that uses tokens.
 
+## Design schools library
+
+`design-systems-schools/` ships **12 hand-authored design philosophy schools** — sibling to the `design-systems/` brand library. Where brands encode *identities* ("look like Apple" with literal hex), schools encode *philosophies* ("follow Müller-Brockmann's discipline" with constraints). The same school applied to two projects produces two different palettes — each respecting the project's brand constraints AND the school's principles.
+
+| Category | Schools |
+|---|---|
+| Flutter-strong (Web ★★★) | `pentagram` · `information-architects` · `brutalism` · `locomotive` |
+| Print-strong (PDF / Cover ★★★) | `muller-brockmann` · `kenya-hara` · `editorial` · `atelier-zero` |
+| AI-gen-strong (AI-image-gen ★★★) | `memphis` · `active-theory` |
+| Versatile (≥4 scenarios ★★★) | `sagmeister-walsh` · `takram` |
+
+**Consumed by** `/theme-create --inspired-by-school <slug>` and `/frontend-design --school <slug>`. The constraint-based translator at `scripts/school_md_to_appcolors.py` reads any school's `SCHOOL.md` and synthesizes a 29-token `AppColors` proposal that satisfies the school's constraints. Each school also ships a 7-column execution-path matrix (Flutter UI / HTML / PPT / PDF / Infographic / Cover / AI-image-gen) — see `docs/design-schools-execution-paths.md` for which external tools to pair with each path.
+
+Schools and brands compose: pick a school for *philosophy* and a brand for *tone*, or pick both from the school library when authoring non-Flutter artifacts.
+
 ## Inspiration library
 
 `design-systems/` ships a 20-entry curated subset of [`nexu-io/open-design`](https://github.com/nexu-io/open-design)'s 71 brand `DESIGN.md` references. Each entry is a complete 9-section spec (Visual Theme · Color Palette · Typography · Components · Layout · Depth · Do/Don't · Responsive · Agent Prompt) with full upstream attribution headers (Apache-2.0 / MIT lineage). Pinned at SHA `d4b547c` (2026-05-07).
@@ -155,7 +170,16 @@ Apache 2.0 — see [LICENSE.txt](LICENSE.txt). Each skill folder also carries a 
 
 ## Status
 
-**v1.4.1** — additive React Native adapter. `adapters/react-native/` ships next to `adapters/flutter/` and `adapters/nextjs-tailwind/`, conformance 3/3 against the same Plan goldens. Detects Expo (via `app.json` or `expo-*` deps) and adapts paths (`src/` for bare RN, `app/` for Expo Router). Token roles emitted as TypeScript exports (`lightColors` / `darkColors` / `palettes`); widget-tree renders via RN core primitives plus a `makeStyles(colors)` factory wrapped in `useMemo` (the `useColors()` hook itself stays project-supplied). Slider imports from `@react-native-community/slider`; everything else is RN core. 20/20 skills still pass `quick_validate.py`. Built on v1.4.0 (interactive mockup stage), v1.3.0 (inspiration library), v1.2.x (multi-stack adapter + design-context). Extracted from production use in the [Fitio](https://fitio.app) Flutter app.
+**v1.5.0** — design schools library. `design-systems-schools/` (12 hand-authored philosophy schools) ships parallel to `design-systems/` (20 brand systems). Where brands say "look like Apple" with literal hex, schools say "follow Müller-Brockmann's discipline" via constraints (saturation, single-accent, WCAG ≥7:1, polarity). The constraint-based translator at `scripts/school_md_to_appcolors.py` solves the constraints to produce different palettes for different projects under the same school. `/theme-create --inspired-by-school <slug>` and `/frontend-design --school <slug>` are the new flags. The 12 schools cover 4 scenario-strength categories — 4 Flutter-strong (Pentagram, IA, Brutalism, Locomotive), 4 Print-strong (Müller-Brockmann, Kenya Hara, Editorial, Atelier-Zero), 2 AI-gen-strong (Memphis, Active Theory), 2 Versatile (Sagmeister-Walsh, Takram). `docs/design-schools-execution-paths.md` documents the multi-target execution matrix and recommended external tools (Marp, Slidev, Pandoc, Typst, Puppeteer, Midjourney, SDXL). 20/20 skills still pass `quick_validate.py`. Built on v1.4.x (RN adapter + interactive mockup stage), v1.3.0 (inspiration library), v1.2.x (multi-stack adapter + design-context). Extracted from production use in the [Fitio](https://fitio.app) Flutter app.
+
+## What changed in v1.5.0
+
+- **12-entry design-school library** at `design-systems-schools/`. Each `<slug>/SCHOOL.md` is hand-authored under Apache-2.0 with 8 standard sections — Philosophy nucleus · Core characteristics · Prompt DNA · Token implications · Execution-path matrix (7 scenarios × ratings) · Slop traps · Best paired with · Anti-pairs. Idea inspired by `alchaincyf/huashu-design` (Personal Use Only — not forked); structure adapted; prose written from scratch.
+- **Constraint-based translator** at `scripts/school_md_to_appcolors.py` (~485 LOC). Schools encode constraints (`accent ≤10% pixels`, `saturation_min 0.6`, `WCAG ≥7:1`, `polarity dark`, `single_accent`); the translator parses the bullets, synthesizes a palette via OKLCH iteration that satisfies the constraints, validates WCAG, and emits the same `proposal.json` + `rationale.md` shape as the v1.3.0 brand translator. **Validates 12/12 schools** with 9-10/11 WCAG pairs passing per mode.
+- **`/theme-create --inspired-by-school <slug>`** routes to the school translator. Same 4-precondition reduction as `--inspired-by` (purpose / audience / invariants / coexistence; skips the 4 the school encodes).
+- **`/frontend-design --school <slug>`** loads the school's `## Prompt DNA` as system-prompt extension for that mockup; appends the school's `## Slop traps` to the auto-revision checklist; stamps `<!-- school: <slug> -->` in `<head>` for traceability. Sticky session via `.design-spec/features/<feature>/active-school.txt`.
+- **`docs/design-schools-execution-paths.md`** explains how to read the 7-column matrix (Flutter UI · HTML · PPT · PDF · Infographic · Cover · AI-image-gen), when to pick the in-pipeline HTML path vs an external tool, and lists recommended tools per scenario (with last-validated dates). The pattern is **HTML-as-canonical-source** — author HTML once, convert to PPT/PDF/Cover via Marp/Pandoc/Puppeteer.
+- **STATE D-23 + D-24 + D-25 logged.** D-23 documents the schools/brands split (sibling folders, different abstractions); D-24 records the from-scratch authoring under Apache-2.0; D-25 captures the multi-target-matrix-as-reference-only doctrine.
 
 ## What changed in v1.4.1
 

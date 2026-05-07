@@ -11,9 +11,9 @@ metadata:
 
 ## Triggers
 
-- **English:** `/Designer`, `/frontend-design`, "create a mockup", "explore visually", "redesign this screen", "build a prototype/preview"
-- **Português:** `/Clara`, `/clara`, `/frontend-design`, "cria um mockup", "explora visualmente", "desenha essa tela", "faz um mock/protótipo/preview"
-- **Natural language:** new feature with no visual precedent; side-by-side current vs proposed; alignment before coding
+- **English:** `/Designer`, `/frontend-design`, `/frontend-design --school <slug>`, "create a mockup", "explore visually", "redesign this screen", "build a prototype/preview", "mockup in Müller-Brockmann style", "Pentagram-style preview"
+- **Português:** `/Clara`, `/clara`, `/frontend-design`, `/frontend-design --school muller-brockmann`, "cria um mockup", "explora visualmente", "desenha essa tela", "mock no estilo Pentagram", "preview na escola Memphis"
+- **Natural language:** new feature with no visual precedent; side-by-side current vs proposed; alignment before coding; "follow X school's discipline" (where X is one of the 12 in `design-systems-schools/`)
 
 Loads `docs/product.md`, `docs/design-tokens.md` and (when present) `docs/motion.md` before each mockup so the output ships calibrated for `/theme-port`.
 
@@ -184,6 +184,37 @@ From v1.4.0 onward, every Clara mockup MUST be tweaks-ready so `/tweaks <path>` 
 Self-check before delivering: `Read skills/frontend-design/references/clara-checklist.md` §"Tweaks-ready emission" — 5 boolean items, all must be true.
 
 If the user explicitly asks for a non-tweaks-ready mockup ("just give me a static screenshot"), call out the trade-off (won't pipe into `/tweaks`) and emit anyway.
+
+## --school mode (load a design philosophy as system-prompt extension)
+
+When the invocation includes `--school <slug>` (e.g. `/frontend-design --school muller-brockmann`), Clara loads the school's **Prompt DNA** section from `design-systems-schools/<slug>/SCHOOL.md` and treats it as a system-prompt extension for that mockup. This is distinct from `/theme-create --inspired-by-school` which generates the *palette*; `--school` here governs the *visual composition* (typography pairing, spacing discipline, layout pacing, motion register) of the HTML output.
+
+Pair the two for coherence: same school in both invocations → palette and composition argue for the same thesis.
+
+### --school workflow
+
+1. **Validate slug.** `ls design-systems-schools/<slug>/SCHOOL.md` must exist. If missing, halt and offer the school-library README at `design-systems-schools/README.md` to pick from.
+2. **Load Prompt DNA + Token implications + Slop traps.** `Read design-systems-schools/<slug>/SCHOOL.md` and treat its `## Prompt DNA` paragraphs as authoritative for emission decisions; the `## Slop traps` section drives the auto-revision checklist additions; `## Token implications` informs the typography / spacing / radius / motion choices.
+3. **Stamp the mockup with traceability.** Emit `<!-- school: <slug> -->` as the first line in `<head>` of the output HTML. This lets future runs of `/theme-port` and `/theme-critique` infer the school without asking.
+4. **Emit per the school's discipline.** Müller-Brockmann produces 8/12-column grids with two type weights; Memphis produces 4–6-color pattern-rich layouts with Druk display; Brutalism produces system-font-stack zero-radius asymmetric layouts. The Prompt DNA is the source of truth for how the mockup looks.
+5. **Apply the school's slop traps in self-revision.** Append the school's `## Slop traps` items to the auto-revision checklist (at `references/clara-checklist.md`); fail if any trap applies to the output before delivering.
+6. **Always remain tweaks-ready.** The CSS-custom-property contract from `## Tweaks-ready output` still applies. The school overrides the *content* of the tokens (which font, what spacing scale), not the *structure* (everything via `var(--…)`).
+
+### Sticky session — active-school per feature
+
+When `--school` is invoked once for a feature, the slug auto-applies to subsequent invocations on the same feature. Per `design-school-library` D-F:
+
+- On invocation, write `.design-spec/features/<feature-slug>/active-school.txt` with the school slug.
+- Subsequent `/frontend-design` calls on the same feature (inferred from the invocation arguments or output path) read the file and re-apply the school without explicit flag.
+- User overrides with `--school <other>` (writes the new value) or clears with `--no-school` (removes the file).
+
+The feature slug is derived from the user's request — typically the path passed to Clara (`/frontend-design milestone-slider`) or the directory under `.design-spec/features/`. When the feature can't be inferred, the active-school file is not written; the school applies only to the current invocation.
+
+### --school failure modes
+
+- **Slug not in `design-systems-schools/`.** Refuse and list available slugs from the README.
+- **User wants school + ad-hoc style** (`--school memphis "but more muted"`). The school's Slop traps will likely flag the request — surface that conflict, ask user to commit to one or the other.
+- **The school recommends ★☆☆ for HTML mockup but the user invoked Clara anyway.** Show the matrix entry; the user is free to proceed but expect a thinner output. Active Theory is the canonical example — it expects motion which static HTML can't carry.
 
 ## Output esperado
 

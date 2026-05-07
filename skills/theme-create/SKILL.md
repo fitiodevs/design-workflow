@@ -1,6 +1,6 @@
 ---
 name: theme-create
-description: Creates a complete palette from scratch (brand + semantic + neutral) or an alternative visual identity (sub-brand, seasonal mode, sponsor skin). Three modes — (1) blank-page with 8 pre-conditions, (2) `--inspired-by [slug]` reading `design-systems/[slug]/DESIGN.md` through the translator at `scripts/design_md_to_appcolors.py` (skips 4 of 8 pre-conditions, source already encodes them), (3) `--browse [category]` listing the curated 20-entry library before dropping into mode 2. Uses OKLCH for perceptually-uniform scales, validates WCAG automatically, emits a ready-to-paste `AppColors` plus anti-AI-slop rationale plus reference sheet in `docs/themes/`. Use when no incremental tweak fits and identity must be redesigned. Triggered by `/Composer`, `/Compositor`, `/theme-create`, `/theme-create --inspired-by stripe`, `/theme-create --browse fintech`, "cria palette nova", "nova identidade visual", "create a new palette", "sub-brand for X", "inspirado no Linear", "inspired by Stripe".
+description: Creates a complete palette (brand + semantic + neutral) — sub-brand, seasonal, sponsor, full identity. Four modes — (1) blank-page with 8 pre-conditions, (2) `--inspired-by [slug]` from 20-entry brand library, (3) `--browse [category]` wrapper for mode 2, (4) `--inspired-by-school [slug]` from 12-entry philosophy library; schools encode constraints (saturation, WCAG, single-accent) and the constraint translator at `scripts/school_md_to_appcolors.py` solves them. OKLCH-uniform scales, WCAG validation, emits `AppColors` + ficha in `docs/themes/`. Triggered by `/Composer`, `/Compositor`, `/theme-create`, `/theme-create --inspired-by stripe`, `/theme-create --browse fintech`, `/theme-create --inspired-by-school muller-brockmann`, "cria palette nova", "create a new palette", "inspirado no Linear", "Pentagram philosophy", "filosofia Müller-Brockmann".
 metadata:
   dw:
     craft:
@@ -12,9 +12,9 @@ metadata:
 ## Triggers
 
 - **English:** `/Composer`, `/theme-create`, "create a new palette", "new visual identity", "sub-brand", "palette from scratch"
-- **English (inspired):** `/theme-create --inspired-by <slug>`, `/theme-create --browse`, `/theme-create --browse <category>`, "inspired by Linear", "start from Stripe"
+- **English (inspired):** `/theme-create --inspired-by <slug>`, `/theme-create --browse`, `/theme-create --browse <category>`, `/theme-create --inspired-by-school <slug>`, "inspired by Linear", "start from Stripe", "follow Müller-Brockmann's philosophy", "Pentagram-style identity"
 - **Português:** `/Compositor`, `/compositor`, `/theme-create`, "cria palette nova", "nova identidade visual", "sub-brand", "palette do zero"
-- **Português (inspirado):** `/theme-create --inspired-by linear-app`, `/theme-create --browse fintech`, "inspirado no Notion", "começa do Stripe"
+- **Português (inspirado):** `/theme-create --inspired-by linear-app`, `/theme-create --browse fintech`, `/theme-create --inspired-by-school muller-brockmann`, "inspirado no Notion", "começa do Stripe", "filosofia Müller-Brockmann", "escola Memphis"
 - **Natural language:** seasonal skin (Black Friday); sponsor branded event; full identity refresh; "preciso de algo na pegada da Apple"
 
 Creates a complete palette. Three modes — pick by argument shape:
@@ -136,6 +136,53 @@ When the invocation is `/theme-create --browse` or `/theme-create --browse <cate
 - **User picks a slug not in the curated 20.** Refuse and offer the closest match plus `/theme-create --inspired-by <closest>`.
 
 ---
+
+## Workflow — --inspired-by-school mode
+
+When the invocation is `/theme-create --inspired-by-school <slug>`, route to the school library at `design-systems-schools/<slug>/SCHOOL.md` and the constraint-based translator at `scripts/school_md_to_appcolors.py`. **Schools differ from brands.** A brand says `--accent: #c96442`; a school says "accent must be primary or saturated red, ≤10% of pixels, contrast ≥7:1 against neutral background". The translator generates hex that *satisfies* the constraint, not hex pulled from a source. Result: the same school applied to two projects produces two different palettes — each respecting the project's brand context vs the school's constraint.
+
+Why pick school over brand:
+- The user wants a *philosophy* not an *identity* ("apply Müller-Brockmann's discipline" rather than "look like Linear").
+- The artifact is non-Flutter (PPT / PDF / cover) where brand-imitation makes less sense — schools recommend execution paths (HTML → Marp / Pandoc / etc; see `docs/design-schools-execution-paths.md`).
+- The user has a project-specific brand color and wants the school's *structure* (typography pairing, spacing discipline) without altering the brand.
+
+1. **Validate slug.** `ls design-systems-schools/<slug>/SCHOOL.md` must exist. If missing, halt and offer the school-library README (`design-systems-schools/README.md`) for the user to pick a slug from.
+2. **Run the translator.**
+   ```bash
+   python3 scripts/school_md_to_appcolors.py design-systems-schools/<slug>/ --out-dir .tmp/theme-create/school-<slug>/
+   ```
+   Outputs `proposal.json` (29 tokens × 2 modes + WCAG report + extracted constraints + decision trace) and `rationale.md` (philosophy quote + constraint table + mapping rationale + open questions). Halt and report on translator non-zero exit.
+3. **Present the rationale.** Show: (a) the school's philosophy nucleus (verbatim from `## Philosophy nucleus`), (b) the extracted constraints (`Constraint(target, kind, value)` rows), (c) the synthesized 29-token mapping, (d) the WCAG report — call out any failures, (e) the school's execution-path matrix to inform the user about non-Flutter scenarios.
+4. **Ask only the 4 remaining pre-conditions** (same as `--inspired-by` mode):
+   - **Purpose** — what's this *theme* for?
+   - **Audience** — same default audience or niche?
+   - **Invariants** — anything that must not change vs the default `AppColors`?
+   - **Coexistence** — replace default, or add as a 3rd `AppColors` instance?
+   - **Skipped** — tone (school's prompt DNA), differentiation (implicit in school choice), color-strategy commitment (school's reduction discipline), anti-category-reflex (user picked a non-default school).
+5. **Tweak loop.** Common school tweaks: pick which accent hue from a school's option set (Müller-Brockmann's red/blue/yellow), override the saturation if the project's brand demands less than the school's default, fill the 7 game/badge tokens.
+6. **Final emission.** When approved, run the standard from-scratch closing steps: anti-AI-slop checklist, ficha at `docs/themes/<slug>.md` (cite the school: `> Inspired by school: design-systems-schools/<slug>/SCHOOL.md`), append the rationale doc as the §"Mapping rationale" section, rollout plan.
+
+### --inspired-by-school failure modes
+
+- **Translator extracts zero constraints** (the school's bullets aren't recognised). Output is the seed-default palette. Surface this in the rationale and ask user to confirm the palette character matches the school's intent — or contribute a more parseable constraint to `scripts/school_md_to_appcolors.py`.
+- **Multiple schools' philosophies seem to apply.** Refuse blending in v1.5; pick one (the deferred `--inspired-by-school A + B` is a v1.6 candidate per spec §5).
+- **The school recommends a non-Flutter scenario at ★★★ but the user wants Flutter.** Show the matrix; the user is free to proceed but the school's character will be more legible in the recommended scenario.
+
+### Pairing with `frontend-design --school`
+
+For coherent feature design, the recommended workflow is:
+
+```
+/theme-create --inspired-by-school muller-brockmann      # palette respects school constraints
+        ↓
+/frontend-design --school muller-brockmann               # Clara loads school's prompt DNA
+        ↓
+/tweaks <html>                                           # explore variants within school discipline
+        ↓
+/theme-port --from-html <html>                           # emit Flutter
+```
+
+The same school in both invocations is sticky per-feature — see `frontend-design`'s `--school` documentation for the active-school file convention.
 
 ## Workflow — from-scratch mode (default, no flag)
 

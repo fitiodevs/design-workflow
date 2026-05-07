@@ -116,9 +116,9 @@ After this feature:
 
 ### REQ-06 — STATE.md decisions
 
-- **REQ-06.1** D-20 — Schools library separate from brands library: different folder (`design-systems-schools/` vs `design-systems/`), different file (`SCHOOL.md` vs `DESIGN.md`), different translator. Rationale: different abstraction layer (philosophy vs identity).
-- **REQ-06.2** D-21 — School entries authored from scratch (huashu license); Apache-2.0 citation in attribution header.
-- **REQ-06.3** D-22 — Multi-target matrix is reference-only for non-Flutter rows; we don't ship PPT/PDF/AI-gen generators, only recommend external tools.
+- **REQ-06.1** D-23 — Schools library separate from brands library: different folder (`design-systems-schools/` vs `design-systems/`), different file (`SCHOOL.md` vs `DESIGN.md`), different translator. Rationale: different abstraction layer (philosophy vs identity).
+- **REQ-06.2** D-24 — School entries authored from scratch (huashu license); Apache-2.0 citation in attribution header.
+- **REQ-06.3** D-25 — Multi-target matrix is reference-only for non-Flutter rows; we don't ship PPT/PDF/AI-gen generators, only recommend external tools.
 
 ### REQ-07 — README + theme-create + frontend-design updates
 
@@ -129,7 +129,7 @@ After this feature:
 
 ### REQ-08 — Validate + bump
 
-- **REQ-08.1** `quick_validate.py` 21/21 valid (no skill count change in v1.5; only flag additions).
+- **REQ-08.1** `quick_validate.py` 20/20 valid (no skill count change in v1.5; only flag additions).
 - **REQ-08.2** Translator smoke test on 3 sample schools (Müller-Brockmann, Brutalism, Editorial) — manual review for sanity.
 - **REQ-08.3** `marketplace.json` bumped 1.4.0 → 1.5.0.
 
@@ -167,5 +167,5 @@ After this feature:
 - [ ] `theme-create --inspired-by-school müller-brockmann` works end-to-end
 - [ ] `frontend-design --school memphis` produces a mockup whose visual character matches Memphis (manual review)
 - [ ] `docs/design-schools-execution-paths.md` exists with external-tool recommendations
-- [ ] STATE.md has D-20, D-21, D-22
+- [ ] STATE.md has D-23, D-24, D-25
 - [ ] Single commit: `feat(release): v1.5.0 — design schools library + multi-target execution paths`
