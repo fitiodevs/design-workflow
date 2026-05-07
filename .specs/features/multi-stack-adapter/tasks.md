@@ -60,7 +60,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 2 — Flutter adapter (reference, byte-equivalent)
 
-### T-06 ⬜ Stub `adapters/flutter/` skeleton
+### T-06 ✅ Stub `adapters/flutter/` skeleton
 - **Action:** create dirs + stubs:
   ```
   adapters/flutter/
@@ -75,17 +75,17 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Verify:** `find adapters/flutter -type f | wc -l` ≥ 6.
 - **Refs:** REQ-B.1
 
-### T-07 ⬜ Implement `mappings.py` + 3 templates
+### T-07 ✅ Implement `mappings.py` + 3 templates
 - **Action:** TOKEN_ROLE_MAP (29 entries: `brandDefault` → `context.colors.brandDefault`); WIDGET_TYPE_MAP (`button` → `AppButton`, etc); 3 string templates capturing current `AppColors._light` / widget file / design-tokens.md format.
 - **Verify:** `python3 -c "from adapters.flutter.mappings import TOKEN_ROLE_MAP; assert len(TOKEN_ROLE_MAP) >= 29"`.
 - **Refs:** REQ-B.1
 
-### T-08 ⬜ Implement `adapter.py` main dispatch
+### T-08 ✅ Implement `adapter.py` main dispatch
 - **Action:** entry function `main(plan_path, dry_run=False) -> int`; dispatch on `plan["kind"]` to `emit_palette` / `emit_widget_tree` / `emit_motion`. Each emit calls templates + writes per `actions[]`.
 - **Verify:** `python3 adapters/flutter/adapter.py docs/adapter-examples/palette.json --dry-run` prints expected paths without writing.
 - **Refs:** REQ-B.1
 
-### T-09 ⬜ Write conformance test + 3 goldens
+### T-09 ✅ Write conformance test + 3 goldens
 - **Action:** for each example, manually craft expected Dart output (golden), commit. `tests/conformance.py`: runs adapter on each example with `--dry-run` capture, diffs against golden, prints PASS/FAIL.
 - **Verify:** `python3 adapters/flutter/tests/conformance.py` prints `PASS: 3/3`.
 - **Refs:** REQ-B.2
