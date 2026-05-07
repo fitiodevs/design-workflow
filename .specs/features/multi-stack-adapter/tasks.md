@@ -266,7 +266,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Verify:** all green.
 - **Refs:** REQ-I.2, REQ-I.3, REQ-I.4
 
-### T-34 ⬜ Commit + push
+### T-34 ✅ Commit + push
 - **Action:**
   ```bash
   git add adapters/ docs/adapter-protocol.md docs/adapter-plan.schema.json docs/adapter-examples/ \
@@ -279,7 +279,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
   ```
 - **Verify:** push exit 0; `git log -1 --stat` shows expected file list (adapters/ ×2, docs/ ×3, scripts/ ×3, skills/ ×3, etc).
 
-### T-35 ⬜ Tag + GitHub release
+### T-35 ✅ Tag + GitHub release
 - **Action:** `git tag -a v1.2.0 <commit-sha> -m "..."` + push tag + `gh release create v1.2.0 --latest --notes ...`.
 - **Verify:** `gh release list --limit 5` shows v1.2.0 as Latest.
 
