@@ -60,20 +60,44 @@ Se falhar AA:
 - Clarear a versão dark.
 - Repetir até passar.
 
-#### Step A3 — Editar `lib/core/theme/app_colors.dart`
+#### Step A3 — Build Adapter Plan + dispatch
 
-Adicionar em **6 lugares** (segue o padrão dos campos existentes — o `AppColors` atual tem 29 fields organizados em 7 grupos com comentários `// ── <Grupo> ──`):
+Em vez de editar `app_colors.dart` diretamente, emit um **Adapter Plan** `kind: palette` e delegue ao adapter da stack ativa.
 
-1. Campo: `final Color <novoToken>;` (no grupo apropriado, manter ordem)
-2. Constructor: `required this.<novoToken>,`
-3. `AppColors.navyBlue` (light): `<novoToken>: Color(0xFF...),`
-4. `AppColors.darkBlue` (dark): `<novoToken>: Color(0xFF...),`
-5. `copyWith`: parâmetro opcional + linha `<novoToken>: <novoToken> ?? this.<novoToken>,`
-6. `lerp`: `<novoToken>: Color.lerp(<novoToken>, other.<novoToken>, t)!,`
+```bash
+# 1. Resolve active stack — STACK env > config.stack > flutter
+STACK=$(python3 scripts/resolve_stack.py)
 
-Se o token novo for de feedback (par cor + muted), adicionar **2 fields** seguindo o padrão `feedbackXxx` + `feedbackXxxMuted`. Se for badge novo, adicionar 3 fields no `AppBadgeColors` E uma entrada na factory `fromAppColors()`.
+# 2. Emit Plan (extends current palette with the new role)
+cat > /tmp/extend-<novoToken>-plan.json <<EOF
+{
+  "version": "1.0",
+  "kind": "palette",
+  "tokens": {
+    "palette": {
+      "<novoToken>": {"light": "#XXXXXX", "dark": "#YYYYYY"}
+      /* + outros 29 roles existentes (read from current AppColors / globals.css) */
+    }
+  },
+  "actions": [
+    {"op": "patch",  "role": "palette",       "intent": "tokens"},
+    {"op": "append", "role": "design-tokens", "intent": "doc-summary"}
+  ]
+}
+EOF
 
-O script `generate_palette.py pair` já emite snippet pronto nos passos 1-4.
+# 3. Adapter renders to native:
+python3 adapters/$STACK/adapter.py /tmp/extend-<novoToken>-plan.json
+```
+
+Por stack:
+
+- **flutter:** o adapter atualiza `lib/core/theme/app_colors.dart` (field, constructor, light/dark instances, `copyWith`, `lerp` — os 6 lugares ficam responsabilidade do template). Token de feedback (`feedbackXxx` + `feedbackXxxMuted`) requer **2 entradas** no Plan.
+- **nextjs-tailwind:** o adapter atualiza `app/globals.css` (`:root` + `.dark` blocks) e regenera o snippet `tailwind.config.ts.tmpl` para `theme.extend.colors`.
+
+Se o token novo for badge, manter compat com `AppBadgeColors.fromAppColors()` em Flutter — o adapter ainda não cobre badge derivation (planned v1.3); o Plan declara o role base e o operador faz o passo manual.
+
+O script `generate_palette.py pair` continua útil para gerar o par light/dark hex que vai dentro do Plan.
 
 #### Step A4 — Atualizar `docs/design-tokens.md`
 

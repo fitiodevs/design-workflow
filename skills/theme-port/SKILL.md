@@ -157,35 +157,78 @@ Antes de escrever código, mapear cada elemento da source para um component do d
 
 Custom só se nenhum component cobre. Coloca em `lib/features/<feature>/presentation/widgets/`.
 
-### Step 5 — Implement
+### Step 5 — Build Adapter Plan
 
-- Path: `lib/features/<feature>/presentation/{pages,widgets}/`.
-- Import: `package:<your_app>/core/widgets/widgets.dart`.
-- Texto: `Theme.of(context).textTheme.<role>` (ou `context.cappedTextTheme.<role>` para elementos fixos — pills, tabs, badges, texto descritivo curto de hero/captions de marca).
-- Cores: `context.colors.<role>`.
-- Spacing/Radius: `AppSpacing.<t>` / `AppRadius.<t>`.
-- Sizes (w/h literal) OK — são estruturais.
-- Copy pt-BR; identifiers em inglês.
+Em vez de escrever Dart diretamente, emit um **Adapter Plan** (formato neutro entre stacks). O Plan é um JSON conforme `docs/adapter-plan.schema.json`:
 
-**Elementos que DEVEM usar `cappedTextTheme` (cap A+):**
-Badges, pills, bottom-nav tabs, navbar section titles, status chips, short label/caption text, point/score labels — anything where uncapped scaling at A++ would break the fixed layout.
-
-### Step 6 — Validate
-
-```bash
-flutter analyze
+```json
+{
+  "version": "1.0",
+  "kind": "widget-tree",
+  "meta": {"feature": "<feature-slug>"},
+  "widgets": [
+    {"type": "form-group", "variant": "stacked", "size": "md",
+     "props": {"title": "..."}, "children": [/* ... */]}
+  ],
+  "actions": [
+    {"op": "write", "role": "widget-tree", "intent": "component", "name": "MilestoneCta"}
+  ]
+}
 ```
 
-Deve retornar `No issues found!`. Se `@freezed` foi tocado: `dart run build_runner build --delete-conflicting-outputs`.
+Salvar em `/tmp/<feature>-plan.json`. Esse arquivo é o **único artefato direto da skill** — toda emissão de código é responsabilidade do adapter.
 
-### Step 7 — Report
+Token roles (cores/spacing/radius/typography) **continuam sendo decididos aqui** (Step 3 / Step 4) — o Plan os referencia por nome canônico (ex: `brandDefault`, `bgSurface`). O adapter resolve para a sintaxe da stack ativa (`context.colors.brandDefault` em Flutter, `var(--brand-default)` em Tailwind).
+
+Copy pt-BR; identifiers em inglês — independe do stack.
+
+### Step 6 — Resolve active stack
+
+Resolução em ordem (executar via Bash) — `STACK` env var → `.design-workflow.yaml` `stack:` field → `flutter`:
+
+```bash
+STACK=$(python3 scripts/resolve_stack.py)   # STACK env > config.stack > "flutter"
+```
+
+Se `resolve_stack.py` falhar (stack desconhecido), parar e reportar — não chutar.
+
+### Step 7 — Render via adapter
+
+```bash
+python3 adapters/$STACK/adapter.py /tmp/<feature>-plan.json
+```
+
+O adapter consume o Plan, renderiza via templates, escreve nos paths convencionais:
+
+- **flutter:** `lib/features/<feature>/presentation/widgets/<name>.dart` + atualiza `lib/core/theme/app_colors.dart` se kind=palette.
+- **nextjs-tailwind:** `components/<feature>/<name>.tsx` + atualiza `app/globals.css` (App Router) ou `styles/tokens.css` (Pages) se kind=palette.
+
+### Step 7.5 — Verify outputs
+
+Confirmar que cada `action` do Plan resultou num arquivo no path esperado. Listar paths absolutos no relatório (Step 9).
+
+### Step 8 — Validate per stack
+
+| Stack | Comando | Esperado |
+|---|---|---|
+| `flutter` | `flutter analyze` | `No issues found!` (rodar `dart run build_runner build` se `@freezed` foi tocado) |
+| `nextjs-tailwind` | `npx tsc --noEmit && npx eslint <component-path>` | exit 0 |
+
+Se a validação falhar, **não reportar done** — fix-and-retry ou escalar para o usuário.
+
+### Step 9 — Report
 
 Terminar com relatório curto:
-- Arquivos criados/editados.
+- Stack resolvido (`flutter` / `nextjs-tailwind`).
+- Plan emitido em `/tmp/<feature>-plan.json` (anexar ao relatório).
+- Arquivos criados/editados pelo adapter (output de Step 7).
 - Tokens reutilizados (lista curta).
 - **Qualquer fill que não encaixou em token existente** — flag explícito.
 - Desvios de radius/spacing fora da escala.
-- **Sugestão do próximo passo**: `/theme-audit lib/features/<feature>` para validar cobertura.
+- **Sugestão do próximo passo**: `/theme-audit lib/features/<feature>` (Flutter) ou `/theme-audit components/<feature>` (Next.js) para validar cobertura.
+
+**Elementos que DEVEM usar `cappedTextTheme` (cap A+, Flutter only):**
+Badges, pills, bottom-nav tabs, navbar section titles, status chips, short label/caption text, point/score labels — anything where uncapped scaling at A++ would break the fixed layout. (Sem equivalente direto em Tailwind; resolvido via `clamp()` quando o adapter Next.js implementar typography em v1.3+.)
 
 ## Anti-patterns
 

@@ -157,37 +157,37 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 5 — Migrate skills to adapter dispatch
 
-### T-17 ⬜ Refactor `skills/theme-port/SKILL.md` workflow
+### T-17 ✅ Refactor `skills/theme-port/SKILL.md` workflow
 - **Action:** restructure Workflow steps per design §"Migration shape for theme-port". Step 5 becomes "Build Adapter Plan"; new Step 6 "Resolve active stack"; Step 7 "Render via adapter"; Step 7.5 "Verify outputs"; Step 8 "Validate per stack" with branch flutter/nextjs-tailwind.
 - **Verify:** `python3 $VAL skills/theme-port/` valid; `grep -c "Adapter Plan" skills/theme-port/SKILL.md` ≥ 2; `grep -c "stack:" skills/theme-port/SKILL.md` ≥ 1.
 - **Refs:** REQ-D.1, REQ-D.4
 
-### T-18 ⬜ Flutter regression smoke for theme-port
+### T-18 ✅ Flutter regression smoke for theme-port
 - **Action:** with `stack: flutter`, invoke `/theme-port` on the frame snapshotted in T-00. Diff resulting Dart byte-by-byte (modulo whitespace) against snapshot.
 - **Verify:** `diff -r --strip-trailing-cr .design-spec/regression-snapshots/pre-v1.2/flutter/ <new-output>/` returns zero diff.
 - **Refs:** REQ-D.2, REQ-I.3
 
-### T-19 ⬜ Next.js+Tailwind manual smoke for theme-port
+### T-19 ✅ Next.js+Tailwind manual smoke for theme-port
 - **Action:** spin up minimal Next.js + Tailwind project (`npx create-next-app@latest --ts --tailwind --app /tmp/nextjs-smoke`). Set `stack: nextjs-tailwind` in `.design-workflow.yaml`. Invoke `/theme-port` on same Figma frame. Confirm: `app/globals.css` has CSS vars, `tailwind.config.ts` has `theme.extend.colors` from CSS vars, `components/<feature>/<name>.tsx` renders structure. Screenshot saved at `.design-spec/smoke/v1.2.0-nextjs-port.md`.
 - **Verify:** smoke file exists with 3 ✅ checkboxes (CSS vars / Tailwind config / TSX component); manual visual check passed.
 - **Refs:** REQ-D.3, REQ-I.4
 
-### T-20 ⬜ Update theme-port eval
+### T-20 ✅ Update theme-port eval
 - **Action:** add assertion to `skills/theme-port/evals/evals.json`: an Adapter Plan JSON sidecar exists after invocation. Add per-stack expected output checks.
 - **Verify:** eval passes manually on smokes from T-18 + T-19; `python3 $VAL skills/theme-port/` valid.
 - **Refs:** REQ-D.5
 
-### T-21 ⬜ Refactor `skills/theme-extend/SKILL.md`
+### T-21 ✅ Refactor `skills/theme-extend/SKILL.md`
 - **Action:** same shape as theme-port — emit Plan describing token additions, dispatch adapter.
 - **Verify:** `python3 $VAL skills/theme-extend/` valid; `grep -c "Adapter Plan" skills/theme-extend/SKILL.md` ≥ 1.
 - **Refs:** REQ-E.1
 
-### T-22 ⬜ Regression smoke for theme-extend (Flutter)
+### T-22 ✅ Regression smoke for theme-extend (Flutter)
 - **Action:** simulate adding a token (e.g. `feedbackPositive`) with `stack: flutter`. Confirm adapter writes to `lib/core/theme/app_colors.dart` + `docs/design-tokens.md` exactly as pre-v1.2.
 - **Verify:** byte-equivalent against pre-v1.2 baseline (manually captured).
 - **Refs:** REQ-E.2
 
-### T-23 🅿️ Smoke for theme-extend (Next.js)
+### T-23 ✅ Smoke for theme-extend (Next.js)
 - **Action:** same token addition with `stack: nextjs-tailwind`. Confirm CSS var + Tailwind config update + design-tokens.md update.
 - **Verify:** all 3 files updated correctly (manual review logged).
 - **Refs:** REQ-E.1
