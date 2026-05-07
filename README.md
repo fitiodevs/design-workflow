@@ -154,7 +154,28 @@ Apache 2.0 — see [LICENSE.txt](LICENSE.txt). Each skill folder also carries a 
 
 ## Status
 
-**v1.3.0** — inspiration library: a curated 20-entry subset of [`nexu-io/open-design`](https://github.com/nexu-io/open-design)'s 71 brand `DESIGN.md` references lives at `design-systems/`, plus a translator at `scripts/design_md_to_appcolors.py` that maps any source's CSS-style palette onto the Fitio 29-token `AppColors`. `/theme-create` gains two flags — `--inspired-by <slug>` (skip 4 of 8 pre-conditions, source already encodes them) and `--browse [<category>]` (discover before picking). 19/19 skills still pass `quick_validate.py`. Built on v1.2.1 (design-context doctrine) and v1.2.0 (multi-stack adapter). Extracted from production use in the [Fitio](https://fitio.app) Flutter app.
+**v1.4.0** — interactive mockup stage: new `tweaks` skill wraps any tweaks-ready HTML mockup with a side panel of live CSS-custom-property knobs (accent hue · type scale · density · theme mode · motion) persisting to localStorage; Clara (`frontend-design`) refit to emit tweaks-ready HTML by contract; `theme-critique --mode 5dim` adds an alternative 5-dimension review (Philosophy / Hierarchy / Detail / Function / Innovation) with a self-contained HTML radar-chart report. 20/20 skills pass `quick_validate.py` (was 19; +1 for `tweaks`). Built on v1.3.0 (inspiration library), v1.2.1 (design-context doctrine), v1.2.0 (multi-stack adapter). Extracted from production use in the [Fitio](https://fitio.app) Flutter app.
+
+## What changed in v1.4.0
+
+- **`tweaks` skill (new — 20th in the marketplace).** `/tweaks <path>` wraps any tweaks-ready HTML with a fixed side panel of 5 knobs binding to CSS custom properties + localStorage persistence. Output is a sibling `<input>.tweaks.html` (original untouched). Refuses to wrap inputs that bake hex/px outside `:root` and tells the user to re-emit via `/frontend-design`. Vanilla JS, ~250 lines, no framework, no server — single self-contained HTML. Persona: **Tweaker** (functional skill, no PT alias).
+- **Clara refit: tweaks-ready emission contract.** `/frontend-design` (Clara / Designer) now ships HTML where every visual decision is a CSS custom property reference: colors via `var(--accent)`, spacing via `calc(var(--space-unit) * N)`, font-sizes via the multiplicative scale ladder, dark mode via `:root[data-mode="dark"]` overrides, every major section gets `data-od-id`. The auto-revisão checklist gains 5 boolean items. Mockups produced from v1.4 forward pipe directly into `/tweaks` without refit.
+- **`theme-critique --mode 5dim`.** Alternative rubric forked from `nexu-io/open-design` (originating in `huashu-design`) — 5 dimensions scored 0–10 (Philosophy / Visual hierarchy / Detail / Functionality / Innovation), each with evidence + a Keep/Fix/Quick-win bullet. Output is a self-contained HTML report at `.design-spec/critique/<feature>/<timestamp>-5dim.html` with inline-SVG radar chart. Default mode stays Nielsen 10. Use 5dim for early-stage exploration; Nielsen for shipping-readiness.
+- **Pipeline (new step between Clara and Architect):**
+
+  ```
+  /theme-create [--inspired-by]          # palette
+       ↓
+  /frontend-design                       # tweaks-ready HTML mockup
+       ↓
+  /tweaks <path>                         # NEW v1.4 — knob panel, explore N variants
+       ↓
+  /theme-critique --mode 5dim <path>     # NEW v1.4 — radar-chart review of chosen state
+       ↓
+  /theme-port --from-html <path>         # HTML → Flutter using tokens
+  ```
+
+- **STATE D-19 + D-20 + D-21 logged.** D-19 records tweaks-as-wrapper-not-generator; D-20 records `data-od-id` reuse over inventing `data-dw-id`; D-21 records `--mode 5dim` as a flag rather than a separate skill.
 
 ## What changed in v1.3.0
 

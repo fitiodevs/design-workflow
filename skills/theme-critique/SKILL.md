@@ -1,6 +1,6 @@
 ---
 name: theme-critique
-description: Júri persona — dual-mode design orchestrator. Without args, runs Discovery interview (4 blocks Produto/Tom/Identidade/Stack, brownfield pre-scan, generates discovery.md + PRD/skeletons, emits priority-ordered routing plan). With a Flutter path, runs Critique (Nielsen 0–4 × 10 heuristics, AI-slop verdict, persona walkthroughs, cognitive load, P0–P3 issues mapped to next skills). Triggered by `/Critic`, `/Júri`, `/theme-critique`, "critique this screen", "design review", "Nielsen heuristic", "/juri" alone for project discovery.
+description: Júri persona — multi-mode design orchestrator. Without args, runs Discovery interview (4 blocks Produto/Tom/Identidade/Stack, brownfield pre-scan, generates discovery.md + PRD/skeletons, emits priority-ordered routing plan). With a Flutter path, runs Critique (Nielsen 0–4 × 10 heuristics by default — AI-slop verdict, persona walkthroughs, cognitive load, P0–P3 issues mapped to next skills). With `--mode 5dim` and an HTML path, runs the alternative 5-dimension review (Philosophy / Visual hierarchy / Detail / Functionality / Innovation, scored 0–10 each) and emits a self-contained HTML report with radar chart + Keep/Fix/Quick-wins lists. Triggered by `/Critic`, `/Júri`, `/theme-critique`, `/theme-critique --mode 5dim [path]`, "critique this screen", "design review", "Nielsen heuristic", "5dim review", "5 维度评审", "/juri" alone for project discovery.
 metadata:
   dw:
     craft:
@@ -11,9 +11,9 @@ metadata:
 
 ## Triggers
 
-- **English:** `/Critic`, `/theme-critique`, "critique this screen", "design review", "Nielsen heuristic", "is this design good?", "review this screenshot", "start a design discovery", "interview me about this project"
-- **Português:** `/Júri`, `/Juri`, `/júri`, `/juri`, `/theme-critique`, "critica essa tela", "design review", "heurística de Nielsen", "o que está errado nessa tela", "analisa essa imagem", "começar discovery", "entrevista de design"
-- **Natural language:** path to a feature dir; pasted screenshot; "is this AI-slop?"; bare `/juri` to start project discovery.
+- **English:** `/Critic`, `/theme-critique`, `/theme-critique --mode 5dim <path>`, "critique this screen", "design review", "Nielsen heuristic", "is this design good?", "review this screenshot", "start a design discovery", "interview me about this project", "5-dim review", "5 维度评审"
+- **Português:** `/Júri`, `/Juri`, `/júri`, `/juri`, `/theme-critique`, `/theme-critique --mode 5dim <html>`, "critica essa tela", "design review", "heurística de Nielsen", "o que está errado nessa tela", "analisa essa imagem", "começar discovery", "entrevista de design", "review 5 dimensões"
+- **Natural language:** path to a feature dir; pasted screenshot; "is this AI-slop?"; bare `/juri` to start project discovery; `--mode 5dim` after an HTML mockup to get a radar-chart report instead of Nielsen 10.
 
 ## Craft references
 
@@ -28,21 +28,23 @@ These are upstream from any project's design system; the project's own tokens (`
 
 ## Mode dispatch
 
-Júri opera em 2 modos. Decide pelo shape do argumento — **antes** de carregar qualquer reference pesada.
+Júri opera em 3 modos principais (mais 5dim como sub-modo de critique). Decide pelo shape do argumento — **antes** de carregar qualquer reference pesada.
 
-| Invocation                    | Mode      | Loads                                                                  |
-|-------------------------------|-----------|------------------------------------------------------------------------|
-| `/juri` (sem argumentos)      | discovery | `references/discovery-sizing.md` + `references/discovery-protocol.md`  |
-| `/juri specify <feature>`     | discovery (slug-aware) | mesmo que acima, com `<feature>` pré-definido               |
-| `/juri <flutter-path>`        | critique  | `references/nielsen-rubric.md` (existente, fluxo abaixo)               |
-| `/juri discuss <topic>`       | discuss   | `references/discovery-discuss.md` (Socratic, stateless, sem file diffs)|
-| `/juri --discuss <topic>`     | discuss   | alias do anterior                                                       |
-| `/juri --resume <feature>`    | resume    | `references/discovery-resume.md` + retoma `discovery.md`               |
-| `/juri --mode <tier>`         | discovery override | `references/discovery-sizing.md` (override do tier auto-detectado) |
+| Invocation                              | Mode             | Loads                                                                 |
+|-----------------------------------------|------------------|-----------------------------------------------------------------------|
+| `/juri` (sem argumentos)                | discovery        | `references/discovery-sizing.md` + `references/discovery-protocol.md` |
+| `/juri specify <feature>`               | discovery (slug) | mesmo que acima, com `<feature>` pré-definido                         |
+| `/juri <flutter-path>`                  | critique nielsen | `references/nielsen-rubric.md` (existente, fluxo abaixo)              |
+| `/juri --mode 5dim <html-path>`         | critique 5dim    | `references/5dim-rubric.md` (forked from open-design)                 |
+| `/juri --mode nielsen <flutter-path>`   | critique nielsen | alias explícito; mesmo comportamento que `/juri <flutter-path>`       |
+| `/juri discuss <topic>`                 | discuss          | `references/discovery-discuss.md` (Socratic, stateless)               |
+| `/juri --discuss <topic>`               | discuss          | alias do anterior                                                     |
+| `/juri --resume <feature>`              | resume           | `references/discovery-resume.md` + retoma `discovery.md`              |
+| `/juri --mode <tier>` (greenfield/brownfield/mvp/full) | discovery override | `references/discovery-sizing.md` (override tier)             |
 
-**Resolution order:** flag (`--`) → caminho existente em `lib/` ou arquivo `.dart` → discovery default.
+**Resolution order:** `--mode 5dim` → outras flags `--` → caminho existente em `lib/` ou arquivo `.dart` → discovery default.
 
-**Critique mode preservado byte-perfect.** Quando shape = path, todo o workflow abaixo (Setup gates → Inputs → Workflow → Step 1..5 → Persona walkthroughs) roda idêntico. Discovery-mode adiciona um pré-passo de detecção e desvia para `discovery-protocol.md`.
+**Critique mode preservado byte-perfect.** Quando shape = path sem `--mode 5dim`, todo o workflow abaixo (Setup gates → Inputs → Workflow → Step 1..5 → Persona walkthroughs) roda idêntico. Discovery-mode adiciona um pré-passo de detecção e desvia para `discovery-protocol.md`. **5dim** é um caminho separado documentado em §"5dim mode (review HTML mockups)" mais abaixo — output é um relatório HTML self-contained, não um markdown narrativo.
 
 ## Discovery mode (overview)
 
@@ -98,6 +100,45 @@ Tabela tier × deliverables, decision tree, e override semantics em **`reference
 - ❌ Sobrescrever `docs/product.md` existente em greenfield sem confirmar.
 - ❌ Inventar resposta quando usuário disse "não sei". Persistir `<!-- não respondido -->` + `quality: weak`.
 - ❌ Misturar discovery e critique no mesmo turno. Modo escolhido no dispatch é mantido até o fim.
+
+## 5dim mode (review HTML mockups)
+
+When invoked with `--mode 5dim <html-path>`, Júri runs the alternative 5-dimension rubric (Philosophy / Visual hierarchy / Detail / Functionality / Innovation) against any HTML artifact — typically a Clara mockup or a `/tweaks`-wrapped variant the user has settled on. Complement to (not replacement of) Nielsen 10. Use 5dim when the goal is **early-stage exploration** ("is this direction promising?"); use Nielsen when the goal is **shipping-readiness** ("what's broken before launch?").
+
+### 5dim — workflow
+
+1. **Validate path.** Must exist and be `.html`. If not, halt and offer to run Nielsen instead (or `/frontend-design` if the user has no mockup yet).
+2. **Read the rubric.** `Read skills/theme-critique/references/5dim-rubric.md` — 5 dimensions, each with prompt / evidence / anti-patterns / score bands.
+3. **Read the artifact.** `Read <html-path>`. Skim the rendered structure: headers, sections (`data-od-id` if present), color/spacing tokens, copy decisions.
+4. **Score each dimension 0–10** with bands (0–4 *Broken* · 5–6 *Functional* · 7–8 *Strong* · 9–10 *Exceptional*). Each score must cite specific elements/lines as evidence — never just a number with no defense.
+5. **Build action lists.** Combined Keep / Fix / Quick-wins across all 5 dimensions. Quick-win = ≤15-min tweak with disproportionate impact.
+6. **Emit the report HTML** at `.design-spec/critique/<feature-slug>/<YYYY-MM-DD-HHMM>-5dim.html` — never overwrite. `<feature-slug>` derived from the input filename (e.g. `milestone-slider.html` → `milestone-slider/`).
+
+### 5dim report layout
+
+The model emits the HTML inline at invocation time. Layout, top to bottom:
+
+1. **Header** — artifact path, review date (ISO), reviewer ("Júri · 5dim mode"), 1-line verdict (e.g. "Strong philosophy, weak hierarchy on hero — fix before user testing").
+2. **Radar chart** — inline SVG, no library. 5 axes (Philosophy / Hierarchy / Detail / Function / Innovation), each scaled 0–10. Use percentile axis if the spread exceeds 5 points (mitigates risk-4 in spec §7).
+3. **5 dimension cards** — one per dimension, each with: score (with band label), 1-paragraph evidence citing specific elements, 1 Keep/Fix/Quick-win bullet.
+4. **Combined Keep / Fix / Quick-wins lists** at the bottom — Keep (don't touch), Fix (P0/P1, visually expensive), Quick wins (5–15 min, disproportionate impact).
+
+The output is a single self-contained `<html>` file: inline `<style>`, inline `<svg>`, no external assets. User opens locally; no server needed.
+
+### 5dim — output paths (never overwrite)
+
+| Mode    | Output path                                                             |
+|---------|-------------------------------------------------------------------------|
+| nielsen | `.design-spec/critique/<feature-slug>/<YYYY-MM-DD-HHMM>-nielsen.html`   |
+| 5dim    | `.design-spec/critique/<feature-slug>/<YYYY-MM-DD-HHMM>-5dim.html`      |
+
+Each invocation writes a timestamped report. Never overwrite — design exploration produces N critiques over time and overwriting loses history. `.design-spec/` is the runtime state dir per `docs/design-spec-driven-plan.md`. `<feature-slug>` is derived from the input filename's stem (kebab-case, drop the extension).
+
+### 5dim — when to switch back to Nielsen
+
+- **The artifact is shippable** (no obvious broken states, copy reviewed). Nielsen 10 catches accessibility / hierarchy / state-coverage gaps that 5dim glosses.
+- **The mockup is Flutter, not HTML.** 5dim is HTML-only — Nielsen 10 handles `.dart` paths.
+- **The user wants Persona walkthroughs.** That's Nielsen-mode only.
 
 ## Discuss mode (Onda C)
 

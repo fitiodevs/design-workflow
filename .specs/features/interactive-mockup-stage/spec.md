@@ -3,7 +3,7 @@
 > Convert Clara's HTML mockup output from "static artifact → re-prompt loop" to "interactive exploration → final pick". Ship 3 components: (1) a new `tweaks` skill that wraps any HTML with a side panel of live CSS-custom-property knobs persisted to localStorage; (2) refit `frontend-design` to emit "tweaks-ready" HTML (CSS custom properties as the source of all visual decisions); (3) add `theme-critique --mode 5dim` flag for evidence-based scoring across 5 dimensions with a single-file HTML report (radar chart + Keep/Fix/Quick-wins).
 
 **Status:** Draft (ready for execution)
-**Target release:** v1.4.0 (pushed back from v1.3.0 on 2026-05-06 — multi-stack-adapter pulled forward to v1.2.0 per user urgency on Next.js+Tailwind)
+**Target release:** v1.4.0 (pushed back from v1.4.0 on 2026-05-06 — multi-stack-adapter pulled forward to v1.2.0 per user urgency on Next.js+Tailwind)
 **Sized:** Large (3 sub-features, ~10-12h, mix of skill creation + script + skill refit)
 **Owner:** fitiodev
 **Created:** 2026-05-05
@@ -97,21 +97,21 @@ After this feature, the visual exploration pipeline is:
 
 ### REQ-04 — Pipeline doc updates
 
-- **REQ-04.1** README: §What changed in v1.3.0 documents the loop — frontend-design → tweaks → theme-port. Includes a small ASCII diagram of the pipeline.
+- **REQ-04.1** README: §What changed in v1.4.0 documents the loop — frontend-design → tweaks → theme-port. Includes a small ASCII diagram of the pipeline.
 - **REQ-04.2** `docs/theme-manager.md` "I'm starting a new app" workflow updated to include `/tweaks` between `/frontend-design` and `/theme-port`.
 - **REQ-04.3** `docs/personas.md` adds Tweaker persona row (no PT alias — keep `/tweaks` as the only trigger).
 
 ### REQ-05 — STATE.md decisions
 
-- **REQ-05.1** D-15 — Tweaks as wrapper, not generator: tweaks doesn't author HTML; it wraps existing. Rationale: composability — works on any HTML, not just Clara's.
-- **REQ-05.2** D-16 — `data-od-id` reuse: we adopt open-design's attribute name verbatim instead of inventing `data-dw-id`. Reason: future bidirectional compatibility (their critique skill could read our mockups; ours could read theirs).
-- **REQ-05.3** D-17 — Critique mode flag, not separate skill: `--mode 5dim` instead of new `theme-critique-5dim` skill. Reason: same input, different rubric — keeping them unified keeps the routing decision simple ("when in doubt, /theme-critique").
+- **REQ-05.1** D-19 — Tweaks as wrapper, not generator: tweaks doesn't author HTML; it wraps existing. Rationale: composability — works on any HTML, not just Clara's.
+- **REQ-05.2** D-20 — `data-od-id` reuse: we adopt open-design's attribute name verbatim instead of inventing `data-dw-id`. Reason: future bidirectional compatibility (their critique skill could read our mockups; ours could read theirs).
+- **REQ-05.3** D-21 — Critique mode flag, not separate skill: `--mode 5dim` instead of new `theme-critique-5dim` skill. Reason: same input, different rubric — keeping them unified keeps the routing decision simple ("when in doubt, /theme-critique").
 
 ### REQ-06 — Validate + bump
 
 - **REQ-06.1** `quick_validate.py` returns 20/20 valid (was 19; +1 for `tweaks`).
 - **REQ-06.2** End-to-end smoke test: generate a mockup with Clara → wrap with tweaks → open in browser → confirm panel appears + accent slider mutates the header color + localStorage persists across reload.
-- **REQ-06.3** `marketplace.json` bumped 1.2.0 → 1.3.0 + add `./skills/tweaks` to skills array.
+- **REQ-06.3** `marketplace.json` bumped 1.3.0 → 1.4.0 + add `./skills/tweaks` to skills array.
 
 ## 5. Out of scope (deferred)
 
@@ -148,5 +148,5 @@ After this feature, the visual exploration pipeline is:
 - [ ] Clara's mockup output is byte-for-byte tweaks-ready (CSS custom properties as the only visual source + every section has data-od-id)
 - [ ] End-to-end smoke: create mockup → wrap → open in 2 browsers (Chrome + Firefox) → all 5 knobs mutate live → reload → state persists
 - [ ] `theme-critique --mode 5dim cupom-milestone-slider.html` produces a self-contained HTML report with radar chart
-- [ ] STATE.md has D-15, D-16, D-17
-- [ ] Single commit: `feat(release): v1.3.0 — interactive mockup stage (tweaks + 5dim critique)`
+- [ ] STATE.md has D-19, D-20, D-21
+- [ ] Single commit: `feat(release): v1.4.0 — interactive mockup stage (tweaks + 5dim critique)`

@@ -1,0 +1,44 @@
+{
+  "skill_name": "tweaks",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/tweaks /tmp/landing.html — input is a Clara mockup with `:root { --accent: hsl(18 70% 50%); --space-unit: 8px; --scale: 1.250; }` and uses var(--accent) / calc(var(--space-unit) * N) throughout. Wrap with the panel.",
+      "expected_output": "Reads the input file. Validates that CSS custom properties drive visual decisions (no anti-pattern hits). Reads skills/tweaks/assets/panel.html. Substitutes %BASENAME% with `landing` and %CONTENT_SHA% with the first 8 chars of sha256(content). Injects the resulting markup before </body>. Writes /tmp/landing.tweaks.html (sibling, never overwrites the input). Prints the absolute path and a one-line invitation to open in any browser.",
+      "files": [],
+      "assertions": [
+        {"text": "Read tool reads /tmp/landing.html before doing anything", "type": "tool_use"},
+        {"text": "Read tool reads skills/tweaks/assets/panel.html", "type": "tool_use"},
+        {"text": "Output substitutes %BASENAME% (replaces the placeholder, does not leave the literal in the wrapped file)", "type": "qualitative"},
+        {"text": "Output substitutes %CONTENT_SHA% with an 8-char hex string", "type": "regex_match"},
+        {"text": "Write tool emits /tmp/landing.tweaks.html (sibling — input file is untouched)", "type": "tool_use"},
+        {"text": "Wrapped HTML contains the panel id `dw-tweaks-panel`, all 5 knob fieldsets (accent hue, type scale, density, theme mode, motion), and the bind script", "type": "qualitative"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "/tweaks /tmp/already-static-hex.html — input bakes literal `color: #6366f1` and `padding: 16px` outside :root, no var(--…) anywhere.",
+      "expected_output": "Detects the anti-pattern: hex/px literals outside :root + zero var(--…) references. Refuses to wrap. Outputs the exact recommendation from §When to refuse, citing specific lines that violate the contract, and points to /frontend-design --refit (or re-emission via /frontend-design) as the remediation. Does NOT write a .tweaks.html file.",
+      "files": [],
+      "assertions": [
+        {"text": "Read tool reads /tmp/already-static-hex.html", "type": "tool_use"},
+        {"text": "Output refuses (does not produce a wrapped file) — Write tool is NOT invoked for /tmp/already-static-hex.tweaks.html", "type": "qualitative"},
+        {"text": "Output cites at least one specific line number where literal hex appears", "type": "regex_match"},
+        {"text": "Output recommends running /frontend-design (refit or fresh emission) as the next step before /tweaks", "type": "qualitative"},
+        {"text": "Output explains WHY: panel knobs bind to CSS custom properties; literals can't be mutated", "type": "qualitative"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "/tweaks /tmp/milestone.html — and the path /tmp/milestone.tweaks.html already exists from a previous run.",
+      "expected_output": "Detects the existing sibling. Does NOT overwrite. Emits the new file with a numeric suffix: /tmp/milestone.2.tweaks.html (or .3, .4 if those also exist). Tells the user the new path explicitly. Original input and existing .tweaks.html are untouched.",
+      "files": [],
+      "assertions": [
+        {"text": "Read tool reads /tmp/milestone.html (the input) AND checks for existing /tmp/milestone.tweaks.html (via Read or Bash ls)", "type": "tool_use"},
+        {"text": "Output writes the new wrapped file with a `.N.tweaks.html` suffix where N is the lowest unused integer ≥ 2", "type": "regex_match"},
+        {"text": "Output explicitly tells the user that /tmp/milestone.tweaks.html already existed and the new file got a different name", "type": "qualitative"},
+        {"text": "Original /tmp/milestone.html and the pre-existing /tmp/milestone.tweaks.html are NOT modified", "type": "qualitative"}
+      ]
+    }
+  ]
+}

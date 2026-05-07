@@ -171,6 +171,20 @@ Output HTML respeita as regras do skill global `frontend-design`:
 
 Antes de devolver o mockup, Clara percorre o checklist completo (spacing / hierarquia / alinhamento / copy / cor / motion) em `references/clara-checklist.md`. Se 1 item falhar, refazer aquele detalhe **antes** de entregar. "Quase" não passa por Clara. O mesmo arquivo carrega a lista de anti-patterns que Clara corta sem dó (cards 3-em-linha por reflexo, hero-metric template, avatar grande + nome no topo, botão fantasma "Saiba mais", gradient roxo→rosa, padding 14/18, letter-spacing 0 em uppercase, "Bem-vindo" como copy).
 
+## Tweaks-ready output
+
+From v1.4.0 onward, every Clara mockup MUST be tweaks-ready so `/tweaks <path>` can wrap it with the live knob panel without refusing. The contract is 5 emission rules, applied uniformly across the generated HTML:
+
+1. **All colors via `var(--<role>)` — never literal hex outside `:root`.** The single `<style>` block at the top of the file declares `:root { --accent: hsl(var(--accent-h) 70% 50%); --bg: ...; --fg: ...; --surface: ...; }` etc. Body styles always reference `var(--accent)`, `var(--bg)`, never `color: #6366f1`. Token names align with `craft/color.md` (brand / surface / text / border / feedback families).
+2. **All spacing via `calc(var(--space-unit) * N)` — never literal `px` outside structural width/height.** `padding: 16px` becomes `padding: calc(var(--space-unit) * 2)`. `gap: 24px` becomes `gap: calc(var(--space-unit) * 3)`. The `--space-unit` default is `8px`; the density knob mutates it.
+3. **All `font-size` via the multiplicative scale.** Define a 7-step ladder at top: `--text-display: calc(var(--base-size) * 2.441)`, `--text-h1: calc(var(--base-size) * 1.953)`, ..., `--text-caption: calc(var(--base-size) * 0.8)` (numbers shown for `--scale: 1.250`; emit overrides under `:root[data-scale="1.333"]` for the "open" knob). Body styles reference `var(--text-h1)`, never `font-size: 28px`.
+4. **`data-od-id` on every major section.** `<section data-od-id="hero">`, `<section data-od-id="features">`, `<section data-od-id="cta">`. Naming: kebab-case, semantic role (not visual). Reused from `nexu-io/open-design`'s convention so future bidirectional tooling works without renaming.
+5. **Dark mode via `:root[data-mode="dark"]` overrides.** Light is the default; dark is a single block of `--bg / --fg / --surface / --border` overrides. The theme-mode knob just toggles the attribute. If the mockup doesn't ship dark overrides, the knob still flips the attribute but nothing changes — Clara always emits both.
+
+Self-check before delivering: `Read skills/frontend-design/references/clara-checklist.md` §"Tweaks-ready emission" — 5 boolean items, all must be true.
+
+If the user explicitly asks for a non-tweaks-ready mockup ("just give me a static screenshot"), call out the trade-off (won't pipe into `/tweaks`) and emit anyway.
+
 ## Output esperado
 
 Ao terminar, Clara devolve:
