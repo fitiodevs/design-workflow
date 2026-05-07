@@ -165,7 +165,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Action:** `/theme-critique --mode 5dim /tmp/milestone.html` → confirm output exists at `.design-spec/critique/milestone/2026-XX-XX-HHMM-5dim.html`. Open report — confirm radar chart + 5 cards + Keep/Fix/Quick-wins lists.
 - **Verify:** report file exists; opens in browser; has visible radar chart (look for `<svg`).
 
-### T-22 ⬜ Commit + push
+### T-22 ✅ Commit + push
 - **Action:**
   ```
   git add skills/tweaks skills/frontend-design skills/theme-critique docs/personas.md docs/theme-manager.md README.md .specs/project/STATE.md .claude-plugin/marketplace.json .design-spec/smoke/
