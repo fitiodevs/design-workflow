@@ -131,7 +131,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 4 — Stack config + dispatch
 
-### T-15 ⬜ Add `stack:` + `paths:` to `config.example.yaml`
+### T-15 ✅ Add `stack:` + `paths:` to `config.example.yaml`
 - **Action:** edit `config.example.yaml`:
   ```yaml
   # Active stack — selects the adapter for code emission.
@@ -148,7 +148,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Verify:** `grep -E "^stack:" config.example.yaml` returns `stack: flutter`; `paths:` block present (commented).
 - **Refs:** REQ-G.1
 
-### T-16 ⬜ Resolution helper script
+### T-16 ✅ Resolution helper script
 - **Action:** create `scripts/resolve_stack.py` — reads `STACK` env, falls back to `.design-workflow.yaml` `stack:`, falls back to `flutter`. Emits resolved value to stdout. Errors on unknown.
 - **Verify:** `STACK=nextjs-tailwind python3 scripts/resolve_stack.py` prints `nextjs-tailwind`; `STACK=react-native python3 scripts/resolve_stack.py` exits non-zero with "available adapters: flutter, nextjs-tailwind".
 - **Refs:** REQ-B.3
