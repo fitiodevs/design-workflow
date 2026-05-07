@@ -135,7 +135,13 @@ Apache 2.0 — see [LICENSE.txt](LICENSE.txt). Each skill folder also carries a 
 
 ## Status
 
-**v1.2.0** — multi-stack adapter release: stack-neutral Plan format + two reference adapters (Flutter + Next.js/Tailwind). `theme-port` and `theme-extend` now dispatch through the adapter; Flutter output is byte-equivalent to pre-v1.2. Stack selected via `stack:` field in `.design-workflow.yaml` (default `flutter`). 19/19 skills still pass `quick_validate.py`. Extracted from production use in the [Fitio](https://fitio.app) Flutter app and dogfooded against a fresh Next.js+Tailwind project.
+**v1.2.1** — design-context craft doctrine: new `craft/design-context.md` codifies the 5-tier context hierarchy and a sharp refusal rule. 5 skills wired (`theme-port`, `theme-create`, `theme-extend` NEW, `theme-critique`, `frontend-design`); 3 of them gain a "Pre-flight context check" section. 19/19 skills still pass `quick_validate.py`. Built on v1.2.0 (multi-stack adapter — stack-neutral Plan format + Flutter + Next.js/Tailwind reference adapters). Extracted from production use in the [Fitio](https://fitio.app) Flutter app.
+
+## What changed in v1.2.1
+
+- **Design context doctrine.** New `craft/design-context.md` codifies the "blank-page is last resort" rule with a 5-tier context hierarchy (existing design system → codebase → deployed product → external brief → vague description) and a sharp refusal rule: STOP if Tier 1–4 absent. Authored from scratch under Apache-2.0; idea inspired by [huashu-design](https://github.com/alchaincyf/huashu-design).
+- **5 wired skills, 1 net-new wire.** `theme-port`, `theme-create`, `theme-critique`, `frontend-design` get `design-context` appended to existing `dw.craft.requires:`. `theme-extend` becomes wired for the first time (Tier 1 dependency only — extending nothing is meaningless). `theme-port`, `theme-create`, `theme-extend` gain a "Pre-flight context check" section with skill-specific tier checks before Workflow Step 1.
+- **STATE D-11.1 logged.** Sub-decision under D-11 (craft adoption) records the from-scratch authoring + 5-skill wiring.
 
 ## What changed in v1.2.0
 

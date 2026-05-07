@@ -4,7 +4,7 @@ description: Ports a structural source (Figma frame OR HTML mockup from any tool
 metadata:
   dw:
     craft:
-      requires: [state-coverage, typography]
+      requires: [state-coverage, typography, design-context]
 ---
 
 # Skill: theme-port (`/theme-port`) — persona **Arquiteto** (English: **Architect**)
@@ -64,6 +64,21 @@ These are upstream from any project's design system; the project's own tokens (`
 - **`--from-html <path>`** → lê o `.html` apontado. Se path for diretório, listar `*.html` e perguntar qual.
 - **`--from-html <path> target=<lib-path>`** → declara onde escrever o widget Flutter (path da feature).
 - **Screenshot pair (opcional):** se existir `<basename>.png` ao lado do `.html`, ler também — referência visual ajuda em casos onde a largura/altura literal não está nos atributos.
+
+## Pre-flight context check
+
+Before generating, verify Tier 1–4 context exists per `craft/design-context.md`. Concrete checks for theme-port:
+
+- **Tier 1** — `lib/core/theme/app_colors.dart` exists and has >50 lines? (the 29-role token system must be in place to map fills semantically)
+- **Tier 2** — at least one similar widget exists in `lib/features/<related>/`? (matching coherent precedent keeps the system together)
+- **Tier 3** — screenshots in `docs/screenshots/` or deployed product reachable? (optional fallback when codebase is contractor-blind)
+- **Tier 4** — `docs/product.md` exists and has §Tone with declared adjectives + banned phrases? (required for copy + microcopy decisions)
+
+If Tier 1 missing → STOP. Without `AppColors` there are no semantic roles to map; emitting raw hex re-introduces the slop. Ask the user to seed the palette via `/theme-create` first.
+
+If Tier 4 missing → STOP. Without declared tone, copy in the ported widget will be category-reflex ("Eleve seu jogo", "Sua jornada começa"). Ask the user to seed `docs/product.md` §Tone before proceeding (5 minutes; the doc lists the 4–7 questions).
+
+The decision rule is binary — STOP, not "ideally check". See `craft/design-context.md` §"The decision rule".
 
 ## Workflow
 

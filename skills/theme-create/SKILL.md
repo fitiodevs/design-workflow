@@ -4,7 +4,7 @@ description: Creates a complete palette from scratch (brand + semantic + neutral
 metadata:
   dw:
     craft:
-      requires: [color, typography, anti-ai-slop]
+      requires: [color, typography, anti-ai-slop, design-context]
 ---
 
 # Skill: theme-create (`/theme-create`) — persona **Compositor** (English: **Composer**)
@@ -74,6 +74,15 @@ Se qualquer resposta for vaga, parar e perguntar. Criar palette sem direção �
 | Art deco / geometric | Black + gold + jewel tones, simetria |
 | Soft / pastel | Hue ampla mas C baixo, sem preto, sem white puro |
 | Industrial / utilitarian | Hi-vis, signage tones, mono-cinza + 1 hi-contrast |
+
+## Pre-flight context check
+
+Before generating a palette, verify Tier 1–4 context exists per `craft/design-context.md`. Concrete checks for theme-create:
+
+- **Tier 1** — existing `AppColors` (or equivalent for the active stack) loads as the contrast reference. New palette must clearly differ.
+- **Tier 4** — either an `--inspired-by <slug>` flag pointing at a reference brand, OR the 8 pre-conditions above answered explicitly (one sentence each). "Modern, clean, professional" is vague — refuse and ask for declared tone.
+
+If Tier 1 absent and there's no Tier 4 — STOP. Generating from a vague brief produces category-reflex (purple gradient, Tailwind indigo, Strava green). See `craft/design-context.md`.
 
 ## Workflow
 

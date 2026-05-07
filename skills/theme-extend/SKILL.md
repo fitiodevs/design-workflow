@@ -1,6 +1,10 @@
 ---
 name: theme-extend
 description: Adds or tweaks semantic tokens in the project's design system (colors, typography roles, spacing, radius). Generates WCAG-validated light/dark pairs, updates `AppColors`, `docs/design-tokens.md` and suggests where to apply. Use to resolve contrast failures detected by `/theme-audit`, add a new semantic role, or tune an existing value. Use when the user asks for `/Surgeon`, `/Cirurgião`, `/theme-extend`, "adiciona um token", "add a token", "resolve contraste de X", "fix contrast", "melhora o tema".
+metadata:
+  dw:
+    craft:
+      requires: [design-context]
 ---
 
 # Skill: theme-extend (`/theme-extend`) — persona **Cirurgião** (English: **Surgeon**)
@@ -27,6 +31,16 @@ Antes de estender, responder:
 - **Por que o token existente não serve?** Se `brand` cobre, não crie `primary`. Evitar proliferação.
 - **Qual o papel semântico?** Descrever em uma frase. Se a descrição é "a cor X tal", está errado — precisa ser um papel (ex: "destaque em card de desafio sponsorado").
 - **Onde vai ser usado?** Listar 2-3 call sites pretendidos. Se só 1, reconsiderar se token é necessário ou se é invariante de marca → `AppBrandColors`.
+
+## Pre-flight context check
+
+Before extending, verify Tier 1 context per `craft/design-context.md`:
+
+- **Tier 1** — existing `AppColors` (Flutter) or `app/globals.css` + Tailwind config (Next.js+Tailwind) MUST exist. Extending nothing makes no sense — there's no neighbor palette to pick a coherent OKLCH value against.
+
+If Tier 1 missing → STOP. Ask the user to seed the palette via `/theme-create` first, then come back with `/theme-extend`.
+
+Tier 4 (`docs/product.md`) is not strictly required for theme-extend — concrete requests like "add a token for disabled state" are self-describing. Vague requests ("make the theme nicer") still trigger STOP.
 
 ## Workflow
 

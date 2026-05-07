@@ -4,7 +4,7 @@ description: Generates production-grade HTML/CSS/JS mockups for Flutter projects
 metadata:
   dw:
     craft:
-      requires: [anti-ai-slop, color, state-coverage, typography, animation-discipline]
+      requires: [anti-ai-slop, color, state-coverage, typography, animation-discipline, design-context]
 ---
 
 # Skill: frontend-design (`/frontend-design`) — invokes **Clara** (English: **Designer**)

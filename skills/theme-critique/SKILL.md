@@ -4,7 +4,7 @@ description: Júri persona — dual-mode design orchestrator. Without args, runs
 metadata:
   dw:
     craft:
-      requires: [anti-ai-slop, color, state-coverage, typography]
+      requires: [anti-ai-slop, color, state-coverage, typography, design-context]
 ---
 
 # Skill: theme-critique (`/theme-critique`) — invokes **Júri** (English: **Critic**)
