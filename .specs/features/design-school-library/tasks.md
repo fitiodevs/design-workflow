@@ -188,7 +188,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Verify:** `python3 scripts/school_md_to_appcolors.py --validate-all` reports 12/12 valid.
 - **Refs:** REQ-08.2
 
-### T-30 ⬜ Commit + push
+### T-30 ✅ Commit + push
 - **Action:**
   ```
   git add design-systems-schools/ scripts/school_md_to_appcolors.py skills/theme-create skills/frontend-design docs/design-schools-execution-paths.md README.md .specs/project/STATE.md .claude-plugin/marketplace.json
