@@ -94,12 +94,12 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 
 ## Onda 3 — Next.js+Tailwind adapter (the new one)
 
-### T-10 ⬜ Stub `adapters/nextjs-tailwind/` skeleton
+### T-10 ✅ Stub `adapters/nextjs-tailwind/` skeleton
 - **Action:** mirror Flutter skeleton structure with `tokens.css.tmpl`, `tailwind.config.ts.tmpl`, `component.tsx.tmpl`, `component-shadcn.tsx.tmpl`, `design_tokens.md.tmpl`.
 - **Verify:** `find adapters/nextjs-tailwind -type f | wc -l` ≥ 8.
 - **Refs:** REQ-C.1
 
-### T-11 ⬜ Implement `mappings.py` + project-detection helpers
+### T-11 ✅ Implement `mappings.py` + project-detection helpers
 - **Action:**
   - TOKEN_ROLE_MAP: 29 entries mapping role → CSS variable name (`brandDefault` → `--brand-default`).
   - WIDGET_TYPE_MAP: with shadcn variants vs plain Tailwind (`button` → `<Button>` vs `<button className=...>`).
@@ -109,7 +109,7 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Verify:** `python3 -c "from adapters.nextjs_tailwind.mappings import TOKEN_ROLE_MAP, has_shadcn; assert len(TOKEN_ROLE_MAP) >= 29; print(has_shadcn())"` runs without error.
 - **Refs:** REQ-C.1, REQ-C.4
 
-### T-12 ⬜ Implement `adapter.py` for Next.js+Tailwind
+### T-12 ✅ Implement `adapter.py` for Next.js+Tailwind
 - **Action:** entry `main(plan_path, dry_run=False)`. Detects project (shadcn? router?), picks templates accordingly, writes:
   - palette → `app/globals.css` (App Router) or `styles/tokens.css` (Pages) PLUS appends `theme.extend.colors` to `tailwind.config.ts`
   - widget-tree → `components/<feature>/<name>.tsx`
@@ -117,12 +117,12 @@ Legenda: ✅ done · 🔄 in_progress · ⬜ pending · 🅿️ parallelizable
 - **Verify:** `python3 adapters/nextjs-tailwind/adapter.py docs/adapter-examples/palette.json --dry-run` prints sensible paths.
 - **Refs:** REQ-C.1, REQ-C.2
 
-### T-13 🅿️ Conformance test + 3 goldens (plain Tailwind variant)
+### T-13 ✅ Conformance test + 3 goldens (plain Tailwind variant)
 - **Action:** craft expected outputs for plain Tailwind mode (no shadcn): `palette.css`, `widget-tree.tsx`, `motion-set.css`. Conformance script forces `shadcn=False`.
 - **Verify:** `python3 adapters/nextjs-tailwind/tests/conformance.py --plain` prints `PASS: 3/3`.
 - **Refs:** REQ-C.3
 
-### T-14 🅿️ Conformance test + 1 shadcn golden (variant detection)
+### T-14 ✅ Conformance test + 1 shadcn golden (variant detection)
 - **Action:** craft `widget-tree-shadcn.tsx` golden using `<Button>` from shadcn. Conformance script forces `shadcn=True`.
 - **Verify:** `python3 adapters/nextjs-tailwind/tests/conformance.py --shadcn` prints `PASS: 3/3` (palette + motion identical, widget-tree picks shadcn variant).
 - **Refs:** REQ-C.3, REQ-C.4
