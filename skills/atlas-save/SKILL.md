@@ -24,16 +24,20 @@ Default mode is opt-out friendly: zero filesystem footprint outside the repo. Va
 
 ## Procedure
 
-### Step 1 — Deterministic capture
+### Step 1 — Deterministic capture (skip-if-trivial)
 
-Read directly with `Bash`/`Read` (no helper script ships in v1.1; the script equivalent is tracked in `.specs/project/STATE.md` for v1.2). Capture:
+> **Default: skip.** Git state, commits, atlas snapshot, and open tasks are all recoverable in ~4 bash calls (`git status`, `git log`, `/status`, `ls .specs/`) at the start of the next session for ~500 tokens. Writing them into the handoff costs ~6-8k tokens of dense markdown **now** to register data that will be in `git`/`ls` in 1 hour. **Never worth it.**
+>
+> **Include only if non-derivable** — e.g. the user wants a frozen snapshot before a destructive operation, or the session crossed a state that no longer exists in git (uncommitted work that was discarded). In those cases, write only the specific datum that won't survive.
 
-- **§1 Repo state** — every repo declared in `.atlas-save.yaml` (or just the current one). Per repo: branch, last commit (sha + subject), uncommitted count.
-- **§2 Commits in this session** — `git log --oneline --since="<session-start>"` per repo (default last 20 if start unknown; `--since <sha>` if user gives a marker).
-- **§3 Atlas snapshot** — invoke `/status` mentally: WIP/blocked tasks across `.specs/features/*/tasks.md`, plus checkbox progress in `docs/backlog/*.md`.
-- **§4 Open tasks** — list of `T-XX` rows currently in `in_progress` or `blocked`, with their `spec/id/title`.
+If you do capture, read directly with `Bash`/`Read`. The four sections an LLM can fill from grep + git alone — and which the next session can rebuild for free:
 
-These are the four sections an LLM can fill from grep + git alone, with no judgment.
+- §1 Repo state — branch, last commit, uncommitted count per repo.
+- §2 Commits in this session — `git log --oneline --since=<marker>`.
+- §3 Atlas snapshot — `/status`-style WIP/blocked across specs.
+- §4 Open tasks — `T-XX` rows in `in_progress` / `blocked`.
+
+The handoff's **value** is in Step 2 below.
 
 ### Step 2 — Curated enrichment (LLM judgment)
 
@@ -122,11 +126,10 @@ Print to user:
    ↳ Mirrored to: <obsidian-vault>/Atlas/2026-05-05-1145-mapbox-diego.md   (only if vault configured)
 
 Captured:
-  • 8 commits across <N> repos
-  • 2 specs touched (cupom-wishlist-multi-mission, cupom-acquisition-refactor)
-  • 1 WIP task (nova-ui T-20 emulator smoke)
-  • 3 decisions, 2 bugs+lessons, 5-step playbook
+  • 3 decisions, 2 bugs+lessons, 4 open questions, 5-step playbook
 ```
+
+**Target size: ~80 lines.** If you wrote more than ~120 lines, you are duplicating data that lives in git/disk. Cut Step 1 sections.
 
 ## Optional config — `.atlas-save.yaml`
 
@@ -147,6 +150,7 @@ Without this file, atlas-save captures only the current repo and writes only to 
 ## Anti-patterns
 
 - **Don't** dump the transcript — the handoff is curated, not a copy.
+- **Don't** duplicate git/disk** — `git status`, `git log`, `ls .specs/` recover for free next session. Writing them to markdown costs 6-8k tokens **now** for zero new information. Skip Step 1 unless the data won't survive in git.
 - **Don't** be vague — "discussion about features" is useless. Concrete: spec names, `T-XX` ids, commit shas.
 - **Don't** invent a decision that wasn't taken — if there was none, write `_no architectural decision this session_`.
 - **Don't** default-positive the sentiment line — if the user voiced frustration, record it. The next session needs to know.
