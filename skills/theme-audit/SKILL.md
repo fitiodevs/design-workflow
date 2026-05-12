@@ -182,6 +182,31 @@ Alguns casos são legítimos e devem ser tolerados:
 
 Ao apresentar o relatório, separar **violações bloqueantes** de **known-good tolerado**.
 
+### Step 5 — Persistir evidence ledger
+
+Append à `.design-spec/state/elicitation/<date>.jsonl` para que próximas runs de Clara/Arquiteto vejam o débito estrutural. Ledger doc em `docs/elicitation-ledger.md`. Dois comandos obrigatórios:
+
+```bash
+# Rollup do audit como eval_result (1 entry por path auditado)
+python "${CLAUDE_SKILL_DIR}/scripts/elicitation.py" append eval_result \
+  --target <path> --source theme-audit \
+  --summary "<N> violações em <M> files, WCAG light:<X> dark:<Y> AA failures" \
+  --extra '{"violations_total": <N>, "files_with_violations": <M>, "wcag_light_failures": <X>, "wcag_dark_failures": <Y>}'
+
+# 1 counterexample por top-offender (max 5)
+python "${CLAUDE_SKILL_DIR}/scripts/elicitation.py" append counterexample \
+  --target <path> --source theme-audit \
+  --severity major \
+  --summary "<violation-rule> em <file>: <count> occurrences" \
+  --evidence "<file:line>,<file:line>" \
+  --slop-pattern hardcoded-color|hardcoded-font|off-scale-spacing|wcag-aa-fail
+```
+
+- Só persiste os **top 5 offenders** como counterexamples (sinal alto, ruído baixo).
+- `--slop-pattern` usa o nome da regra que o detector flagou (`hex_color` → `hardcoded-color`, `material_color` → `hardcoded-color`, `font_*` → `hardcoded-font`, etc).
+- WCAG failures são counterexamples separados, severity `major`, slop-pattern `wcag-aa-fail`.
+- Falha silenciosa: se elicitation.py não existir, siga adiante. Ledger é opcional, não block.
+
 ## Output example
 
 ```

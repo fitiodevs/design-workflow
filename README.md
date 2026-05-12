@@ -155,6 +155,7 @@ To add a new stack, see `docs/adapter-protocol.md` §"How to add a new adapter".
 - **Anti-AI-slop** verdict: detects 7 archetypal patterns (`scripts/audit_theme.py` slop_patterns)
 - **Cognitive load**: counts decisions per viewport, flags >4
 - **Persona walkthrough**: walks 3 user personas through the screen (configure yours in `docs/personas.md`)
+- **Elicitation ledger** (`scripts/elicitation.py`): append-only JSONL of `judge_verdict` + `counterexample` events so reviewers (Júri, Lupa) persist slop evidence and generators (Clara, Arquiteto) read it before generating. Pattern from `claude-code-harness` (MIT), adapted Apache-2.0. Doc: `docs/elicitation-ledger.md`.
 
 ## Why bilingual
 

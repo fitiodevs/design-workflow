@@ -324,9 +324,34 @@ Bandas: 36–40 ship · 28–35 polish · 20–27 needs work · <20 redesign.
 
 1. **Escrever handoff** em `.claude/handoffs/critique-<timestamp>.yaml` (formato em `SCHEMA.md`). Caveman nas frases textuais; chaves YAML normais.
 
-2. **Apresentar ao usuário** — descomprimir caveman → pt-BR legível (handoff é protocolo entre agents; usuário recebe prosa).
+2. **Persistir evidence ledger.** Append à `.design-spec/state/elicitation/<date>.jsonl` (formato `elicitation-event.v1`) para que próximas runs de Clara/Arquiteto vejam o que falhou aqui — ledger doc em `docs/elicitation-ledger.md`. Comandos obrigatórios (1 `judge_verdict` + 1 `counterexample` por issue P0/P1):
 
-3. **Action plan ordenado por prioridade do usuário**, não por severidade:
+   ```bash
+   # Verdict rolado da critique inteira
+   python "${CLAUDE_SKILL_DIR}/scripts/elicitation.py" append judge_verdict \
+     --target <path> --source theme-critique \
+     --severity major|minor --verdict APPROVE|REQUEST_CHANGES \
+     --summary "Nielsen <score>/40 — <1-line diagnosis>" \
+     --evidence "<file:line>,<file:line>" \
+     --extra '{"score": <0-40>, "rating": "ship|polish|needs work|redesign"}'
+
+   # 1 counterexample por P0/P1 issue
+   python "${CLAUDE_SKILL_DIR}/scripts/elicitation.py" append counterexample \
+     --target <path> --source theme-critique \
+     --severity critical|major \
+     --summary "<1-line slop description>" \
+     --evidence "<file:line>" \
+     --slop-pattern <cardinal-sin-name-from-anti-ai-slop.md>
+   ```
+
+   - `--target` deve bater com o path/feature alvo (para Clara/Arquiteto encontrarem). Use o argumento original da invocação.
+   - `--slop-pattern` SHOULD reusar nomes canônicos de `craft/anti-ai-slop.md` (`default-indigo-accent`, `trust-gradient-hero`, `emoji-as-icon`, `flat-hero-no-hierarchy`, `category-reflex-palette` etc). Pattern novo? Cunhe nome kebab-case + 3 palavras max.
+   - P2/P3 issues **não** viram counterexample. Só P0/P1 vale persistir — sinal alto, ruído baixo.
+   - Falha silenciosa: se elicitation.py não existir (skill não-instalada), siga adiante. Ledger é opcional, não block.
+
+3. **Apresentar ao usuário** — descomprimir caveman → pt-BR legível (handoff é protocolo entre agents; usuário recebe prosa).
+
+4. **Action plan ordenado por prioridade do usuário**, não por severidade:
 
 ```
 Próximo passo sugerido (escolha 1):

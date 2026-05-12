@@ -19,6 +19,7 @@ declare -A USAGE=(
   [design_state.py]="productivity"
   [ralph_tick.py]="ralph-loop"
   [ralph_budget.py]="ralph-loop"
+  [elicitation.py]="theme-critique theme-audit frontend-design theme-port"
 )
 
 count=0

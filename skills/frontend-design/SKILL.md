@@ -115,6 +115,23 @@ Clara entra **antes** do código Flutter. Mockup é a sala de prova — Clara re
 | Tokens | `docs/design-tokens.md` carregado. Saber o que existe antes de pedir cor nova. |
 | Motion | `docs/motion.md` se houver intenção de animar. Comentário `<!-- motion: ... -->` sai pré-pronto pra Jack. |
 | Bench | Se referência visual existe (ex: Macadam), Clara consulta antes pra desviar conscientemente. |
+| Prior evidence | `.design-spec/state/elicitation/` lido para o target (próximo passo). |
+
+## Pre-flight — Prior evidence on target
+
+Antes do Step 1, **se houver um target identificável** (path mencionado no briefing, feature slug, mockup anterior), carregar evidence ledger:
+
+```bash
+python "${CLAUDE_SKILL_DIR}/scripts/elicitation.py" summarize --target <target> --days 30
+```
+
+- Se o output for não-vazio, **incluir no preâmbulo mental** antes de gerar: cada `counterexample` listado é uma armadilha de slop já cobrada por Júri/Lupa em sessão anterior. Repetir o mesmo padrão é regressão.
+- `slop_pattern: flat-hero-no-hierarchy` em verdict anterior → Step 3 (Tipografia) deve garantir ratio ≥1.25× explicitamente; sinalize em `<!-- evidence: prior counterexample on hierarchy -->`.
+- `slop_pattern: hardcoded-color` em verdict de Lupa → Step 6 (Output) usa exclusivamente CSS vars/tokens, nunca hex literal.
+- Sem target identificável (mockup do zero, briefing abstrato) → pular pre-flight, seguir pro Step 1.
+- Falha silenciosa: se elicitation.py não existir, siga adiante.
+
+Documentar no auto-review (Step 7) qual evidence foi consultada e qual decisão foi tomada em resposta. Doc do ledger: `docs/elicitation-ledger.md`.
 
 ## Workflow
 

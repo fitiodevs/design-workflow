@@ -80,6 +80,23 @@ If Tier 4 missing → STOP. Without declared tone, copy in the ported widget wil
 
 The decision rule is binary — STOP, not "ideally check". See `craft/design-context.md` §"The decision rule".
 
+### Tier 5 — Prior evidence on target
+
+After Tiers 1–4 pass, **carregar evidence ledger** se houver target identificável (`target=<lib-path>` no input, ou path inferido do basename do HTML):
+
+```bash
+python "${CLAUDE_SKILL_DIR}/scripts/elicitation.py" summarize --target <lib-path> --days 30
+```
+
+- Se a saída lista counterexamples de Júri ou Lupa, **inclui no preâmbulo do port**:
+  - `slop_pattern: hardcoded-color` em audit anterior → Step 3 (Identify color semantic roles) deve emitir 100% via tokens semânticos; falhar o port se faltar role.
+  - `slop_pattern: flat-hero-no-hierarchy` em verdict anterior → Step 4 (Widget composition) garante ratio tipográfico ≥1.25× entre hero e título; sinalize com comentário `// evidence: prior counterexample on hierarchy`.
+  - `slop_pattern: wcag-aa-fail` em audit anterior → Step 8 (Validate) precisa rodar `check_contrast.py` antes de fechar — não confie só nos tokens existentes.
+- Sem target identificável (port greenfield, sem precedente) → pular Tier 5.
+- Falha silenciosa: se elicitation.py não existir, siga adiante. Ledger é opcional.
+
+Ledger doc: `docs/elicitation-ledger.md`.
+
 ## Workflow
 
 ### Step 1 — Capture frame
