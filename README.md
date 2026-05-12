@@ -6,7 +6,7 @@ A pipeline of Claude Code skills for designing, auditing, and refining UI in mob
 
 ## What's inside
 
-19 skills, organized as **atomic operators** (one job each) plus an **orchestration layer** that sequences them under explicit phase gates. Persona names are PT primary + EN alias — the same operator answers to both, so multilingual squads converge on the same vocabulary.
+20 skills, organized as **atomic operators** (one job each) plus an **orchestration layer** that sequences them under explicit phase gates. Persona names are PT primary + EN alias — the same operator answers to both, so multilingual squads converge on the same vocabulary.
 
 ### Skill / persona / what it does
 
@@ -31,6 +31,7 @@ A pipeline of Claude Code skills for designing, auditing, and refining UI in mob
 | `status` | Atlas / Cartographer | Read-only snapshot of active work across `.specs/`, `docs/backlog/`, `memory/active_work.md` plus current branch state. Emits TL;DR + table. |
 | `promote` | Atlas Promote / Cartographer Promote | Converts a `docs/backlog/` markdown into a `.specs/features/` triplet, then recommends `/tlc-spec-driven` to refine and `/tlc-closure` to verify dependency closure. |
 | `atlas-save` | Atlas Cronista / Cartographer Chronicler | Curated session handoff (decisions, bugs, lessons, sentiment, playbook) into `memory/sessions/`. Obsidian vault mirror is opt-in. |
+| `opus-execute` | (Workflow helper) | `/opusexecute` packages the current Opus conversation into a self-contained brief (5 sections — Context · Files · Acceptance · Constraints · Style) and dispatches it to a Sonnet sub-agent in an isolated context window (default background), so the main Opus session never overflows Sonnet. Primary flow: `--from-task <feature>/T-<id>` reads `.specs/features/<feature>/{spec,design,tasks}.md` and synthesizes the brief from the task's structured fields. |
 
 Personas don't have to be named to be invoked — every skill answers to the literal slash command (`/theme-audit`, `/theme-port`, `/compose`, `/ralph`, …). Use the persona handle when you want to be explicit about *who* you're calling on; use the slash command when you don't care.
 
