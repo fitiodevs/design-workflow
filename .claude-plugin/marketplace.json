@@ -5,8 +5,8 @@
     "email": "fitio.devs@gmail.com"
   },
   "metadata": {
-    "description": "Multi-stack design-spec-driven workflow skills for Claude Code: stack-neutral Adapter Plan + Flutter and Next.js/Tailwind reference adapters; discovery, compose, sequence, ship, ralph autonomy loop; status/promote/atlas-save productivity helpers; 12 atomic theme/critique/refine/copy/mockup/tweaks operators (interactive mockup stage shipped in v1.4).",
-    "version": "1.5.1"
+    "description": "Multi-stack design-spec-driven workflow skills for Claude Code: stack-neutral Adapter Plan + Flutter and Next.js/Tailwind reference adapters; discovery, compose, sequence, ship, ralph autonomy loop; status/promote/atlas-save productivity helpers; 12 atomic theme/critique/refine/copy/mockup/tweaks operators (interactive mockup stage shipped in v1.4); flow audit (v1.5.1), cross-session elicitation ledger + opus-execute Sonnet worker (v1.5.2).",
+    "version": "1.5.2"
   },
   "plugins": [
     {
@@ -34,7 +34,9 @@
         "./skills/status",
         "./skills/promote",
         "./skills/atlas-save",
-        "./skills/tweaks"
+        "./skills/tweaks",
+        "./skills/flow",
+        "./skills/opus-execute"
       ]
     }
   ]
