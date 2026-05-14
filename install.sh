@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
-# Install design-workflow skills into ~/.claude/skills/ and craft/ docs into ~/.claude/craft/.
+# Install design-workflow skills into ~/.claude/skills/, agents into ~/.claude/agents/, and craft/ docs into ~/.claude/craft/.
 # Re-runnable: existing destination directories are replaced.
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SKILL_TARGET="${HOME}/.claude/skills"
+AGENT_TARGET="${HOME}/.claude/agents"
 CRAFT_TARGET="${HOME}/.claude/craft"
 
 if [ ! -d "${SCRIPT_DIR}/skills" ]; then
@@ -51,8 +52,34 @@ if [ -d "${SCRIPT_DIR}/craft" ]; then
   echo "  rewrote: craft/ refs → ~/.claude/craft/ in 5 wired skills"
 fi
 
+# agents/ — global subagents (persona bundles + single-file critics).
+# Each agent is either:
+#   - a bundle: <name>.md (entry/frontmatter) + <name>/ (SOUL.md, HEARTBEAT.md, TOOLS.md)
+#   - a single file: <name>.md
+# We iterate over *.md files to get the canonical list; if a sibling dir exists, copy it too.
+agent_count=0
+if [ -d "${SCRIPT_DIR}/agents" ]; then
+  mkdir -p "${AGENT_TARGET}"
+  for entry in "${SCRIPT_DIR}/agents"/*.md; do
+    [ -f "${entry}" ] || continue
+    name="$(basename "${entry}" .md)"
+    rm -rf "${AGENT_TARGET}/${name}" "${AGENT_TARGET}/${name}.md"
+    cp "${entry}" "${AGENT_TARGET}/${name}.md"
+    if [ -d "${SCRIPT_DIR}/agents/${name}" ]; then
+      cp -R "${SCRIPT_DIR}/agents/${name}" "${AGENT_TARGET}/${name}"
+      echo "  installed: ${name} (bundle)"
+    else
+      echo "  installed: ${name}"
+    fi
+    agent_count=$((agent_count + 1))
+  done
+fi
+
 echo ""
 echo "✓ installed ${count} skill(s) into ${SKILL_TARGET}"
+if [ "${agent_count}" -gt 0 ]; then
+  echo "✓ installed ${agent_count} agent(s) into ${AGENT_TARGET}"
+fi
 if [ "${craft_count}" -gt 0 ]; then
   echo "✓ installed ${craft_count} craft doc(s) into ${CRAFT_TARGET}"
 fi
