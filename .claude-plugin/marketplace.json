@@ -5,13 +5,13 @@
     "email": "fitio.devs@gmail.com"
   },
   "metadata": {
-    "description": "Multi-stack design-spec-driven workflow skills for Claude Code: stack-neutral Adapter Plan + Flutter and Next.js/Tailwind reference adapters; discovery, compose, sequence, ship, ralph autonomy loop; status/promote/atlas-save productivity helpers; 12 atomic theme/critique/refine/copy/mockup/tweaks operators (interactive mockup stage shipped in v1.4); flow audit (v1.5.1), cross-session elicitation ledger + opus-execute Sonnet worker (v1.5.2).",
-    "version": "1.5.2"
+    "description": "Multi-stack design-spec-driven workflow skills for Claude Code: stack-neutral Adapter Plan + Flutter and Next.js/Tailwind reference adapters; discovery, compose, sequence, ship; status/promote/atlas-save productivity helpers; 12 atomic theme/critique/refine/copy/mockup/tweaks operators (interactive mockup stage shipped in v1.4); flow audit (v1.5.1), cross-session elicitation ledger + opus-execute Sonnet worker (v1.5.2); caveman ultra-compressed communication suite (v1.5.3).",
+    "version": "1.5.3"
   },
   "plugins": [
     {
       "name": "design-workflow",
-      "description": "Full design-spec-driven pipeline — Júri discovery + critique (Nielsen 10 + 5dim radar), compose/sequence/ship orchestrators, ralph-loop 3-tier autonomy, productivity helpers (pause/resume/status/approve, status, promote, atlas-save), and 12 atomic operators (theme audit/create/extend/port, bolder/quieter/distill, motion, frontend-design, ux-writing, tweaks).",
+      "description": "Full design-spec-driven pipeline — Júri discovery + critique (Nielsen 10 + 5dim radar), compose/sequence/ship orchestrators, productivity helpers (pause/resume/status/approve, status, promote, atlas-save), 12 atomic operators (theme audit/create/extend/port, bolder/quieter/distill, motion, frontend-design, ux-writing, tweaks), and caveman communication suite (caveman, cavecrew, caveman-commit/compress/help/review/stats).",
       "source": "./",
       "strict": false,
       "skills": [
@@ -30,13 +30,19 @@
         "./skills/sequence",
         "./skills/ship",
         "./skills/productivity",
-        "./skills/ralph-loop",
         "./skills/status",
         "./skills/promote",
         "./skills/atlas-save",
         "./skills/tweaks",
         "./skills/flow",
-        "./skills/opus-execute"
+        "./skills/opus-execute",
+        "./skills/caveman",
+        "./skills/cavecrew",
+        "./skills/caveman-commit",
+        "./skills/caveman-compress",
+        "./skills/caveman-help",
+        "./skills/caveman-review",
+        "./skills/caveman-stats"
       ]
     }
   ]

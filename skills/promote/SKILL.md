@@ -5,7 +5,7 @@ description: Promotes a free-form markdown file under `docs/backlog/` into a str
 
 # Skill: promote (`/promote`) — persona **Atlas Promote** (English: **Cartographer Promote**)
 
-Atlas Promote converts a loose backlog markdown into the canonical 3-file spec triplet that the rest of the design-spec-driven pipeline (`/design-spec sequence`, `/design-spec ship`, `/ralph composer`) expects. **Not deterministic** — needs LLM judgment to decompose narrative prose into actionable `T-XX` rows.
+Atlas Promote converts a loose backlog markdown into the canonical 3-file spec triplet that the rest of the design-spec-driven pipeline (`/design-spec sequence`, `/design-spec ship`) expects. **Not deterministic** — needs LLM judgment to decompose narrative prose into actionable `T-XX` rows.
 
 After promotion, Atlas Promote **always recommends** `/tlc-spec-driven specify <name>` to fill gaps in the generated `spec.md` and `design.md`, and `/tlc-closure` to walk the task dependency graph and surface loose ends before execution.
 

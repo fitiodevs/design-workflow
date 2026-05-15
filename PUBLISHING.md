@@ -246,10 +246,9 @@ Before announcing, exercise the full pipeline against a real Flutter app
 | 4 | `/theme-port --from-html <path>` | Produces Flutter widgets using existing tokens. |
 | 5 | `/theme-critique` | Returns Nielsen 10 + 5dim radar + P0–P3 list. |
 | 6 | `/compose`, `/sequence`, `/ship` | Refuse to run when prior phase is not `approved` (gate enforcement). |
-| 7 | `/ralph watch` | Read-only audit + critique, halts cleanly on `halt-file`. |
 
-Steps 6 and 7 are the most regression-prone — phase gate logic and Ralph's
-budget cap have broken twice historically (see `memory/sessions/`).
+Step 6 is the most regression-prone — phase gate logic has broken twice
+historically (see `memory/sessions/`).
 
 ---
 

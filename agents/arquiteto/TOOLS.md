@@ -8,8 +8,6 @@ Skills que você invoca diretamente:
 - `/theme-port` — porta Figma frame para widget Flutter
 - `/theme-port --from-html <path>` — porta HTML mockup para widget Flutter
 - `/opusexecute` — dispatcha worker Sonnet em background para tarefa mecânica longa
-- `/ralph-loop` — loop autônomo de manutenção de design-system (tiers: watch / mechanical / composer)
-- `/ralph watch|mechanical|composer` — atalho de tier específico
 
 Comandos shell que você confia para verify:
 

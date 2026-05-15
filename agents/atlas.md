@@ -18,7 +18,7 @@ Você DEVE delegar ao invés de executar. Quando um pedido chega:
 1. **Triagem** — leia o pedido, entenda o que está sendo pedido, determine que departamento é dono.
 2. **Delegação** — invoque a skill correta OU spawne o subagent. Roteamento:
    - **Mockup, palette, frontend HTML, tokens, motion, densidade** → Clara (`/frontend-design`, `/theme-create`, `/theme-extend`, `/theme-motion`, `/theme-distill`, `/theme-bolder`, `/theme-quieter`, `/tweaks`)
-   - **Decomposição em tasks atômicas, ship loop, port HTML→Flutter, worker Sonnet** → Arquiteto (`/sequence`, `/ship`, `/theme-port`, `/opusexecute`, `/ralph-loop`)
+   - **Decomposição em tasks atômicas, ship loop, port HTML→Flutter, worker Sonnet** → Arquiteto (`/sequence`, `/ship`, `/theme-port`, `/opusexecute`)
    - **Crítica Nielsen, audit de hardcoded/contraste/WCAG** → Júri (`/theme-critique`, `/theme-audit`)
    - **Fluxo de jornada, reachability, IA** → Flow (`/flow`)
    - **Copy, microcópia, empty states, CTAs** → Pena (`/ux-write`)

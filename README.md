@@ -27,13 +27,13 @@ A pipeline of Claude Code skills for designing, auditing, and refining UI in mob
 | `sequence` | Arquiteto / Architect (Sequence phase) | Reads approved compose, emits `tasks.md` with atomic ≤30-min tasks, each with a binary `verify:` block. |
 | `ship` | (Ship phase) | Executes tasks one by one — spawn skill, run verify, commit on pass with `Refs feature/T-id`, halt cleanly on fail. Closes with audit + critique re-run. |
 | `productivity` | (Productivity helpers) | `/design-spec pause` (checkpoint), `/resume` (sumariza, sugere re-discovery se >14d), `/status`, `/approve <phase> <feature>`. |
-| `ralph-loop` | Ralph (autonomy layer) | 3 tiers: **Watch** (read-only audit + critique), **Mechanical** (deterministic fixes, opens PR draft, never auto-merge), **Composer** (executes approved sequence with halt + budget cap). |
 | `status` | Atlas / Cartographer | Read-only snapshot of active work across `.specs/`, `docs/backlog/`, `memory/active_work.md` plus current branch state. Emits TL;DR + table. |
 | `promote` | Atlas Promote / Cartographer Promote | Converts a `docs/backlog/` markdown into a `.specs/features/` triplet, then recommends `/tlc-spec-driven` to refine and `/tlc-closure` to verify dependency closure. |
 | `atlas-save` | Atlas Cronista / Cartographer Chronicler | Curated session handoff (decisions, bugs, lessons, sentiment, playbook) into `memory/sessions/`. Obsidian vault mirror is opt-in. |
 | `opus-execute` | (Workflow helper) | `/opusexecute` packages the current Opus conversation into a self-contained brief (5 sections — Context · Files · Acceptance · Constraints · Style) and dispatches it to a Sonnet sub-agent in an isolated context window (default background), so the main Opus session never overflows Sonnet. Primary flow: `--from-task <feature>/T-<id>` reads `.specs/features/<feature>/{spec,design,tasks}.md` and synthesizes the brief from the task's structured fields. |
+| `caveman` + `cavecrew` + `caveman-{commit,compress,help,review,stats}` | (Communication helpers) | Ultra-compressed communication mode — cuts ~75% of output tokens while keeping technical accuracy. `caveman` toggles caveman speech; `cavecrew` is a delegation guide for caveman-style sub-agents; `caveman-commit/review/compress` apply the same compression to commits, PR review comments, and memory files; `caveman-help/stats` are reference + telemetry. Forked from [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman). |
 
-Personas don't have to be named to be invoked — every skill answers to the literal slash command (`/theme-audit`, `/theme-port`, `/compose`, `/ralph`, …). Use the persona handle when you want to be explicit about *who* you're calling on; use the slash command when you don't care.
+Personas don't have to be named to be invoked — every skill answers to the literal slash command (`/theme-audit`, `/theme-port`, `/compose`, `/caveman`, …). Use the persona handle when you want to be explicit about *who* you're calling on; use the slash command when you don't care.
 
 ## Optional companions
 
@@ -44,7 +44,6 @@ These skills are not bundled — they live in their own repos because they're us
 | `tlc-spec-driven` | `/promote` recommends it as the next step to refine the auto-decomposed spec/design/tasks. Adaptive 4-phase planning (Specify, Design, Tasks, Execute). Stack-agnostic. | external |
 | `tlc-closure` | Walks the task dependency graph after `/promote` + `/tlc-spec-driven`. Lists callers, providers, tests, routes; turns each into a closure subtask; runs auto-RalphLoop until zero loose ends. **Auto-bootstraps `tlc-spec-driven` and `graphify` if not installed.** | `fitiodevs/tlc-closure` |
 | `graphify` | Knowledge-graph any input (code, docs, papers, images) into clustered communities + HTML + JSON + audit report. Used internally by `tlc-closure` to build the dependency graph. | external |
-| `caveman` | Ultra-compressed communication mode (~75% fewer tokens) when you need to ship a long autonomous loop on a budget. | external |
 | `open-design` | **Upstream of `craft/`.** The 5 universal craft docs (`anti-ai-slop`, `color`, `state-coverage`, `typography`, `animation-discipline`) are forked verbatim from `nexu-io/open-design` (Apache-2.0). Sync is manual on demand — see `craft/README.md`. | `nexu-io/open-design` |
 
 If `/tlc-closure` is not installed, `/promote` falls back to a "review the generated files manually" hint. None of these are hard dependencies of `design-workflow`.
@@ -269,7 +268,7 @@ The 13 atomic skills become **operators**. A new orchestration layer wraps them 
 
 - **Onda C — Productivity layer.** `productivity` skill bundling `/design-spec pause`, `/design-spec resume` (suggests light re-discovery after 14 days), `/design-spec status` (calls `scripts/design_state.py` — JSON or prose, `<2s`), and `/design-spec approve <phase> <feature>` (validates schema before flipping `draft → approved`). Júri's discuss mode upgraded from placeholder to real Socratic informal mode.
 
-- **Onda D — Ralph autonomy.** New `ralph-loop` skill with 3 tiers: **Watch** (read-only audit + critique, emits issue payload), **Mechanical** (deterministic regex-replaceable fixes, opens PR draft, never merges), **Composer** (executes approved `tasks.md`, halts on 2× verify fail / `requires_human` / branch protection / halt file / budget). Hard rules: never auto-merge any tier; `.design-spec/halt` checked first each tick; `budget.yaml` is human-set; persona injection per tick (re-loads `voice_dna` from SKILL.md); cycle detection within 3-tick window. Ships JSONL append-only audit log per feature/day, `scripts/ralph_tick.py` (skeleton) + `scripts/ralph_budget.py` (cost dashboard, DuckDB-friendly), and 3 GitHub Actions workflow templates (`design-watch.yml` daily, `design-pre-merge.yml` on PR, `design-sprint.yml` weekly Tier 2 sweep).
+- **Onda D — _(removed in v1.5.3)_** the autonomous `ralph-loop` skill and its scripts were dropped because we weren't using them in practice. History remains in git.
 
 `.design-spec/` is the runtime state directory (features per-phase, project-level decisions, audit logs, halt switch). `.specs/` continues to hold human-written planning artifacts (spec/design/tasks per feature). See `docs/design-spec-driven-plan.md` for the full plan and `.specs/project/STATE.md` for locked decisions and validation runs.
 

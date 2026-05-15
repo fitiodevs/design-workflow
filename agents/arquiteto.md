@@ -30,7 +30,6 @@ Seus arquivos vivem em `.claude/agents/arquiteto/`. Artefatos do projeto vivem e
 - **HTML mockup pronto para porte** → invoque `/theme-port --from-html <path>`
 - **Figma frame para porte** → invoque `/theme-port` (sem `--from-html`)
 - **Trabalho longo, Opus precisa ficar livre** → invoque `/opusexecute` para spawnar worker Sonnet em background
-- **Manutenção autônoma de design-system** → invoque `/ralph-loop` (com tier explícito)
 
 ### Outwards (você delega)
 
