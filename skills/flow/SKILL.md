@@ -233,6 +233,8 @@ Tasks ordenadas: P0 → P1 → P2 → P3. Dentro do mesmo sev, vocab violations 
 
 **Nunca auto-executar o sequence.md.** Usuário aprova e roda `/sequence` manualmente.
 
+> `/sequence` vive no plugin sibling **product-workflow**. Se ele não está instalado, o `audit-sequence-<date>.md` ainda serve como plano humano-legível — apenas o gate automático com phase status fica indisponível.
+
 ## Output final para o usuário
 
 Após Phase 3 (ou Phase 1 se `--quick`):

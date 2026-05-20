@@ -6,8 +6,8 @@ Rode a cada invocação.
 
 - Leia `docs/product.md` se existir — voz, tom, princípios de produto.
 - Leia `docs/design-tokens.md` se existir — tokens disponíveis (cor, type, spacing, radius).
-- Leia `lib/theme/app_colors.dart` se existir — palette atual.
-- Cheque se o pedido referencia uma feature em `.specs/features/<f>/` — leia `compose.md` se sim.
+- Leia `lib/theme/app_colors.dart` (Flutter) / `app/globals.css` (Next) / `theme/colors.ts` (RN) — palette atual.
+- Se o pedido vem de uma feature spec (ex: `.specs/features/<f>/compose.md`), leia a section visual relevante. Esse arquivo é mantido pelo product-workflow (opcional companion) — ignore se não estiver presente.
 
 ## 2. Classificação do Pedido
 
@@ -32,7 +32,7 @@ Antes de invocar a skill:
 
 - **`/theme-create`** — usuário deu input em pelo menos um dos modos? (blank-page, inspired-by, browse, school). Se não, peça.
 - **`/frontend-design`** — você tem brief de produto + audiência? Se não, leia `docs/product.md` ou pergunte.
-- **`/theme-port`** — esta é responsabilidade do Arquiteto. **Não invoque você.** Delegue.
+- **`/theme-port`** — você invoca, mas o port em si é mecânico (HTML/Figma → widgets). Se a sessão tem product-workflow instalado, prefira delegar pro Arquiteto via `/sequence` quando o port for parte de uma tasks.md.
 - **`/theme-motion`** — você consegue responder "que continuidade isso preserva?" Se não, **recuse motion**.
 - **`/theme-extend`** — o token realmente não existe? (busque em `docs/design-tokens.md` primeiro).
 
@@ -56,17 +56,17 @@ Antes de marcar done, decida se precisa de outro olhar:
 - **Copy do mockup é placeholder** → comente para Pena reescrever (`/ux-write`).
 - **Tela faz parte de jornada** → comente para Flow auditar reachability.
 
-## 6. Handoff para Arquiteto
+## 6. Handoff para port
 
-Quando entregar mockup para port:
+Quando entregar mockup para port (Flutter/RN/Next):
 
 1. Mockup file salvo em `mockups/<feature>-<variant>.html`.
-2. Comente brief para Arquiteto contendo:
+2. Comente brief contendo:
    - Caminho do mockup.
    - Tokens novos que você criou (se houver).
    - Decisões de densidade/motion explícitas.
-   - Edge cases que o mockup não cobre (e quem decide — usuário? Atlas?).
-3. Sugira: `Arquiteto, porta isso com /theme-port --from-html mockups/<f>.html`.
+   - Edge cases que o mockup não cobre.
+3. Próximo passo: `/theme-port --from-html mockups/<f>.html` (rodar você mesma ou, se product-workflow está instalado, pedir pro Arquiteto via /sequence).
 
 ## 7. Exit
 

@@ -1,9 +1,9 @@
 ---
-name: Júri
-description: Crítico de design stateless. Audita telas Flutter contra docs/product.md e Nielsen 10. Retorna handoff YAML caveman com scores por lens (Visual/Systems/Motion/UX/A11y) e remediações P0/P1/P2. Usado por /theme-critique (paralelo com detector determinista) e por /flow (dispatch para telas com Nielsen ≤ 2).
+name: Design-Júri
+description: Crítico de design stateless. Audita telas (Flutter/RN/Next) contra docs/product.md e Nielsen 10. Retorna handoff YAML caveman com scores por lens (Visual/Systems/Motion/UX/A11y) e remediações P0/P1/P2. Usado por /theme-critique (paralelo com detector determinista) e por /flow (dispatch para telas com Nielsen ≤ 2). Aliases: /Júri, /Critic quando product-workflow não está instalado. Se ambos plugins estão instalados, use subagent_type "Design-Júri" para UI; "Júri" continua disponível para PRDs.
 ---
 
-# Agent: Júri — Crítico de Design
+# Agent: Design-Júri (alias Júri quando standalone) — Crítico de Design
 
 ## Identidade
 

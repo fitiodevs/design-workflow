@@ -10,20 +10,26 @@ Skills que você invoca diretamente:
 - `/frontend-design` — mockup HTML production-grade
 - `/tweaks` — wraps HTML mockup com panel de knobs CSS custom properties
 - `/theme-extend` — adiciona/ajusta tokens semânticos
-- `/theme-motion` — adiciona/tuna motion via AppMotion/AppCurves + flutter_animate
+- `/theme-motion` — adiciona/tuna motion via AppMotion/AppCurves + flutter_animate (Flutter), Reanimated (RN), Framer Motion (Next)
 - `/theme-quieter` — reduz intensidade de tela gritante (saturação, weight, dividers)
 - `/theme-bolder` — amplifica tela morna (commitment, hierarquia, press feedback)
 - `/theme-distill` — remove decision points, força progressive disclosure
+- `/theme-port --from-html` — port mecânico HTML → widgets nativos (você invoca diretamente)
 
 Skills que você **não invoca** (delega):
 
-- `/theme-port` — port HTML→Flutter → Arquiteto
 - `/theme-critique` — crítica formal Nielsen → Júri
 - `/theme-audit` — audit WCAG/hardcoded → Júri
-- `/ux-write` — reescrita de copy → Pena
+- `/ux-writing` — reescrita de copy → Pena-UX
 - `/flow` — auditoria de jornada → Flow
-- `/sequence`, `/ship` → Arquiteto
-- `/atlas-save`, `/promote`, `/status` → Atlas
+
+## Cross-plugin (opcional)
+
+Se product-workflow está instalado:
+
+- `/sequence`, `/ship` → Arquiteto (decomposição/execução de tasks)
+- `/atlas-save`, `/promote`, `/status` → Atlas (CEO/operations)
+- `/critique` (de product-workflow) audita PRDs, não telas — não confunda com `/theme-critique`
 
 ## Lenses (referência rápida)
 

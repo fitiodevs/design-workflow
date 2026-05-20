@@ -1,12 +1,14 @@
 # design-workflow
 
-A pipeline of Claude Code skills for designing, auditing, and refining UI in mobile apps — Flutter-first, bilingual (English/Portuguese).
+A pipeline of Claude Code skills for designing, auditing, and refining UI — Flutter-first, with Next.js/Tailwind and React Native adapters. Bilingual (English/Portuguese).
 
 > Heuristics over vibes. Tokens over hardcode. WCAG over guesses. Anti-AI-slop by default.
 
+**v2.0.0 split** — orchestration (compose/sequence/ship, status, promote, atlas-save, opus-execute, caveman) moved to the sibling **[product-workflow](../product-workflow/)** plugin. This plugin now focuses purely on UI/screen craft. Install both for the full pipeline; install only this one if you just want the design operators.
+
 ## What's inside
 
-20 skills, organized as **atomic operators** (one job each) plus an **orchestration layer** that sequences them under explicit phase gates. Persona names are PT primary + EN alias — the same operator answers to both, so multilingual squads converge on the same vocabulary.
+13 atomic UI/screen skills, each one job. Persona names are PT primary + EN alias — the same operator answers to both, so multilingual squads converge on the same vocabulary.
 
 ### Skill / persona / what it does
 
@@ -14,26 +16,30 @@ A pipeline of Claude Code skills for designing, auditing, and refining UI in mob
 |---|---|---|
 | `theme-audit` | Lupa / Auditor | Sweeps `lib/` for hardcoded colors, fonts, off-scale spacing; validates WCAG; measures coverage. Also triages screenshots. |
 | `theme-extend` | Cirurgião / Surgeon | Adds or tweaks a semantic token (color, typography, spacing, radius). Generates light/dark pairs validated against WCAG. |
-| `theme-port` | Arquiteto / Architect | Ports a structural source (Figma frame OR HTML mockup from any tool — `/frontend-design`, Figma's HTML export, Stitch, Penpot, hand-written) into Flutter widgets using your existing tokens. Source provides structure; theme provides identity. |
+| `theme-port` | Arquiteto-UI / UI Architect | Ports a structural source (Figma frame OR HTML mockup from any tool — `/frontend-design`, Figma's HTML export, Stitch, Penpot, hand-written) into Flutter/RN/Next widgets using your existing tokens. Source provides structure; theme provides identity. |
 | `theme-create` | Compositor / Composer | Builds a complete palette from scratch (brand + semantic + neutral) in OKLCH with anti-AI-slop checklist + WCAG. |
 | `theme-critique` | Júri / Critic | Nielsen 0–4 × 10 heuristics, AI-slop verdict, persona walkthrough, cognitive load, P0–P3 issue map. Also drives Discovery (no args). |
 | `theme-bolder` | Brasa / Amplifier | Amplifies a bland/timid screen — raises color commitment, breaks reflexive symmetry, intensifies hierarchy. |
 | `theme-quieter` | Calma / Refiner | Calms an aggressive screen — lowers commitment, desaturates accents, drops typographic weight. |
 | `theme-distill` | Lâmina / Distiller | Cuts decisions to ≤4. Forces progressive disclosure. Removes anything that doesn't earn its pixel. |
-| `theme-motion` | Jack / Choreographer | Adds or tunes motion using motion tokens + `flutter_animate`. Refuses motion-for-motion. |
-| `frontend-design` | Clara / Designer | Generates production-grade HTML/CSS/JS mockups consumed directly by `/theme-port --from-html` for conversion to Flutter widgets. |
-| `ux-writing` | Pena / Writer | UX writing critique + rewrite of labels, CTAs, errors, empty states, success messages. Delivers before/after with copy-paste strings. |
-| `compose` | (Compose phase) | Reads approved discovery, sequences `/theme-create` + `/frontend-design` under a phase gate, has Clara review. Output: `compose.md`. |
-| `sequence` | Arquiteto / Architect (Sequence phase) | Reads approved compose, emits `tasks.md` with atomic ≤30-min tasks, each with a binary `verify:` block. |
-| `ship` | (Ship phase) | Executes tasks one by one — spawn skill, run verify, commit on pass with `Refs feature/T-id`, halt cleanly on fail. Closes with audit + critique re-run. |
-| `productivity` | (Productivity helpers) | `/design-spec pause` (checkpoint), `/resume` (sumariza, sugere re-discovery se >14d), `/status`, `/approve <phase> <feature>`. |
-| `status` | Atlas / Cartographer | Read-only snapshot of active work across `.specs/`, `docs/backlog/`, `memory/active_work.md` plus current branch state. Emits TL;DR + table. |
-| `promote` | Atlas Promote / Cartographer Promote | Converts a `docs/backlog/` markdown into a `.specs/features/` triplet, then recommends `/tlc-spec-driven` to refine and `/tlc-closure` to verify dependency closure. |
-| `atlas-save` | Atlas Cronista / Cartographer Chronicler | Curated session handoff (decisions, bugs, lessons, sentiment, playbook) into `memory/sessions/`. Obsidian vault mirror is opt-in. |
-| `opus-execute` | (Workflow helper) | `/opusexecute` packages the current Opus conversation into a self-contained brief (5 sections — Context · Files · Acceptance · Constraints · Style) and dispatches it to a Sonnet sub-agent in an isolated context window (default background), so the main Opus session never overflows Sonnet. Primary flow: `--from-task <feature>/T-<id>` reads `.specs/features/<feature>/{spec,design,tasks}.md` and synthesizes the brief from the task's structured fields. |
-| `caveman` + `cavecrew` + `caveman-{commit,compress,help,review,stats}` | (Communication helpers) | Ultra-compressed communication mode — cuts ~75% of output tokens while keeping technical accuracy. `caveman` toggles caveman speech; `cavecrew` is a delegation guide for caveman-style sub-agents; `caveman-commit/review/compress` apply the same compression to commits, PR review comments, and memory files; `caveman-help/stats` are reference + telemetry. Forked from [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman). |
+| `theme-motion` | Jack / Choreographer | Adds or tunes motion using motion tokens + `flutter_animate` / RN Reanimated / Framer Motion. Refuses motion-for-motion. |
+| `frontend-design` | Clara / Designer | Generates production-grade HTML/CSS/JS mockups consumed directly by `/theme-port --from-html` for conversion to native widgets. |
+| `ux-writing` | Pena-UX / UX Writer | UX writing critique + rewrite of labels, CTAs, errors, empty states, success messages. Delivers before/after with copy-paste strings. |
+| `tweaks` | Tweaker | Wraps any tweaks-ready HTML with a fixed side panel of 5 knobs binding to CSS custom properties + localStorage persistence. Output is a sibling `<input>.tweaks.html` for live variant exploration. |
+| `flow` | Flow | Audits cross-screen UX journey: reachability, IA, dead-ends, persona walkthroughs. Returns YAML handoff with journey_health, issues[] and persona traces. |
 
-Personas don't have to be named to be invoked — every skill answers to the literal slash command (`/theme-audit`, `/theme-port`, `/compose`, `/caveman`, …). Use the persona handle when you want to be explicit about *who* you're calling on; use the slash command when you don't care.
+Personas don't have to be named to be invoked — every skill answers to the literal slash command (`/theme-audit`, `/theme-port`, `/tweaks`, …). Use the persona handle when you want to be explicit about *who* you're calling on; use the slash command when you don't care.
+
+### Pairs with
+
+For the orchestration layer (phase-gated `discovery → compose → sequence → ship`, status snapshot, backlog promote, session save, worker dispatch, communication compression):
+
+```
+git clone https://github.com/fitiodevs/product-workflow.git ~/code/product-workflow
+cd ~/code/product-workflow && ./install.sh
+```
+
+`product-workflow` ships Atlas (CEO), Arquiteto (tech handoff), plus PM personas (Sage, Strategos, Insight, Metrica, Pena, Júri). Its `compose` phase orchestrator can sequence `/theme-create` and `/frontend-design` from this plugin via the same gate model — they compose if installed side-by-side.
 
 ## Optional companions
 
@@ -67,20 +73,24 @@ Or, if you use the Claude Code plugin marketplace:
 
 ## Quickstart
 
-In any Flutter project (Material 3 + Riverpod recommended):
+In any Flutter / Next.js / React Native project:
 
 ```
 /theme-audit          # baseline
 /theme-create         # if you don't have a palette yet
-/theme-port <figma>   # turn a frame into widgets
+/frontend-design      # generate production-grade HTML mockup
+/tweaks <path>        # explore variants via knob panel
+/theme-port <figma>   # turn a frame/mockup into native widgets
 /theme-critique       # is the screen good?
 /theme-bolder         # if it's timid
 /theme-quieter        # if it's shouty
 /theme-distill        # if it's overloaded
 /theme-motion         # if it's flat
+/ux-writing           # microcopy critique + rewrite
+/flow                 # journey audit across screens
 ```
 
-Each skill has a persona triggerable directly: `/Auditor`, `/Composer`, `/Critic`, `/Amplifier`, `/Refiner`, `/Distiller`, `/Choreographer`, `/Designer`, `/Writer`, `/Surgeon`, `/Architect`, `/Cartographer`. Portuguese aliases also work: `/Lupa`, `/Compositor`, `/Júri`, `/Brasa`, `/Calma`, `/Lâmina`, `/Jack`, `/Clara`, `/Pena`, `/Cirurgião`, `/Arquiteto`, `/Atlas`. See [docs/personas.md](docs/personas.md).
+Each skill has a persona triggerable directly: `/Auditor`, `/Composer`, `/Critic`, `/Amplifier`, `/Refiner`, `/Distiller`, `/Choreographer`, `/Designer`, `/UX-Writer`, `/Surgeon`, `/UI-Architect`, `/Tweaker`, `/Flow`. Portuguese aliases also work: `/Lupa`, `/Compositor`, `/Júri`, `/Brasa`, `/Calma`, `/Lâmina`, `/Jack`, `/Clara`, `/Pena`, `/Cirurgião`, `/Arquiteto-UI`. See [docs/personas.md](docs/personas.md).
 
 ## Stack assumptions
 
@@ -170,6 +180,10 @@ Issues and PRs welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 Apache 2.0 — see [LICENSE.txt](LICENSE.txt). Each skill folder also carries a `LICENSE.txt` for clarity when distributed individually.
 
 ## Status
+
+**v2.0.0** — modular split. The orchestration layer (compose/sequence/ship, status, promote, productivity, atlas-save, opus-execute, clickup-sync, caveman family) moved to the sibling **[product-workflow](../product-workflow/)** plugin. Atlas and Arquiteto agents moved too. This plugin now ships 13 atomic UI/screen skills + 4 design personas (Clara, Júri, Pena-UX, Flow). The pair composes if installed side-by-side: `product-workflow` /compose can sequence `/theme-create` + `/frontend-design` from this plugin under its phase gates. Rationale: PM workflow and UI workflow evolve at different cadences; isolating them lets each ship without the other being a blocker.
+
+## What changed in v1.5.0 (legacy — before the v2 split)
 
 **v1.5.0** — design schools library. `design-systems-schools/` (12 hand-authored philosophy schools) ships parallel to `design-systems/` (20 brand systems). Where brands say "look like Apple" with literal hex, schools say "follow Müller-Brockmann's discipline" via constraints (saturation, single-accent, WCAG ≥7:1, polarity). The constraint-based translator at `scripts/school_md_to_appcolors.py` solves the constraints to produce different palettes for different projects under the same school. `/theme-create --inspired-by-school <slug>` and `/frontend-design --school <slug>` are the new flags. The 12 schools cover 4 scenario-strength categories — 4 Flutter-strong (Pentagram, IA, Brutalism, Locomotive), 4 Print-strong (Müller-Brockmann, Kenya Hara, Editorial, Atelier-Zero), 2 AI-gen-strong (Memphis, Active Theory), 2 Versatile (Sagmeister-Walsh, Takram). `docs/design-schools-execution-paths.md` documents the multi-target execution matrix and recommended external tools (Marp, Slidev, Pandoc, Typst, Puppeteer, Midjourney, SDXL). 20/20 skills still pass `quick_validate.py`. Built on v1.4.x (RN adapter + interactive mockup stage), v1.3.0 (inspiration library), v1.2.x (multi-stack adapter + design-context). Extracted from production use in the [Fitio](https://fitio.app) Flutter app.
 
