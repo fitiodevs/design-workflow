@@ -43,14 +43,14 @@ fisicamente — eram "fantasmas" registrados só no `CLAUDE.md` e como
 
 | Persona | Skill anunciada | Dir físico | Repo público |
 |---------|-----------------|------------|--------------|
-| Júri    | `fitio-theme-critique` | ❌ | ✅ `theme-critique` |
-| Brasa   | `fitio-theme-bolder`   | ❌ | ✅ `theme-bolder` |
+| Olavo    | `fitio-theme-critique` | ❌ | ✅ `theme-critique` |
+| Saga   | `fitio-theme-bolder`   | ❌ | ✅ `theme-bolder` |
 | Calma   | `fitio-theme-quieter`  | ❌ | ✅ `theme-quieter` |
-| Lâmina  | `fitio-theme-distill`  | ❌ | ✅ `theme-distill` |
+| Cerne  | `fitio-theme-distill`  | ❌ | ✅ `theme-distill` |
 | Jack    | `fitio-theme-motion`   | ❌ | ✅ `theme-motion` |
 | Clara   | `fitio-frontend-design`| ❌ | ✅ `frontend-design` |
 
-Resultado: invocar `/Júri`, `/Brasa`, `/Calma`, `/Lâmina`, `/Jack` ou `/Clara`
+Resultado: invocar `/Olavo`, `/Saga`, `/Calma`, `/Cerne`, `/Jack` ou `/Clara`
 caía no fallback de routing — nenhuma das skills rodava de fato.
 
 ---
@@ -97,7 +97,7 @@ rm -rf $DST/frontend-design   # global antigo
 **Resultado:** 22 skills físicas (17 → +6 novas → −1 global removido).
 
 **Validação no harness:** as 6 skills foram reconhecidas no mesmo turno, sem
-restart do Claude Code. `/Júri`, `/Brasa`, `/Calma`, `/Lâmina`, `/Jack`,
+restart do Claude Code. `/Olavo`, `/Saga`, `/Calma`, `/Cerne`, `/Jack`,
 `/Clara` agora resolvem para a skill real.
 
 ---
@@ -170,7 +170,7 @@ via `/tlc-spec-driven`. Escopo das 38 tasks (6 frentes):
 3. **Disclosure** — license header, attribution
 4. **Scripts** — paths relativos, fallback quando script não existe
 5. **Evals** — smoke tests por skill (trigger → sample input → expected output)
-6. **Triggers EN** — primary EN, alias PT (`/critique` primary, `/Júri` alias)
+6. **Triggers EN** — primary EN, alias PT (`/critique` primary, `/Olavo` alias)
 
 ### 5.3 Rodar alignment
 
@@ -210,11 +210,11 @@ Decisão por skill:
 name: theme-critique
 license: Complete terms in LICENSE.txt
 description: Crítica de design de uma tela/feature do Fitio. (...)
-triggers: [/theme-critique, /Júri, /Juri]
+triggers: [/theme-critique, /Olavo, /Olavo]
 
 # fitio-theme-bolder
 name: theme-bolder
-triggers: [/theme-bolder, /Brasa, /brasa]
+triggers: [/theme-bolder, /Saga, /saga]
 
 # fitio-theme-quieter
 name: theme-quieter
@@ -222,7 +222,7 @@ triggers: [/theme-quieter, /Calma, /calma]
 
 # fitio-theme-distill
 name: theme-distill
-triggers: [/theme-distill, /Lâmina, /Lamina]
+triggers: [/theme-distill, /Cerne, /Cerne]
 
 # fitio-theme-motion
 name: theme-motion

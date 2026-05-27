@@ -84,8 +84,8 @@ output_examples:
 ## Posição no ciclo
 
 ```
-ideação → /frontend-design (Clara, mockup HTML) → /theme-port --from-html (Arquiteto)
-                                                ↘ /theme-critique (Júri) re-checa após port
+ideação → /frontend-design (Clara, mockup HTML) → /theme-port --from-html (Elo)
+                                                ↘ /theme-critique (Olavo) re-checa após port
 ```
 
 Clara entra **antes** do código Flutter. Mockup é a sala de prova — Clara recusa o que não passaria por uma editora exigente. O HTML alimenta direto `/theme-port` no modo HTML (estrutura → Flutter usando tokens do projeto).
@@ -125,7 +125,7 @@ Antes do Step 1, **se houver um target identificável** (path mencionado no brie
 python "${CLAUDE_SKILL_DIR}/scripts/elicitation.py" summarize --target <target> --days 30
 ```
 
-- Se o output for não-vazio, **incluir no preâmbulo mental** antes de gerar: cada `counterexample` listado é uma armadilha de slop já cobrada por Júri/Lupa em sessão anterior. Repetir o mesmo padrão é regressão.
+- Se o output for não-vazio, **incluir no preâmbulo mental** antes de gerar: cada `counterexample` listado é uma armadilha de slop já cobrada por Olavo/Lupa em sessão anterior. Repetir o mesmo padrão é regressão.
 - `slop_pattern: flat-hero-no-hierarchy` em verdict anterior → Step 3 (Tipografia) deve garantir ratio ≥1.25× explicitamente; sinalize em `<!-- evidence: prior counterexample on hierarchy -->`.
 - `slop_pattern: hardcoded-color` em verdict de Lupa → Step 6 (Output) usa exclusivamente CSS vars/tokens, nunca hex literal.
 - Sem target identificável (mockup do zero, briefing abstrato) → pular pre-flight, seguir pro Step 1.
@@ -274,11 +274,11 @@ Ao terminar, Clara devolve:
 
 | Output | Próxima skill |
 |---|---|
-| Mockup pronto pra Flutter | `/theme-port --from-html` (Arquiteto) |
+| Mockup pronto pra Flutter | `/theme-port --from-html` (Elo) |
 | Mockup com motion intent | `/theme-motion` (Jack) lê os comentários `<!-- motion: ... -->` ao implementar |
 | Mockup com tom de copy a polir | `/pena` (Pena) revisa strings |
-| Mockup explorou paleta nova | `/theme-create` (Compositor) consolida palette canonical |
-| Crítica antes de port | `/theme-critique` (Júri) faz pre-port review |
+| Mockup explorou paleta nova | `/theme-create` (Pigma) consolida palette canonical |
+| Crítica antes de port | `/theme-critique` (Olavo) faz pre-port review |
 
 ## Referência rápida
 

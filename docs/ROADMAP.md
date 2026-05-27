@@ -15,7 +15,7 @@ record intent and priority. PRs welcome on any of them.
 
 Status: **planned** · target: when first external user files an issue.
 
-- [ ] Replace `Fitio`-branded copy in skill `description:` fields with project-agnostic language. Preserve persona names (Lupa/Compositor/etc — they are brand).
+- [ ] Replace `Fitio`-branded copy in skill `description:` fields with project-agnostic language. Preserve persona names (Lupa/Pigma/etc — they are brand).
 - [ ] Replace hardcoded paths in skill body (`docs/product.md`, `lib/core/theme/...`) with config-resolved placeholders or env vars.
 - [ ] Strip references to Fitio-specific user personas (Diego/Marina/Léo). Move to `examples/` as illustrative.
 - [ ] Strip references to `BackendConfig.current`, `Supabase`, and other Fitio-stack assumptions in body text.

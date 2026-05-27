@@ -184,7 +184,7 @@ Ao apresentar o relatório, separar **violações bloqueantes** de **known-good 
 
 ### Step 5 — Persistir evidence ledger
 
-Append à `.design-spec/state/elicitation/<date>.jsonl` para que próximas runs de Clara/Arquiteto vejam o débito estrutural. Ledger doc em `docs/elicitation-ledger.md`. Dois comandos obrigatórios:
+Append à `.design-spec/state/elicitation/<date>.jsonl` para que próximas runs de Clara/Elo vejam o débito estrutural. Ledger doc em `docs/elicitation-ledger.md`. Dois comandos obrigatórios:
 
 ```bash
 # Rollup do audit como eval_result (1 entry por path auditado)

@@ -7,10 +7,10 @@
 
 ## Why this exists
 
-Júri auditing today is good. The problem is that the **diagnosis evaporates
+Olavo auditing today is good. The problem is that the **diagnosis evaporates
 between sessions** — next time Clara mocks the same screen, she has no idea
-what Júri said last week about `hero number bodyMedium em vez de displayLarge`.
-The generator silently repeats the slop, Júri scores it again, the loop never
+what Olavo said last week about `hero number bodyMedium em vez de displayLarge`.
+The generator silently repeats the slop, Olavo scores it again, the loop never
 converges.
 
 The ledger fixes this: reviewers append structured evidence; generators read
@@ -32,11 +32,11 @@ that is being designed — never the design-workflow repo itself.
 
 | `kind` | Who writes | When |
 |---|---|---|
-| `judge_verdict` | Júri (theme-critique), Lupa (theme-audit) | After a critique/audit reaches a verdict (`APPROVE` / `REQUEST_CHANGES` / `NEUTRAL`). One per run. |
-| `counterexample` | Júri, Lupa | One per P0/P1 issue with concrete `file:line` evidence + named slop pattern. |
+| `judge_verdict` | Olavo (theme-critique), Lupa (theme-audit) | After a critique/audit reaches a verdict (`APPROVE` / `REQUEST_CHANGES` / `NEUTRAL`). One per run. |
+| `counterexample` | Olavo, Lupa | One per P0/P1 issue with concrete `file:line` evidence + named slop pattern. |
 | `eval_result` | Lupa | Rolled-up audit metrics (violation counts, WCAG pass-rates). |
 | `weak_label` | Any reviewer | Inconclusive observation worth recording without committing to severity. |
-| `capability_probe` | Discovery (Júri `/juri` no args) | A discovery question presented to the user. Optional, low signal. |
+| `capability_probe` | Discovery (Olavo `/olavo` no args) | A discovery question presented to the user. Optional, low signal. |
 
 ## Required fields
 
@@ -84,7 +84,7 @@ python "${CLAUDE_SKILL_DIR}/scripts/elicitation.py" append counterexample \
 ### Read / summarize (generator side)
 
 ```bash
-# Human-readable preamble — drop into Clara/Arquiteto thought process
+# Human-readable preamble — drop into Clara/Elo thought process
 python "${CLAUDE_SKILL_DIR}/scripts/elicitation.py" summarize \
   --target lib/features/coupons --days 30
 
@@ -114,12 +114,12 @@ The `summarize` output is ready to inject into the generator's preamble:
 
 | Skill | Role | Where in flow |
 |---|---|---|
-| `theme-critique` (Júri) | Writer | Step 5.2 — after handoff write, append `judge_verdict` + 1 `counterexample` per P0/P1 issue. |
+| `theme-critique` (Olavo) | Writer | Step 5.2 — after handoff write, append `judge_verdict` + 1 `counterexample` per P0/P1 issue. |
 | `theme-audit` (Lupa) | Writer | Step 5 — append `eval_result` rollup + `counterexample` for top 5 offenders. |
 | `frontend-design` (Clara) | Reader | Pre-flight before Step 1 — `summarize` for target, treat counterexamples as slop traps. |
-| `theme-port` (Arquiteto) | Reader | Tier 5 of pre-flight context check — `summarize`, fail port if recurring `hardcoded-color` and Step 3 doesn't bind to semantic role. |
+| `theme-port` (Elo) | Reader | Tier 5 of pre-flight context check — `summarize`, fail port if recurring `hardcoded-color` and Step 3 doesn't bind to semantic role. |
 
-Extending to other skills (Brasa, Calma, Lâmina, Pena, Jack) is straightforward: add the sync entry in `scripts/_sync.sh` and the same `append` / `summarize` pattern in the SKILL.md.
+Extending to other skills (Saga, Calma, Cerne, Pena, Jack) is straightforward: add the sync entry in `scripts/_sync.sh` and the same `append` / `summarize` pattern in the SKILL.md.
 
 ## Anti-patterns
 

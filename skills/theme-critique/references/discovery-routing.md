@@ -1,6 +1,6 @@
 # Discovery — routing output
 
-> Reference loaded by `theme-critique` (Júri) **after** entrevista para emitir plano de ação priorizado.
+> Reference loaded by `theme-critique` (Olavo) **after** entrevista para emitir plano de ação priorizado.
 > Output final do discovery é roteamento, não menu. Plan é apendado a `discovery.md` e ecoado em prosa pro usuário.
 
 ## Schema YAML do `plan`
@@ -54,7 +54,7 @@ plan:
 - `/design-spec sequence`
 - `/design-spec ship`
 
-### Não-skills (referência, não executável via Júri)
+### Não-skills (referência, não executável via Olavo)
 - `/design-spec pause` (Onda C)
 - `/design-spec resume` (Onda C)
 
@@ -87,16 +87,16 @@ Ordem de prioridade (top-down):
 
 ## Anti-padrões
 
-- ❌ Auto-rodar a próxima skill. Júri **sempre** para no plano e devolve ao usuário escolher.
+- ❌ Auto-rodar a próxima skill. Olavo **sempre** para no plano e devolve ao usuário escolher.
 - ❌ ETAs vagas tipo "rápido", "longo". Usar bandas concretas (`~30min`, `~1h`, `~half-day`).
 - ❌ Skill names inventados. Lista canônica acima é exclusiva.
-- ❌ Mais de 5 itens no plano. Se passa de 5, é sinal de re-priorizar — Júri trunca em top-5 e cita os deferred ao final.
+- ❌ Mais de 5 itens no plano. Se passa de 5, é sinal de re-priorizar — Olavo trunca em top-5 e cita os deferred ao final.
 - ❌ Reason genérico ("polish", "improve"). Sempre ligar a uma resposta concreta da entrevista ou um número do audit.
 - ❌ `blocks` cíclicos (item 2 bloqueia item 1 que bloqueia item 2). Validar antes de persistir.
 
 ## Echo pro usuário (não-YAML)
 
-Após persistir o YAML em `discovery.md`, Júri ecoa em prosa numerada para o usuário escolher:
+Após persistir o YAML em `discovery.md`, Olavo ecoa em prosa numerada para o usuário escolher:
 
 ```
 Próximos passos sugeridos (escolha 1 — eu não auto-rodo):

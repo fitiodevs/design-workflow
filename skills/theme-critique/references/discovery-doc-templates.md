@@ -1,7 +1,7 @@
 # Discovery — doc templates
 
-> Reference loaded by `theme-critique` (Júri) **after** entrevista termina, para gerar artefatos.
-> Skeletons inline com placeholders `{{var}}`. Júri lê este arquivo, substitui vars, escreve via `Write`.
+> Reference loaded by `theme-critique` (Olavo) **after** entrevista termina, para gerar artefatos.
+> Skeletons inline com placeholders `{{var}}`. Olavo lê este arquivo, substitui vars, escreve via `Write`.
 
 Tier matrix (de `discovery-sizing.md`) define quais skeletons rodar:
 
@@ -75,7 +75,7 @@ plan:
 # Product — {{project_name}}
 
 > Source of truth for product-level decisions (positioning, voice, anti-references, color strategy).
-> Voltado a humanos do time. Skills de design (Júri/Compositor/etc.) gateiam aqui antes de qualquer crítica/criação.
+> Voltado a humanos do time. Skills de design (Olavo/Pigma/etc.) gateiam aqui antes de qualquer crítica/criação.
 
 ## §1 Visão
 
@@ -168,7 +168,7 @@ Pointer pra `docs/design-tokens.md` — todos os valores numéricos vivem lá.
 ## Ciclo de design
 
 ```
-/juri (discovery) → /theme-create (palette) → /frontend-design (mockups)
+/olavo (discovery) → /theme-create (palette) → /frontend-design (mockups)
   → /theme-port (Flutter) → /theme-audit (estrutural) → /theme-critique (juízo)
   → /theme-{bolder,quieter,distill,extend,motion} (refino)
 ```
@@ -291,7 +291,7 @@ Pointer pra `docs/design-tokens.md` — todos os valores numéricos vivem lá.
 
 | Var                       | Origem                                                  |
 |---------------------------|---------------------------------------------------------|
-| `{{feature_slug}}`        | argumento de `/juri` ou perguntado se ausente          |
+| `{{feature_slug}}`        | argumento de `/olavo` ou perguntado se ausente          |
 | `{{project_name}}`        | derivado de `pubspec.yaml`/`package.json`/dir name      |
 | `{{detected_mode}}`       | output de `detect_mode.py`                              |
 | `{{tier}}`                | tier escolhido (auto ou override)                       |

@@ -32,7 +32,7 @@ Antes de invocar a skill:
 
 - **`/theme-create`** — usuário deu input em pelo menos um dos modos? (blank-page, inspired-by, browse, school). Se não, peça.
 - **`/frontend-design`** — você tem brief de produto + audiência? Se não, leia `docs/product.md` ou pergunte.
-- **`/theme-port`** — você invoca, mas o port em si é mecânico (HTML/Figma → widgets). Se a sessão tem product-workflow instalado, prefira delegar pro Arquiteto via `/sequence` quando o port for parte de uma tasks.md.
+- **`/theme-port`** — você invoca (executor: Elo), mas o port em si é mecânico (HTML/Figma → widgets). Se a sessão tem product-workflow instalado, prefira delegar pro Petro via `/sequence` quando o port for parte de uma tasks.md.
 - **`/theme-motion`** — você consegue responder "que continuidade isso preserva?" Se não, **recuse motion**.
 - **`/theme-extend`** — o token realmente não existe? (busque em `docs/design-tokens.md` primeiro).
 
@@ -51,10 +51,10 @@ Antes de invocar a skill:
 
 Antes de marcar done, decida se precisa de outro olhar:
 
-- **Contraste duvidoso, hardcoded suspeito** → invoque `/theme-audit` (Júri delega).
-- **Tela complexa, alta carga cognitiva** → invoque `/theme-critique` (Júri).
+- **Contraste duvidoso, hardcoded suspeito** → invoque `/theme-audit` (Olavo delega).
+- **Tela complexa, alta carga cognitiva** → invoque `/theme-critique` (Olavo).
 - **Copy do mockup é placeholder** → comente para Pena reescrever (`/ux-write`).
-- **Tela faz parte de jornada** → comente para Flow auditar reachability.
+- **Tela faz parte de jornada** → comente para Flavio auditar reachability.
 
 ## 6. Handoff para port
 
@@ -66,7 +66,7 @@ Quando entregar mockup para port (Flutter/RN/Next):
    - Tokens novos que você criou (se houver).
    - Decisões de densidade/motion explícitas.
    - Edge cases que o mockup não cobre.
-3. Próximo passo: `/theme-port --from-html mockups/<f>.html` (rodar você mesma ou, se product-workflow está instalado, pedir pro Arquiteto via /sequence).
+3. Próximo passo: `/theme-port --from-html mockups/<f>.html` (rodar você mesma — executor: Elo — ou, se product-workflow está instalado, pedir pro Petro via /sequence pra virar task).
 
 ## 7. Exit
 

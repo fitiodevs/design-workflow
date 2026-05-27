@@ -1,14 +1,14 @@
 ---
 name: flow
-description: Flow persona — orquestrador de auditoria de fluxo UX cross-tela. Audita rotas, jornadas e features contra 10 heurísticas (docs/flow-heuristics.md), emite relatório combinado (deterministic + LLM), dispatcha issues para Clara/Júri/Brasa/Pena em paralelo. Com --dispatch, gera audit-sequence-{date}.md compatível com /sequence. Triggered by /flow, /Flow, "audita fluxo", "mapa de UX".
+description: Flavio persona — orquestrador de auditoria de fluxo UX cross-tela. Audita rotas, jornadas e features contra 10 heurísticas (docs/flow-heuristics.md), emite relatório combinado (deterministic + LLM), dispatcha issues para Clara/Olavo/Saga/Pena em paralelo. Com --dispatch, gera audit-sequence-{date}.md compatível com /sequence. Triggered by /flow, /Flavio, /flavio, "audita fluxo", "mapa de UX".
 ---
 
-# Skill: flow (`/flow`) — Flow persona
+# Skill: flow (`/flow`) — Flavio persona
 
 ## Triggers
 
-- **English:** `/flow`, `/Flow`, `/flow <journey>`, `/flow <feature>`, `/flow --all`, `/flow --dispatch`, `/flow --quick`, "audit UX flow", "map user journey", "where does the user get stuck"
-- **Português:** `/flow`, `/Flow`, `/flow <jornada>`, `/flow <feature>`, "audita fluxo", "mapa de UX", "onde o usuário trava", "analisa jornada", "verifica o fluxo"
+- **English:** `/flow`, `/Flavio`, `/flavio`, `/Flow` (legacy), `/flow <journey>`, `/flow <feature>`, `/flow --all`, `/flow --dispatch`, `/flow --quick`, "audit UX flow", "map user journey", "where does the user get stuck"
+- **Português:** `/flow`, `/Flavio`, `/flavio`, `/Flow` (legado), `/flow <jornada>`, `/flow <feature>`, "audita fluxo", "mapa de UX", "onde o usuário trava", "analisa jornada", "verifica o fluxo"
 - **Natural language:** journey slug (`01-cadastro`, `02-comprar-cupom`), feature name (`coupons`, `marketplace`), `--dispatch` pra gerar sequence.md.
 
 ## Flag protocol
@@ -25,9 +25,9 @@ description: Flow persona — orquestrador de auditoria de fluxo UX cross-tela. 
 
 ## Modo de execução
 
-`/flow` é **wrapper de orquestração em 4 phases**. Phase 1 roda via Bash/Grep (deterministic, sem LLM). Phase 2 delega ao agent `Flow` (`.claude/agents/flow.md`) via `Agent` tool. Phase 3 combina resultados. Phase 4 (com `--dispatch`) spawna skills correctoras em paralelo.
+`/flow` é **wrapper de orquestração em 4 phases**. Phase 1 roda via Bash/Grep (deterministic, sem LLM). Phase 2 delega ao agent `Flavio` (`.claude/agents/flavio.md`) via `Agent` tool. Phase 3 combina resultados. Phase 4 (com `--dispatch`) spawna skills correctoras em paralelo.
 
-**Nunca auditar em-cabeça neste arquivo** — a auditoria LLM é sempre delegada ao agent Flow.
+**Nunca auditar em-cabeça neste arquivo** — a auditoria LLM é sempre delegada ao agent Flavio.
 
 ## Setup gates (não-opcionais)
 
@@ -81,7 +81,7 @@ Cruzar contra rotas estáveis no catálogo (sem path param, sem state.extra) —
 
 **Output Phase 1:** lista numerada de findings com `file:line`. Se nenhum encontrado, registrar "Phase 1: limpo".
 
-## Phase 2 — LLM audit (agent Flow)
+## Phase 2 — LLM audit (agent Flavio)
 
 > Pular com `--quick`.
 
@@ -89,13 +89,13 @@ Spawnar agent:
 
 ```
 Agent({
-  description: "Flow audita jornada UX",
-  subagent_type: "Flow",   // .claude/agents/flow.md
+  description: "Flavio audita jornada UX",
+  subagent_type: "Flavio",   // .claude/agents/flavio.md
   prompt: "Audita <target>. Contexto deterministic phase 1: <phase1_findings>. Carrega docs/flows/_catalog.md + docs/flows/<target>.md + docs/product.md + docs/flow-heuristics.md. Retorna handoff caveman YAML."
 })
 ```
 
-Flow agent é **stateless com tool whitelist** (Read, Grep, Glob — sem Edit/Write/Bash). Retorna handoff YAML caveman com `journey_health` + `issues[]` + `personas`.
+Flavio agent é **stateless com tool whitelist** (Read, Grep, Glob — sem Edit/Write/Bash). Retorna handoff YAML caveman com `journey_health` + `issues[]` + `personas`.
 
 ## Phase 3 — Combine
 
@@ -165,8 +165,8 @@ Após Phase 3, classificar issues por tipo e spawnar skills corretoras **em para
 |---|---|---|
 | `vocab` — copy banida (`resgatar`, `comprar`) | `/ux-writing` via Agent | Pena |
 | `dead_end`, `missing_cta`, `goodwill_depletion` | `/frontend-design` via Agent | Clara |
-| Nielsen score ≤ 2 em tela específica | `/theme-critique` via Agent | Júri |
-| `celebration_weak`, `reward_flat` | `/theme-bolder` via Agent | Brasa |
+| Nielsen score ≤ 2 em tela específica | `/theme-critique` via Agent | Olavo |
+| `celebration_weak`, `reward_flat` | `/theme-bolder` via Agent | Saga |
 | `confetti_spam`, `overload`, `noise` | `/theme-distill` via Agent | — |
 | `state_extra_fragility`, `orphan_route` | Reportar a Maestro — não spawnar agent | — |
 
@@ -189,8 +189,8 @@ Agent({
 })
 
 Agent({
-  description: "Júri critica tela com Nielsen baixo",
-  subagent_type: "Júri",   // .claude/agents/juri.md
+  description: "Olavo critica tela com Nielsen baixo",
+  subagent_type: "Olavo",   // .claude/agents/olavo.md
   prompt: "Critica <path> encontrado no flow audit <date> com score Nielsen ≤ 2. Carrega docs/product.md. Retorna handoff caveman."
 })
 ```
@@ -264,8 +264,8 @@ Próximo passo sugerido:
 
 - ❌ Rodar sem `docs/product.md` — vocab audit fica cego.
 - ❌ Pular Phase 1 (deterministic) — vocab grep e state.extra scan são baratos e precisos.
-- ❌ Auditar em-cabeça — sempre delegar ao agent Flow (Phase 2).
-- ❌ Auto-executar dispatch ou sequence. Flow diagnostica; dispatch só com `--dispatch` explícito.
+- ❌ Auditar em-cabeça — sempre delegar ao agent Flavio (Phase 2).
+- ❌ Auto-executar dispatch ou sequence. Flavio diagnostica; dispatch só com `--dispatch` explícito.
 - ❌ Spawnar agents de dispatch sequencialmente — devem ser paralelos (single message).
 - ❌ Gerar sequence.md sem `--dispatch` flag — custo extra sem consentimento.
 - ❌ Persistir `audit-{date}.md` sem combinar Phase 1 + Phase 2 — relatório parcial.
@@ -277,7 +277,7 @@ Próximo passo sugerido:
 |---|---|
 | Vocab violation (`resgatar`, `comprar`) | `/ux-writing` (Pena) |
 | Dead end, missing CTA, goodwill depletion | `/frontend-design` (Clara) |
-| Tela específica Nielsen ≤ 2 | `/theme-critique` (Júri) |
+| Tela específica Nielsen ≤ 2 | `/theme-critique` (Olavo) |
 | State.extra fragility, orphan route | Maestro (manual) |
 | Celebração tímida mid-journey | `/theme-bolder` |
 | Confetti-spam em todo success | `/theme-distill` |

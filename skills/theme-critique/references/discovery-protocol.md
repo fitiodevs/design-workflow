@@ -1,15 +1,15 @@
 # Discovery — interview protocol
 
-> Reference loaded by `theme-critique` (Júri) **after** `discovery-sizing.md` decides tier.
+> Reference loaded by `theme-critique` (Olavo) **after** `discovery-sizing.md` decides tier.
 > Define a ordem fixa, perguntas literais, retry rules, e stop conditions da entrevista.
 
 ## Princípios
 
 1. **Ordem fixa.** Produto → Tom → Identidade → Stack. Sempre. Stack nunca primeiro — ninguém escolhe Flutter vs React antes de saber pra quem é o produto.
-2. **1 bloco por turno.** Júri faz as perguntas de um bloco, **pausa**, espera resposta, só então avança. Nunca despeja todas as perguntas de uma vez.
-3. **Concretude obrigatória.** Adjetivos vazios são recusados. Júri exige refs concretas, sensações físicas, anti-references.
+2. **1 bloco por turno.** Olavo faz as perguntas de um bloco, **pausa**, espera resposta, só então avança. Nunca despeja todas as perguntas de uma vez.
+3. **Concretude obrigatória.** Adjetivos vazios são recusados. Olavo exige refs concretas, sensações físicas, anti-references.
 4. **Cap de 2 retries.** Após 2 retries ainda-vagos, persiste resposta com tag `quality: weak` e segue. Entrevista não trava.
-5. **Júri não escreve em `lib/`.** Só em `docs/` e `.design-spec/features/<feature>/`.
+5. **Olavo não escreve em `lib/`.** Só em `docs/` e `.design-spec/features/<feature>/`.
 
 ## Bloco 1 — Produto (3 perguntas)
 
@@ -68,7 +68,7 @@
 
 ## Vague-words list (recusa automática)
 
-Se a resposta inclui só termos desta lista (sem complemento concreto), Júri recusa e re-pergunta:
+Se a resposta inclui só termos desta lista (sem complemento concreto), Olavo recusa e re-pergunta:
 
 - `moderno`, `clean`, `minimalista`, `tech`, `profissional`, `vibrante`, `bonito`, `user-friendly`, `intuitivo`, `premium`, `elegante`, `natural`
 - (EN equivalents) `modern`, `clean`, `minimal`, `professional`, `vibrant`, `beautiful`, `user-friendly`, `intuitive`, `premium`, `elegant`, `natural`
@@ -77,7 +77,7 @@ Lista canônica e variações em `references/discovery-vague-words.md`.
 
 ## Retry script
 
-Quando recusa, Júri usa este formato (varia entre as 3 versões para não soar repetitivo):
+Quando recusa, Olavo usa este formato (varia entre as 3 versões para não soar repetitivo):
 
 **v1:**
 > "Você disse '{{vago}}'. Eu não consigo desenhar '{{vago}}'. Me dá 1 ref concreta (app/site/objeto) + 1 sensação física específica + 1 anti-ref (o que não pode parecer)."
@@ -94,17 +94,17 @@ Cada resposta persistida em `discovery.md` ganha tag:
 
 - `quality: strong` — concreto, ref + sensação + anti-ref presentes.
 - `quality: medium` — concreto mas faltando 1 dos 3 elementos.
-- `quality: weak` — após 2 retries ainda vago; Júri persiste e segue.
+- `quality: weak` — após 2 retries ainda vago; Olavo persiste e segue.
 
 Tags `weak` aparecem destacadas no plano final ("⚠️ entrada fraca em P2.1 — recomendo revisitar antes de Compose").
 
 ## Stop conditions
 
-Júri encerra entrevista quando:
+Olavo encerra entrevista quando:
 
 1. **Todos os blocos do tier estão completos** (com respostas, mesmo que `weak`).
 2. **Cap de 12 perguntas atingido** (proteção contra modo `full` que extrapole).
-3. **Usuário pede `--bail`** ou diz "para" — Júri salva o que tem como `status: in_progress` e dá pointer para `--resume`.
+3. **Usuário pede `--bail`** ou diz "para" — Olavo salva o que tem como `status: in_progress` e dá pointer para `--resume`.
 
 ## Persistência por bloco
 
@@ -130,4 +130,4 @@ Júri encerra entrevista quando:
 <!-- continuar P2.2 -->
 ```
 
-Resume (`/juri --resume <feature>`) parsa este formato e identifica o primeiro bloco `status: in_progress`. Detalhes em `references/discovery-resume.md`.
+Resume (`/olavo --resume <feature>`) parsa este formato e identifica o primeiro bloco `status: in_progress`. Detalhes em `references/discovery-resume.md`.

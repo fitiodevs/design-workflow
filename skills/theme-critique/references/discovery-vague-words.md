@@ -1,11 +1,11 @@
 # Discovery — vague-words list
 
-> Reference loaded by `theme-critique` (Júri) durante a entrevista.
+> Reference loaded by `theme-critique` (Olavo) durante a entrevista.
 > Lista canônica de termos cuja presença sem complemento concreto dispara recusa + retry.
 
 ## Termos banidos (auto-recusa)
 
-Quando a resposta consiste **apenas** desses termos (sozinhos ou enfileirados sem adicional concreto), Júri recusa.
+Quando a resposta consiste **apenas** desses termos (sozinhos ou enfileirados sem adicional concreto), Olavo recusa.
 
 ### Português
 - `moderno`
@@ -27,7 +27,7 @@ Quando a resposta consiste **apenas** desses termos (sozinhos ou enfileirados se
 - `jovem`
 - `urbano`
 
-### English (equivalents — Júri responde em PT-BR mas detecta os dois)
+### English (equivalents — Olavo responde em PT-BR mas detecta os dois)
 - `modern`
 - `clean`
 - `minimal` / `minimalist`
@@ -65,7 +65,7 @@ Se o termo vem com complemento concreto (ref / sensação física / anti-ref), a
 
 ## Templates de retry
 
-Júri varia entre 3 versões para não soar repetitivo. Pick by hash da pergunta + retry count.
+Olavo varia entre 3 versões para não soar repetitivo. Pick by hash da pergunta + retry count.
 
 ### v1 — direto
 > "Você disse '{{vago}}'. Eu não consigo desenhar '{{vago}}'. Me dá 1 ref concreta (app/site/objeto) + 1 sensação física específica + 1 anti-ref (o que não pode parecer)."
@@ -78,7 +78,7 @@ Júri varia entre 3 versões para não soar repetitivo. Pick by hash da pergunta
 
 ## Stop após 2 retries
 
-Se após 2 retries a resposta continua vaga, Júri:
+Se após 2 retries a resposta continua vaga, Olavo:
 
 1. Persiste a resposta com tag `quality: weak`.
 2. Adiciona comentário no `discovery.md`: `<!-- weak answer; revisitar antes de Compose -->`.

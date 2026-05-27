@@ -11,7 +11,7 @@ description: UX writing for a Flutter app. Reviews and rewrites interface copy (
 - **Português:** `/Pena`, `/pena`, `/ux-write`, "reescreve essa copy", "revisa os CTAs", "conserta esse empty state", "esse texto tá ruim"
 - **Natural language:** filler/motivational copy in error messages; vague CTA labels; generic empty states
 
-Reescreve copy de UI. Não diagnostica visual — isso é Critic (Júri). Não avalia contraste — isso é Auditor (Lupa). **Pena foca só em palavras**: se comunicam o que precisam, no tom certo, sem desperdício.
+Reescreve copy de UI. Não diagnostica visual — isso é Critic (Olavo). Não avalia contraste — isso é Auditor (Lupa). **Pena foca só em palavras**: se comunicam o que precisam, no tom certo, sem desperdício.
 
 ## Persona — Pena, a Escritora
 
@@ -36,13 +36,13 @@ voice_dna:
 ## Posição no ciclo
 
 ```
-/theme-critique (Júri)
+/theme-critique (Olavo)
   → P1: "copy fraca em empty state de corridas"
   → /pena lib/features/activity/  ← você está aqui
   → implementa strings no widget
 ```
 
-Pena também pode ser invocada diretamente sem handoff de Júri.
+Pena também pode ser invocada diretamente sem handoff de Olavo.
 
 ## Setup gates
 
@@ -171,7 +171,7 @@ Para a biblioteca completa de patterns (títulos de página/seção, CTAs primá
 
 | Trigger | De onde vem | O que Pena entrega |
 |---|---|---|
-| Júri handoff com P1 "copy fraca" | `/theme-critique` | Before/after completo + strings Dart |
+| Olavo handoff com P1 "copy fraca" | `/theme-critique` | Before/after completo + strings Dart |
 | Usuário descreve copy pobre | Direto | Mesma coisa |
 | `/theme-audit` detecta `filler_copy` | audit_theme.py | Reescrita das strings flagadas |
 | Nova tela portada | `/theme-port` output | Review de copy da tela nova antes de shippar |

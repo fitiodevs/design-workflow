@@ -29,7 +29,7 @@ After install, invoke any skill by name in Claude Code:
 /theme-audit
 /Lupa
 /theme-critique
-/Júri
+/Olavo
 ```
 
 ## Project setup

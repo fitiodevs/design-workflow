@@ -1,18 +1,18 @@
 ---
 name: theme-extend
-description: Adds or tweaks semantic tokens in the project's design system (colors, typography roles, spacing, radius). Generates WCAG-validated light/dark pairs, updates `AppColors`, `docs/design-tokens.md` and suggests where to apply. Use to resolve contrast failures detected by `/theme-audit`, add a new semantic role, or tune an existing value. Use when the user asks for `/Surgeon`, `/Cirurgião`, `/theme-extend`, "adiciona um token", "add a token", "resolve contraste de X", "fix contrast", "melhora o tema".
+description: Adds or tweaks semantic tokens in the project's design system (colors, typography roles, spacing, radius). Generates WCAG-validated light/dark pairs, updates `AppColors`, `docs/design-tokens.md` and suggests where to apply. Use to resolve contrast failures detected by `/theme-audit`, add a new semantic role, or tune an existing value. Use when the user asks for `/Surgeon`, `/Mira`, `/theme-extend`, "adiciona um token", "add a token", "resolve contraste de X", "fix contrast", "melhora o tema".
 metadata:
   dw:
     craft:
       requires: [design-context]
 ---
 
-# Skill: theme-extend (`/theme-extend`) — persona **Cirurgião** (English: **Surgeon**)
+# Skill: theme-extend (`/theme-extend`) — persona **Mira** (English: **Surgeon**)
 
 ## Triggers
 
 - **English:** `/Surgeon`, `/theme-extend`, "add a semantic token", "extend the theme", "resolve contrast for X", "tune semantic color"
-- **Português:** `/Cirurgião`, `/Cirurgiao`, `/cirurgião`, `/cirurgiao`, `/theme-extend`, "adiciona um token", "resolve contraste", "melhora o tema", "ajusta cor semântica"
+- **Português:** `/Mira`, `/mira`, `/theme-extend`, "adiciona um token", "resolve contraste", "melhora o tema", "ajusta cor semântica"
 - **Natural language:** WCAG fail flagged by audit; "I need a new role for X"; "the success green looks too light"
 
 Modifica o tema de forma cirúrgica. Dois cenários principais:

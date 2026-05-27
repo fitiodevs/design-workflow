@@ -47,7 +47,7 @@ A friendly walkthrough of the design pipeline. Read this if you're new to the wo
 /theme-create                    # Composer: palette from scratch (or --inspired-by <slug>)
 /frontend-design                 # Designer: tweaks-ready HTML mockup
 /tweaks <path>                   # Tweaker: wrap with knobs, ride 5 sliders, pick a state
-/theme-critique --mode 5dim <path>  # Júri 5dim: radar-chart review of the chosen mockup
+/theme-critique --mode 5dim <path>  # Olavo 5dim: radar-chart review of the chosen mockup
 /theme-port --from-html <path>   # Architect: HTML → Flutter using tokens
 /theme-audit                     # Auditor: measures coverage
 ```
@@ -87,7 +87,7 @@ It returns scored Nielsen heuristics + AI-slop verdict + persona walkthrough + c
 /theme-port --from-html /tmp/<feature>_mockup.html
 ```
 
-`frontend-design` (Designer / Clara) generates HTML mockups; `theme-port` (Architect / Arquiteto) converts them — or any other HTML source, or a Figma frame — into widgets using your tokens. The Designer + Architect handoff is intentional: Designer obsesses over typography rhythm, alignment, microcopy; Architect translates structure to code. Same skill handles HTML from Stitch, Penpot, Figma's HTML export, or hand-written.
+`frontend-design` (Designer / Clara) generates HTML mockups; `theme-port` (Architect / Elo) converts them — or any other HTML source, or a Figma frame — into widgets using your tokens. The Designer + Architect handoff is intentional: Designer obsesses over typography rhythm, alignment, microcopy; Architect translates structure to code. Same skill handles HTML from Stitch, Penpot, Figma's HTML export, or hand-written.
 
 ## How personas refuse work
 
@@ -106,9 +106,9 @@ This isn't bureaucracy. It's a way to keep each skill *narrow enough* to actuall
 
 After a critique:
 
-- **Screen feels timid / "AI safe" / no impact** → `theme-bolder` (Amplifier / Brasa)
+- **Screen feels timid / "AI safe" / no impact** → `theme-bolder` (Amplifier / Saga)
 - **Screen feels aggressive / shouty / oversaturated** → `theme-quieter` (Refiner / Calma)
-- **Screen feels overloaded / >4 decisions / I don't know where to look** → `theme-distill` (Distiller / Lâmina)
+- **Screen feels overloaded / >4 decisions / I don't know where to look** → `theme-distill` (Distiller / Cerne)
 
 If 2 of these apply, do them in this order: `distill` → `bolder` (or `quieter`). Reducing decisions first reveals what actually needs amplification or calming.
 

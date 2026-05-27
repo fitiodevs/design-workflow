@@ -1,19 +1,19 @@
 ---
 name: theme-create
-description: Creates a complete palette (brand + semantic + neutral) — sub-brand, seasonal, sponsor, full identity. Four modes — (1) blank-page with 8 pre-conditions, (2) `--inspired-by [slug]` from 20-entry brand library, (3) `--browse [category]` wrapper for mode 2, (4) `--inspired-by-school [slug]` from 12-entry philosophy library; schools encode constraints (saturation, WCAG, single-accent) and the constraint translator at `scripts/school_md_to_appcolors.py` solves them. OKLCH-uniform scales, WCAG validation, emits `AppColors` + ficha in `docs/themes/`. Triggered by `/Composer`, `/Compositor`, `/theme-create`, `/theme-create --inspired-by stripe`, `/theme-create --browse fintech`, `/theme-create --inspired-by-school muller-brockmann`, "cria palette nova", "create a new palette", "inspirado no Linear", "Pentagram philosophy", "filosofia Müller-Brockmann".
+description: Creates a complete palette (brand + semantic + neutral) — sub-brand, seasonal, sponsor, full identity. Four modes — (1) blank-page with 8 pre-conditions, (2) `--inspired-by [slug]` from 20-entry brand library, (3) `--browse [category]` wrapper for mode 2, (4) `--inspired-by-school [slug]` from 12-entry philosophy library; schools encode constraints (saturation, WCAG, single-accent) and the constraint translator at `scripts/school_md_to_appcolors.py` solves them. OKLCH-uniform scales, WCAG validation, emits `AppColors` + ficha in `docs/themes/`. Triggered by `/Composer`, `/Pigma`, `/theme-create`, `/theme-create --inspired-by stripe`, `/theme-create --browse fintech`, `/theme-create --inspired-by-school muller-brockmann`, "cria palette nova", "create a new palette", "inspirado no Linear", "Pentagram philosophy", "filosofia Müller-Brockmann".
 metadata:
   dw:
     craft:
       requires: [color, typography, anti-ai-slop, design-context]
 ---
 
-# Skill: theme-create (`/theme-create`) — persona **Compositor** (English: **Composer**)
+# Skill: theme-create (`/theme-create`) — persona **Pigma** (English: **Composer**)
 
 ## Triggers
 
 - **English:** `/Composer`, `/theme-create`, "create a new palette", "new visual identity", "sub-brand", "palette from scratch"
 - **English (inspired):** `/theme-create --inspired-by <slug>`, `/theme-create --browse`, `/theme-create --browse <category>`, `/theme-create --inspired-by-school <slug>`, "inspired by Linear", "start from Stripe", "follow Müller-Brockmann's philosophy", "Pentagram-style identity"
-- **Português:** `/Compositor`, `/compositor`, `/theme-create`, "cria palette nova", "nova identidade visual", "sub-brand", "palette do zero"
+- **Português:** `/Pigma`, `/pigma`, `/theme-create`, "cria palette nova", "nova identidade visual", "sub-brand", "palette do zero"
 - **Português (inspirado):** `/theme-create --inspired-by linear-app`, `/theme-create --browse fintech`, `/theme-create --inspired-by-school muller-brockmann`, "inspirado no Notion", "começa do Stripe", "filosofia Müller-Brockmann", "escola Memphis"
 - **Natural language:** seasonal skin (Black Friday); sponsor branded event; full identity refresh; "preciso de algo na pegada da Apple"
 

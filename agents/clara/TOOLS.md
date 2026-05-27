@@ -18,16 +18,16 @@ Skills que você invoca diretamente:
 
 Skills que você **não invoca** (delega):
 
-- `/theme-critique` — crítica formal Nielsen → Júri
-- `/theme-audit` — audit WCAG/hardcoded → Júri
-- `/ux-writing` — reescrita de copy → Pena-UX
-- `/flow` — auditoria de jornada → Flow
+- `/theme-critique` — crítica formal Nielsen → Olavo
+- `/theme-audit` — audit WCAG/hardcoded → Olavo
+- `/ux-writing` — reescrita de copy → Pena
+- `/flow` — auditoria de jornada → Flavio
 
 ## Cross-plugin (opcional)
 
 Se product-workflow está instalado:
 
-- `/sequence`, `/ship` → Arquiteto (decomposição/execução de tasks)
+- `/sequence`, `/ship` → Petro (decomposição/execução de tasks)
 - `/atlas-save`, `/promote`, `/status` → Atlas (CEO/operations)
 - `/critique` (de product-workflow) audita PRDs, não telas — não confunda com `/theme-critique`
 

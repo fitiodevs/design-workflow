@@ -2,8 +2,8 @@
 """elicitation — append-only ledger of weak-supervision events.
 
 Ported pattern from claude-code-harness (`docs/sandbagging-aware-weak-supervision.md`,
-MIT). Adapted for design-workflow: review skills (Júri/Lupa) append evidence
-when they spot AI-slop; generator skills (Clara/Arquiteto) read the ledger
+MIT). Adapted for design-workflow: review skills (Olavo/Lupa) append evidence
+when they spot AI-slop; generator skills (Clara/Elo) read the ledger
 before generating so prior failures are not repeated.
 
 Storage convention (per-project, append-only):
@@ -48,7 +48,7 @@ LEDGER_ROOT = Path(".design-spec") / "state" / "elicitation"
 ALLOWED_KINDS = {
     "capability_probe",   # a question/probe presented to the user or to a sub-agent
     "weak_label",         # a noisy/inconclusive label (audit saw a hint, no proof)
-    "judge_verdict",      # a reviewer reached a verdict (Júri/Lupa output rolled up)
+    "judge_verdict",      # a reviewer reached a verdict (Olavo/Lupa output rolled up)
     "eval_result",        # a scored evaluation (audit_theme.py coverage, WCAG pass-rate)
     "counterexample",     # a failing case with concrete evidence (file:line)
 }

@@ -15,18 +15,18 @@ A pipeline of Claude Code skills for designing, auditing, and refining UI — Fl
 | Skill | Persona (PT / EN) | What it does |
 |---|---|---|
 | `theme-audit` | Lupa / Auditor | Sweeps `lib/` for hardcoded colors, fonts, off-scale spacing; validates WCAG; measures coverage. Also triages screenshots. |
-| `theme-extend` | Cirurgião / Surgeon | Adds or tweaks a semantic token (color, typography, spacing, radius). Generates light/dark pairs validated against WCAG. |
-| `theme-port` | Arquiteto-UI / UI Architect | Ports a structural source (Figma frame OR HTML mockup from any tool — `/frontend-design`, Figma's HTML export, Stitch, Penpot, hand-written) into Flutter/RN/Next widgets using your existing tokens. Source provides structure; theme provides identity. |
-| `theme-create` | Compositor / Composer | Builds a complete palette from scratch (brand + semantic + neutral) in OKLCH with anti-AI-slop checklist + WCAG. |
-| `theme-critique` | Júri / Critic | Nielsen 0–4 × 10 heuristics, AI-slop verdict, persona walkthrough, cognitive load, P0–P3 issue map. Also drives Discovery (no args). |
-| `theme-bolder` | Brasa / Amplifier | Amplifies a bland/timid screen — raises color commitment, breaks reflexive symmetry, intensifies hierarchy. |
+| `theme-extend` | Mira / Surgeon | Adds or tweaks a semantic token (color, typography, spacing, radius). Generates light/dark pairs validated against WCAG. |
+| `theme-port` | Elo / UI Architect | Ports a structural source (Figma frame OR HTML mockup from any tool — `/frontend-design`, Figma's HTML export, Stitch, Penpot, hand-written) into Flutter/RN/Next widgets using your existing tokens. Source provides structure; theme provides identity. |
+| `theme-create` | Pigma / Composer | Builds a complete palette from scratch (brand + semantic + neutral) in OKLCH with anti-AI-slop checklist + WCAG. |
+| `theme-critique` | Olavo / Critic | Nielsen 0–4 × 10 heuristics, AI-slop verdict, persona walkthrough, cognitive load, P0–P3 issue map. Also drives Discovery (no args). |
+| `theme-bolder` | Saga / Amplifier | Amplifies a bland/timid screen — raises color commitment, breaks reflexive symmetry, intensifies hierarchy. |
 | `theme-quieter` | Calma / Refiner | Calms an aggressive screen — lowers commitment, desaturates accents, drops typographic weight. |
-| `theme-distill` | Lâmina / Distiller | Cuts decisions to ≤4. Forces progressive disclosure. Removes anything that doesn't earn its pixel. |
+| `theme-distill` | Cerne / Distiller | Cuts decisions to ≤4. Forces progressive disclosure. Removes anything that doesn't earn its pixel. |
 | `theme-motion` | Jack / Choreographer | Adds or tunes motion using motion tokens + `flutter_animate` / RN Reanimated / Framer Motion. Refuses motion-for-motion. |
 | `frontend-design` | Clara / Designer | Generates production-grade HTML/CSS/JS mockups consumed directly by `/theme-port --from-html` for conversion to native widgets. |
-| `ux-writing` | Pena-UX / UX Writer | UX writing critique + rewrite of labels, CTAs, errors, empty states, success messages. Delivers before/after with copy-paste strings. |
-| `tweaks` | Tweaker | Wraps any tweaks-ready HTML with a fixed side panel of 5 knobs binding to CSS custom properties + localStorage persistence. Output is a sibling `<input>.tweaks.html` for live variant exploration. |
-| `flow` | Flow | Audits cross-screen UX journey: reachability, IA, dead-ends, persona walkthroughs. Returns YAML handoff with journey_health, issues[] and persona traces. |
+| `ux-writing` | Pena / UX Writer | UX writing critique + rewrite of labels, CTAs, errors, empty states, success messages. Delivers before/after with copy-paste strings. |
+| `tweaks` | Twik / Tweaker | Wraps any tweaks-ready HTML with a fixed side panel of 5 knobs binding to CSS custom properties + localStorage persistence. Output is a sibling `<input>.tweaks.html` for live variant exploration. |
+| `flow` | Flavio / Flow auditor | Audits cross-screen UX journey: reachability, IA, dead-ends, persona walkthroughs. Returns YAML handoff with journey_health, issues[] and persona traces. |
 
 Personas don't have to be named to be invoked — every skill answers to the literal slash command (`/theme-audit`, `/theme-port`, `/tweaks`, …). Use the persona handle when you want to be explicit about *who* you're calling on; use the slash command when you don't care.
 
@@ -39,7 +39,7 @@ git clone https://github.com/fitiodevs/product-workflow.git ~/code/product-workf
 cd ~/code/product-workflow && ./install.sh
 ```
 
-`product-workflow` ships Atlas (CEO), Arquiteto (tech handoff), plus PM personas (Sage, Strategos, Insight, Metrica, Pena, Júri). Its `compose` phase orchestrator can sequence `/theme-create` and `/frontend-design` from this plugin via the same gate model — they compose if installed side-by-side.
+`product-workflow` ships Atlas (CEO), Petro (tech handoff), plus PM personas (Sage, Strategos, Insight, Metrica, Pena, Olavo). Its `compose` phase orchestrator can sequence `/theme-create` and `/frontend-design` from this plugin via the same gate model — they compose if installed side-by-side.
 
 ## Optional companions
 
@@ -90,7 +90,7 @@ In any Flutter / Next.js / React Native project:
 /flow                 # journey audit across screens
 ```
 
-Each skill has a persona triggerable directly: `/Auditor`, `/Composer`, `/Critic`, `/Amplifier`, `/Refiner`, `/Distiller`, `/Choreographer`, `/Designer`, `/UX-Writer`, `/Surgeon`, `/UI-Architect`, `/Tweaker`, `/Flow`. Portuguese aliases also work: `/Lupa`, `/Compositor`, `/Júri`, `/Brasa`, `/Calma`, `/Lâmina`, `/Jack`, `/Clara`, `/Pena`, `/Cirurgião`, `/Arquiteto-UI`. See [docs/personas.md](docs/personas.md).
+Each skill has a persona triggerable directly: `/Auditor`, `/Composer`, `/Critic`, `/Amplifier`, `/Refiner`, `/Distiller`, `/Choreographer`, `/Designer`, `/Writer`, `/Surgeon`, `/Architect`, `/Tweaker`. Portuguese aliases also work: `/Lupa`, `/Pigma`, `/Olavo`, `/Saga`, `/Calma`, `/Cerne`, `/Jack`, `/Clara`, `/Pena`, `/Mira`, `/Elo`, `/Flavio`, `/Twik`. See [docs/personas.md](docs/personas.md).
 
 ## Stack assumptions
 
@@ -165,11 +165,11 @@ To add a new stack, see `docs/adapter-protocol.md` §"How to add a new adapter".
 - **Anti-AI-slop** verdict: detects 7 archetypal patterns (`scripts/audit_theme.py` slop_patterns)
 - **Cognitive load**: counts decisions per viewport, flags >4
 - **Persona walkthrough**: walks 3 user personas through the screen (configure yours in `docs/personas.md`)
-- **Elicitation ledger** (`scripts/elicitation.py`): append-only JSONL of `judge_verdict` + `counterexample` events so reviewers (Júri, Lupa) persist slop evidence and generators (Clara, Arquiteto) read it before generating. Pattern from `claude-code-harness` (MIT), adapted Apache-2.0. Doc: `docs/elicitation-ledger.md`.
+- **Elicitation ledger** (`scripts/elicitation.py`): append-only JSONL of `judge_verdict` + `counterexample` events so reviewers (Olavo, Lupa) persist slop evidence and generators (Clara, Elo) read it before generating. Pattern from `claude-code-harness` (MIT), adapted Apache-2.0. Doc: `docs/elicitation-ledger.md`.
 
 ## Why bilingual
 
-The skills speak both English and Portuguese (`pt-BR`). Persona names default to English archetypes (`Auditor`, `Composer`, `Critic`...) but accept Portuguese aliases (`Lupa`, `Compositor`, `Júri`...). You can invoke any skill with either form. Slash commands and copy follow your project's locale.
+The skills speak both English and Portuguese (`pt-BR`). Persona names default to English archetypes (`Auditor`, `Composer`, `Critic`...) but accept Portuguese aliases (`Lupa`, `Pigma`, `Olavo`...). You can invoke any skill with either form. Slash commands and copy follow your project's locale.
 
 ## Contributing
 
@@ -181,7 +181,7 @@ Apache 2.0 — see [LICENSE.txt](LICENSE.txt). Each skill folder also carries a 
 
 ## Status
 
-**v2.0.0** — modular split. The orchestration layer (compose/sequence/ship, status, promote, productivity, atlas-save, opus-execute, clickup-sync, caveman family) moved to the sibling **[product-workflow](../product-workflow/)** plugin. Atlas and Arquiteto agents moved too. This plugin now ships 13 atomic UI/screen skills + 4 design personas (Clara, Júri, Pena-UX, Flow). The pair composes if installed side-by-side: `product-workflow` /compose can sequence `/theme-create` + `/frontend-design` from this plugin under its phase gates. Rationale: PM workflow and UI workflow evolve at different cadences; isolating them lets each ship without the other being a blocker.
+**v2.0.0** — modular split. The orchestration layer (compose/sequence/ship, status, promote, productivity, atlas-save, opus-execute, clickup-sync, caveman family) moved to the sibling **[product-workflow](../product-workflow/)** plugin (Atlas + PM persona squad). This plugin now ships 13 atomic UI/screen skills + 4 design personas (Clara, Olavo, Pena, Flavio). The pair composes if installed side-by-side: `product-workflow` /compose can sequence `/theme-create` + `/frontend-design` from this plugin under its phase gates. Rationale: PM workflow and UI workflow evolve at different cadences; isolating them lets each ship without the other being a blocker.
 
 ## What changed in v1.5.0 (legacy — before the v2 split)
 
@@ -276,11 +276,11 @@ Apache 2.0 — see [LICENSE.txt](LICENSE.txt). Each skill folder also carries a 
 
 The 13 atomic skills become **operators**. A new orchestration layer wraps them with phase gates, decisions tracking, and an autonomous execution loop. Four ondas (waves) shipped:
 
-- **Onda A — Discovery foundation.** Júri (`theme-critique`) gains a Discovery mode dispatched by `/juri` (no args). Auto-sizes greenfield vs brownfield via `scripts/detect_mode.py`, runs `/theme-audit` silently in brownfield to bring real numbers to the interview, conducts a 4-block structured interview (Produto / Tom / Identidade / Stack — 1 block per turn, refuses vague answers with 2-retry cap), generates `.design-spec/features/<feature>/discovery.md` plus tier-appropriate skeletons in `docs/`, and emits a priority-ordered routing plan into the next skill — never auto-runs. `/juri --resume <feature>`, `/juri specify <feature>`, `/juri discuss <topic>` (Socratic, stateless), `/juri --mode <tier>` flags supported. Critique mode preserved byte-perfect.
+- **Onda A — Discovery foundation.** Olavo (`theme-critique`) gains a Discovery mode dispatched by `/olavo` (no args). Auto-sizes greenfield vs brownfield via `scripts/detect_mode.py`, runs `/theme-audit` silently in brownfield to bring real numbers to the interview, conducts a 4-block structured interview (Produto / Tom / Identidade / Stack — 1 block per turn, refuses vague answers with 2-retry cap), generates `.design-spec/features/<feature>/discovery.md` plus tier-appropriate skeletons in `docs/`, and emits a priority-ordered routing plan into the next skill — never auto-runs. `/olavo --resume <feature>`, `/olavo specify <feature>`, `/olavo discuss <topic>` (Socratic, stateless), `/olavo --mode <tier>` flags supported. Critique mode preserved byte-perfect.
 
-- **Onda B — Spec-driven workflow.** Three new wrapper skills with hard phase gates: `compose` (reads approved discovery → `/theme-create` + `/frontend-design` + Clara review → `compose.md`), `sequence` (Arquiteto persona — atomic ≤30min tasks each with binary `verify:` blocks), `ship` (executes tasks one by one, 1 commit per task with `Refs: <feature>/<task-id>` footer, halts cleanly on verify fail, finalizes with `/theme-audit` + `/theme-critique` re-run). `decisions.md` schema with supersedes-based audit trail prevents refining skills from contradicting prior locked decisions.
+- **Onda B — Spec-driven workflow.** Three new wrapper skills with hard phase gates: `compose` (reads approved discovery → `/theme-create` + `/frontend-design` + Clara review → `compose.md`), `sequence` (Petro persona — atomic ≤30min tasks each with binary `verify:` blocks), `ship` (executes tasks one by one, 1 commit per task with `Refs: <feature>/<task-id>` footer, halts cleanly on verify fail, finalizes with `/theme-audit` + `/theme-critique` re-run). `decisions.md` schema with supersedes-based audit trail prevents refining skills from contradicting prior locked decisions.
 
-- **Onda C — Productivity layer.** `productivity` skill bundling `/design-spec pause`, `/design-spec resume` (suggests light re-discovery after 14 days), `/design-spec status` (calls `scripts/design_state.py` — JSON or prose, `<2s`), and `/design-spec approve <phase> <feature>` (validates schema before flipping `draft → approved`). Júri's discuss mode upgraded from placeholder to real Socratic informal mode.
+- **Onda C — Productivity layer.** `productivity` skill bundling `/design-spec pause`, `/design-spec resume` (suggests light re-discovery after 14 days), `/design-spec status` (calls `scripts/design_state.py` — JSON or prose, `<2s`), and `/design-spec approve <phase> <feature>` (validates schema before flipping `draft → approved`). Olavo's discuss mode upgraded from placeholder to real Socratic informal mode.
 
 - **Onda D — _(removed in v1.5.3)_** the autonomous `ralph-loop` skill and its scripts were dropped because we weren't using them in practice. History remains in git.
 

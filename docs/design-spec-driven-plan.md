@@ -67,14 +67,14 @@ After all 4 ondas, `design-spec-driven` v1.0 should:
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │  HUMAN (designer / eng / PM)                                  │
-│  ↓ "/juri" / "/design-spec specify <feature>"                 │
+│  ↓ "/olavo" / "/design-spec specify <feature>"                 │
 └──────────────────────────────────────────────────────────────┘
                           ↓
 ┌──────────────────────────────────────────────────────────────┐
 │  ORCHESTRATION LAYER (new — Ondas A/B/C)                      │
 │  ┌────────────┐  ┌─────────┐  ┌──────────┐  ┌──────┐         │
 │  │ Discovery  │→ │ Compose │→ │ Sequence │→ │ Ship │         │
-│  │ (Júri)     │  │ (Comp + │  │ (Arq +   │  │      │         │
+│  │ (Olavo)     │  │ (Comp + │  │ (Arq +   │  │      │         │
 │  │            │  │  Clara) │  │  tasks)  │  │      │         │
 │  └────────────┘  └─────────┘  └──────────┘  └──────┘         │
 │       gate            gate          gate         gate         │
@@ -112,7 +112,7 @@ After all 4 ondas, `design-spec-driven` v1.0 should:
 - The 13 atomic operators know almost nothing about the new layer.
 - The new layer knows about all 13 operators.
 - Atomic operators expose `requires_human: true` in output when input is needed; orchestration reads this and pauses.
-- Refining operators (Brasa/Calma/Lâmina/Jack) consult `decisions.md` before proposing changes that contradict prior approved decisions.
+- Refining operators (Saga/Calma/Cerne/Jack) consult `decisions.md` before proposing changes that contradict prior approved decisions.
 
 ---
 
@@ -120,7 +120,7 @@ After all 4 ondas, `design-spec-driven` v1.0 should:
 
 ### Onda A — Discovery foundation
 
-Júri becomes the dual-mode orchestrator. Auto-sizes intervention (quick / light / full / greenfield). Produces PRD-per-intervention. Routes to Compositor / Clara / Pena / Jack with priority.
+Olavo becomes the dual-mode orchestrator. Auto-sizes intervention (quick / light / full / greenfield). Produces PRD-per-intervention. Routes to Pigma / Clara / Pena / Jack with priority.
 
 **Deliverables:**
 - New skill `skills/discovery/` (or extension of `theme-critique` — final decision in spec.md).
@@ -129,7 +129,7 @@ Júri becomes the dual-mode orchestrator. Auto-sizes intervention (quick / light
 - Structured 4-block interview (Produto / Tom / Identidade / Stack) — 1 block per turn, recuses vague answers ("moderno e clean" → re-ask).
 - Doc generators: `discovery.md`, `docs/product.md` skeleton, `docs/design.md` skeleton, `docs/design-tokens.md` skeleton, `docs/PRD.md` (per-intervention).
 - Routing output: priority-ordered action plan (not menu).
-- `/juri --resume <feature>` retomar entrevista parcial.
+- `/olavo --resume <feature>` retomar entrevista parcial.
 - Memory expansion: `.design-spec/features/<feature>/discovery.md` + `.design-spec/project/decisions.md` initialized.
 
 ### Onda B — Spec-driven workflow
@@ -138,7 +138,7 @@ Compose / Sequence / Ship as wrapper skills with explicit approval gates. Atomic
 
 **Deliverables:**
 - `skills/compose/` — wraps `/theme-create` + `/frontend-design` with gate. Output: `compose.md` with palette + 1–3 mockups + Clara's review.
-- `skills/sequence/` — Arquiteto persona emits `tasks.md` with atomic tasks, each with `verify:` block.
+- `skills/sequence/` — Petro persona emits `tasks.md` with atomic tasks, each with `verify:` block.
 - `skills/ship/` — orchestrates `/theme-port` + `/theme-audit` + final `/theme-critique` re-run with gate.
 - Phase gate protocol: `status: draft|approved|consumed` in YAML frontmatter of each phase doc.
 - `decisions.md` format (decision + reason + date + supersedes); refining skills read it on invocation.
@@ -151,8 +151,8 @@ Pause/resume, discuss vs specify, state inspection script.
 **Deliverables:**
 - `/design-spec pause` — captures active phase + task + serializes to `.design-spec/pause-state.yaml`.
 - `/design-spec resume` — reads pause-state, summarizes, asks "continue or re-prioritize?". After >14 days, suggests light re-discovery.
-- `/juri discuss <topic>` — informal mode, no docs written, only socratic questions.
-- `/juri specify <feature>` — formal mode (maps to existing discovery flow).
+- `/olavo discuss <topic>` — informal mode, no docs written, only socratic questions.
+- `/olavo specify <feature>` — formal mode (maps to existing discovery flow).
 - `scripts/design-state.py` — reads `STATE.md` + per-feature dirs + git log, emits "you are at: phase Compose, task T-03 in progress, T-04/05 blocked, last commit ad12bc3".
 
 ### Onda D — Ralph autonomy
@@ -171,7 +171,7 @@ New skill `ralph-loop/`. 3 tiers with explicit halt conditions, budget caps, aud
 - 3 GH Actions workflows: `design-watch.yml` (Tier 1, daily cron + on push), `design-pre-merge.yml` (Tier 1, on PR), `design-sprint.yml` (Tier 2, weekly Friday 17h).
 - Budget enforcement: hard caps in `budget.yaml`; loop self-halts when exceeded.
 - Persona injection per iteration (don't trust context, re-load `voice_dna` from SKILL.md each tick).
-- Cycle detection: track which operator touched which file when, refuse oscillations (Brasa↔Calma) within N ticks.
+- Cycle detection: track which operator touched which file when, refuse oscillations (Saga↔Calma) within N ticks.
 - Idempotency contract: every operator must be safe to invoke 2× without side effect.
 
 ---
@@ -182,11 +182,11 @@ New skill `ralph-loop/`. 3 tiers with explicit halt conditions, budget caps, aud
 
 ### Onda A — Discovery foundation
 
-#### REQ-A1 — Júri dual-mode trigger
-- **REQ-A1.1** `/juri` with no args → discovery mode (interview).
-- **REQ-A1.2** `/juri <flutter-path>` → existing critique mode (preserved, no breaking change).
-- **REQ-A1.3** `/juri --discuss <topic>` → informal mode (no docs written).
-- **REQ-A1.4** `/juri --resume <feature>` → continue paused interview.
+#### REQ-A1 — Olavo dual-mode trigger
+- **REQ-A1.1** `/olavo` with no args → discovery mode (interview).
+- **REQ-A1.2** `/olavo <flutter-path>` → existing critique mode (preserved, no breaking change).
+- **REQ-A1.3** `/olavo --discuss <topic>` → informal mode (no docs written).
+- **REQ-A1.4** `/olavo --resume <feature>` → continue paused interview.
 - **Verification:** all 4 trigger forms produce distinct workflows; existing critique flows unchanged (regression test against current `theme-critique` evals).
 
 #### REQ-A2 — Auto-sizing detection
@@ -197,29 +197,29 @@ New skill `ralph-loop/`. 3 tiers with explicit halt conditions, budget caps, aud
 - **Verification:** integration test in fresh empty Flutter project → greenfield detected; in cloned medium repo → brownfield detected; both produce expected doc set.
 
 #### REQ-A3 — Structured interview protocol
-- **REQ-A3.1** Júri asks 4 blocks in order: Produto (3 questions) → Tom (3) → Identidade (3) → Stack (2-3). Total 11–12 questions, never all at once.
+- **REQ-A3.1** Olavo asks 4 blocks in order: Produto (3 questions) → Tom (3) → Identidade (3) → Stack (2-3). Total 11–12 questions, never all at once.
 - **REQ-A3.2** 1 block per turn; pauses for response before next block.
 - **REQ-A3.3** Recuses vague answers ("moderno e clean", "tech profissional", "vibrante") and re-asks with concrete examples requested.
 - **REQ-A3.4** First question is Produto, NEVER Stack. (Stack premature without product.)
-- **Verification:** scripted eval where vague answers are given → Júri must recuse and re-ask in ≥80% of cases. Eval persona: "ambiguous user" with predefined vague answer set.
+- **Verification:** scripted eval where vague answers are given → Olavo must recuse and re-ask in ≥80% of cases. Eval persona: "ambiguous user" with predefined vague answer set.
 
 #### REQ-A4 — Brownfield pre-scan
-- **REQ-A4.1** When brownfield detected, Júri runs `/theme-audit` silently before any question.
+- **REQ-A4.1** When brownfield detected, Olavo runs `/theme-audit` silently before any question.
 - **REQ-A4.2** Audit results inform questions ("you have 47 hex literals in `lib/features/<x>` — intentional brand color or hardcode drift?").
 - **REQ-A4.3** Audit results saved as appendix to `discovery.md`.
 - **Verification:** brownfield mode discovery output references concrete numbers from the audit (regex check on output).
 
 #### REQ-A5 — Doc generation
-- **REQ-A5.1** Júri writes `.design-spec/features/<feature>/discovery.md` with frontmatter `status: draft|approved|consumed`.
+- **REQ-A5.1** Olavo writes `.design-spec/features/<feature>/discovery.md` with frontmatter `status: draft|approved|consumed`.
 - **REQ-A5.2** For greenfield: writes skeletons of `docs/product.md` (sections §2/§3/§4/§5.3/§7/§8 from current Fitio template, generalized), `docs/design.md`, `docs/design-tokens.md`. Each section has placeholder content + comments explaining what to fill.
 - **REQ-A5.3** For brownfield: writes `discovery.md` + `docs/PRD.md` (per-intervention only) + appends to existing `docs/design.md`.
-- **REQ-A5.4** Júri NEVER edits files in `lib/`. Read-only on code; write-only on `docs/` + `.design-spec/`.
+- **REQ-A5.4** Olavo NEVER edits files in `lib/`. Read-only on code; write-only on `docs/` + `.design-spec/`.
 - **Verification:** post-discovery, `lib/` git-diff is empty; `docs/` git-diff matches expected file set per scenario.
 
 #### REQ-A6 — Routing output
 - **REQ-A6.1** Final discovery output is a priority-ordered action plan (not a menu of options).
 - **REQ-A6.2** Each item: skill recommendation + 1-line reason + ETA estimate + blocking dependencies.
-- **REQ-A6.3** Júri NEVER auto-runs the next skill (preserves user control, consistent with current critique).
+- **REQ-A6.3** Olavo NEVER auto-runs the next skill (preserves user control, consistent with current critique).
 - **Verification:** output structure matches schema (skill, reason, eta, blocks). Skill names must be from the 13 existing operators or new orchestration skills.
 
 ### Onda B — Spec-driven workflow
@@ -247,9 +247,9 @@ New skill `ralph-loop/`. 3 tiers with explicit halt conditions, budget caps, aud
 
 #### REQ-B4 — Decisions tracking
 - **REQ-B4.1** `decisions.md` schema: `{id, decision, reason, date, supersedes?}`.
-- **REQ-B4.2** Refining skills (Brasa/Calma/Lâmina/Jack) MUST read `decisions.md` before proposing changes; if proposal contradicts a prior decision, must surface the conflict to user before acting.
-- **REQ-B4.3** Júri writes decisions during discovery (e.g. "color commitment axis = drenched, reason: persona Maria needs visceral reward").
-- **Verification:** integration test where Júri sets axis=drenched, then `/theme-quieter` is invoked → must surface the conflict, not silently override.
+- **REQ-B4.2** Refining skills (Saga/Calma/Cerne/Jack) MUST read `decisions.md` before proposing changes; if proposal contradicts a prior decision, must surface the conflict to user before acting.
+- **REQ-B4.3** Olavo writes decisions during discovery (e.g. "color commitment axis = drenched, reason: persona Maria needs visceral reward").
+- **Verification:** integration test where Olavo sets axis=drenched, then `/theme-quieter` is invoked → must surface the conflict, not silently override.
 
 #### REQ-B5 — Atomic commits with REQ-ID
 - **REQ-B5.1** Each task in Ship phase produces 1 commit.
@@ -262,13 +262,13 @@ New skill `ralph-loop/`. 3 tiers with explicit halt conditions, budget caps, aud
 #### REQ-C1 — Pause/resume
 - **REQ-C1.1** `/design-spec pause` writes `.design-spec/pause-state.yaml` with active feature, phase, task, timestamp.
 - **REQ-C1.2** `/design-spec resume` reads pause-state, summarizes, asks "continue or re-prioritize?".
-- **REQ-C1.3** If resume happens >14 days after pause, Júri suggests light re-discovery before continuing.
+- **REQ-C1.3** If resume happens >14 days after pause, Olavo suggests light re-discovery before continuing.
 - **Verification:** pause → fresh session → resume → state correctly restored, summary correctly identifies last action.
 
 #### REQ-C2 — Discuss vs specify
-- **REQ-C2.1** `/juri discuss <topic>` enters informal mode: only socratic questions, NO docs written.
-- **REQ-C2.2** `/juri specify <feature>` enters formal mode: writes discovery.md + PRD.
-- **REQ-C2.3** From discuss mode, Júri can suggest "ready to specify?" — transitions to formal with consent.
+- **REQ-C2.1** `/olavo discuss <topic>` enters informal mode: only socratic questions, NO docs written.
+- **REQ-C2.2** `/olavo specify <feature>` enters formal mode: writes discovery.md + PRD.
+- **REQ-C2.3** From discuss mode, Olavo can suggest "ready to specify?" — transitions to formal with consent.
 - **Verification:** discuss mode session produces zero file diffs; specify mode produces expected doc set.
 
 #### REQ-C3 — State inspection script
@@ -325,7 +325,7 @@ New skill `ralph-loop/`. 3 tiers with explicit halt conditions, budget caps, aud
 #### REQ-D8 — Idempotency + cycle detection
 - **REQ-D8.1** Each task has `task_state: pending|in_progress|done|blocked` persisted between ticks.
 - **REQ-D8.2** Crashed iteration must not duplicate work on next tick.
-- **REQ-D8.3** Cycle detection: track operator touches per file with timestamp; refuse oscillations (Brasa↔Calma on same file within 3 ticks).
+- **REQ-D8.3** Cycle detection: track operator touches per file with timestamp; refuse oscillations (Saga↔Calma on same file within 3 ticks).
 - **Verification:** simulated crash mid-task → state recovered correctly; oscillation attempt → detected and refused with clear log message.
 
 #### REQ-D9 — GH Actions integration
@@ -349,7 +349,7 @@ New skill `ralph-loop/`. 3 tiers with explicit halt conditions, budget caps, aud
 
 | Risk | Likelihood | Impact | Mitigation |
 |---|---|---|---|
-| Discovery becomes burocracy users skip | High | High | Aggressive auto-sizing; legitimate quick mode; Júri recuses gracefully when full not needed |
+| Discovery becomes burocracy users skip | High | High | Aggressive auto-sizing; legitimate quick mode; Olavo recuses gracefully when full not needed |
 | Ralph autonomous + Tier 3 ON merges 50 bad PRs overnight | Medium | Catastrophic | Tier 3 NEVER auto-merges (PR draft only); hard rule in REQ-D4.4 |
 | Cost runaway in enterprise pilot | High | High | `budget.yaml` per repo; cost dashboard mandatory before Tier 2/3; alert at 80% |
 | Locked-in bad decision at Compose phase → 100× damage | Medium | High | Phase approval gates inegociáveis; Compose never auto-approved |
@@ -367,10 +367,10 @@ New skill `ralph-loop/`. 3 tiers with explicit halt conditions, budget caps, aud
 
 ### Onda A acceptance
 - [ ] All REQ-A1..REQ-A6 verifications pass.
-- [ ] Greenfield walkthrough: empty Flutter project → `/juri` → 11-question interview → `discovery.md` + 3 docs/skeletons + routing plan, in <60min.
-- [ ] Brownfield walkthrough: cloned medium Flutter repo → `/juri` → silent audit + interview → discovery references concrete audit numbers + PRD focused on top 3-5 fixes.
+- [ ] Greenfield walkthrough: empty Flutter project → `/olavo` → 11-question interview → `discovery.md` + 3 docs/skeletons + routing plan, in <60min.
+- [ ] Brownfield walkthrough: cloned medium Flutter repo → `/olavo` → silent audit + interview → discovery references concrete audit numbers + PRD focused on top 3-5 fixes.
 - [ ] Critique mode regression: existing `theme-critique` evals (`evals/evals.json` for current `theme-critique` skill) still pass — Onda A doesn't break what shipped.
-- [ ] Júri refuses vague answers ≥80% of evaluation set.
+- [ ] Olavo refuses vague answers ≥80% of evaluation set.
 - [ ] `lib/` git-diff after discovery is empty.
 - [ ] STATE.md updated with Onda A decisions, deferred items.
 
@@ -384,7 +384,7 @@ New skill `ralph-loop/`. 3 tiers with explicit halt conditions, budget caps, aud
 ### Onda C acceptance
 - [ ] All REQ-C1..REQ-C3 verifications pass.
 - [ ] Pause → 14+ days → resume → re-discovery suggested.
-- [ ] `/juri discuss` produces zero file diffs.
+- [ ] `/olavo discuss` produces zero file diffs.
 - [ ] `design-state.py --json` emits valid schema in <2s.
 
 ### Onda D acceptance
@@ -458,7 +458,7 @@ Final
 - **Multi-tenant SaaS** hosted version. Open-source self-hosted only for v1.0.
 - **Visual diff tool** (screenshot regression detection). Useful but separate concern.
 - **LLM-as-judge for subjective evals** (the 9 skills missing evals from `skill-creator-alignment` deferred). Belongs to evals tooling, not workflow orchestration.
-- **Voice/speech interface** for Júri interview (accessibility). Future onda.
+- **Voice/speech interface** for Olavo interview (accessibility). Future onda.
 - **Telemetry → BI integration** beyond JSONL export. Customers can ETL the JSONL themselves.
 
 ---
@@ -477,6 +477,6 @@ When you start a new session and the user says "vai full":
 8. **Update `STATE.md` continuously.** Decisions, blockers, deferred items go there. Future sessions read it.
 9. **Update memory** when you discover something the plan didn't anticipate — append a new memory file + update `MEMORY.md` index.
 
-If the user asks "by the way, can we skip Onda A and go straight to Ralph?" — refuse. Cite this doc §5 ("Ralph rodando em chão de areia") and `decision_ralph_separate_skill.md`. Same firmness Júri uses to refuse "moderno e clean".
+If the user asks "by the way, can we skip Onda A and go straight to Ralph?" — refuse. Cite this doc §5 ("Ralph rodando em chão de areia") and `decision_ralph_separate_skill.md`. Same firmness Olavo uses to refuse "moderno e clean".
 
 — Plan v0.1, ready for execution.

@@ -1,6 +1,6 @@
 # Discovery — auto-sizing
 
-> Reference loaded by `theme-critique` (Júri) in **discovery mode** to decide tier and deliverables.
+> Reference loaded by `theme-critique` (Olavo) in **discovery mode** to decide tier and deliverables.
 > Sized by `scripts/detect_mode.py` + optional `--mode` override.
 
 ## Output of `detect_mode.py`
@@ -32,10 +32,10 @@
 
 ## Override semantics
 
-`/juri --mode <tier>` força o tier escolhido independentemente do `tier_recommended`.
+`/olavo --mode <tier>` força o tier escolhido independentemente do `tier_recommended`.
 
 - Override é honrado sempre — usuário sabe melhor que heurística em casos de borda.
-- Se `--mode` discrepa de `tier_recommended` em mais de 1 nível (ex: detect=greenfield mas user pede `quick`), Júri loga 1 warning curto antes de prosseguir: *"Detectei greenfield. Você pediu quick — confirmando? (sim/não)"*.
+- Se `--mode` discrepa de `tier_recommended` em mais de 1 nível (ex: detect=greenfield mas user pede `quick`), Olavo loga 1 warning curto antes de prosseguir: *"Detectei greenfield. Você pediu quick — confirmando? (sim/não)"*.
 
 ## Decision tree (sem override)
 
@@ -45,7 +45,7 @@ detect_mode.py output:
 └── mode == brownfield
     ├── signals.has_product_md == true AND has_theme_dir == true → tier = full
     ├── signals.has_product_md == true AND has_theme_dir == false → tier = full (avisa: tema ausente)
-    └── signals.has_product_md == false                            → tier = full (avisa: docs/product.md ausente — Júri vai gerar skeleton appendado)
+    └── signals.has_product_md == false                            → tier = full (avisa: docs/product.md ausente — Olavo vai gerar skeleton appendado)
 ```
 
 `quick` e `light` nunca são escolhidos por detecção — só via override explícito do usuário.
@@ -67,6 +67,6 @@ detect_mode.py output:
 
 ## Anti-patterns
 
-- ❌ Rodar tier `greenfield` em repo brownfield — sobrescreve `docs/product.md` real. Júri sempre confirma antes (ver REQ-A5.5).
+- ❌ Rodar tier `greenfield` em repo brownfield — sobrescreve `docs/product.md` real. Olavo sempre confirma antes (ver REQ-A5.5).
 - ❌ Ignorar override do usuário em favor de detecção. Override vence.
 - ❌ Mudar tier no meio da entrevista. Tier é decidido no início e mantido até o fim.

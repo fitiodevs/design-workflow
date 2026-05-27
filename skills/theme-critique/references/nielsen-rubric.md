@@ -9,7 +9,7 @@ Used in Step 4 (report assembly) of `/theme-critique`. Each heuristic gets one i
 - **20–27 needs work** — Não merge ainda; lista P0/P1 deve fechar antes.
 - **<20 redesign** — Voltar pro Figma / `/theme-port` re-run.
 
-> Júri scoring discipline: score 4 é raro como score 0. **Maioria das telas vive em 20–32**. Não dar score 3+ por default. Bandas existem pra ser usadas.
+> Olavo scoring discipline: score 4 é raro como score 0. **Maioria das telas vive em 20–32**. Não dar score 3+ por default. Bandas existem pra ser usadas.
 
 ## As 10 heurísticas + critério de scoring
 

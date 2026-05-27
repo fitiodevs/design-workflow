@@ -120,7 +120,7 @@ If you want to disable a persona or override their voice, drop a section in `.de
 ```yaml
 personas:
   amplifier:
-    enabled: false        # disable Brasa entirely
+    enabled: false        # disable Saga entirely
   critic:
     voice: "encouraging"  # default: "cutting"
 ```

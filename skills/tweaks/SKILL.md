@@ -1,18 +1,18 @@
 ---
 name: tweaks
-description: Wraps any tweaks-ready HTML mockup with a side panel of live CSS-custom-property knobs (accent hue, type scale, density, theme mode, motion) persisting to localStorage. The user opens the wrapped file in any browser and explores N variants without re-prompting Clara. Output is a sibling file `[input].tweaks.html`; original input is untouched. Refuses to wrap inputs that bake decisions in literal hex/px (recommends `/frontend-design` refit first). Use after `/frontend-design` and before `/theme-port`. Triggered by `/tweaks`, `/Tweaker`, "wrap with knobs", "tweak panel", "explore variants", "manda os botões", "panel pra explorar".
+description: Wraps any tweaks-ready HTML mockup with a side panel of live CSS-custom-property knobs (accent hue, type scale, density, theme mode, motion) persisting to localStorage. The user opens the wrapped file in any browser and explores N variants without re-prompting Clara. Output is a sibling file `[input].tweaks.html`; original input is untouched. Refuses to wrap inputs that bake decisions in literal hex/px (recommends `/frontend-design` refit first). Use after `/frontend-design` and before `/theme-port`. Triggered by `/tweaks`, `/Twik`, `/twik`, `/Tweaker`, "wrap with knobs", "tweak panel", "explore variants", "manda os botões", "panel pra explorar".
 metadata:
   dw:
     craft:
       requires: [color, typography, anti-ai-slop]
 ---
 
-# Skill: tweaks (`/tweaks`) — persona **Tweaker** (no PT alias — functional skill)
+# Skill: tweaks (`/tweaks`) — persona **Twik** (English archetype: **Tweaker**)
 
 ## Triggers
 
 - **English:** `/tweaks <path>`, `/Tweaker`, "wrap with knobs", "tweak panel", "explore variants", "give me the slider", "knobify"
-- **Português:** `/tweaks <path>`, "manda os botões", "panel pra explorar", "vamos mexer nesses parâmetros", "quero variar"
+- **Português:** `/tweaks <path>`, `/Twik`, `/twik`, "manda os botões", "panel pra explorar", "vamos mexer nesses parâmetros", "quero variar"
 - **Natural language:** any time the user has an HTML mockup and wants to ride sliders before committing to a final state. Common phrasing: "I'll know it when I see it" / "gostei mas não sei o que mudar".
 
 `tweaks` exists to break the articulate-before-see loop: today the user must articulate a tweak ("um pouco mais quente, escala maior") before getting a new render; the skill flips that — render first, articulate by sliding.

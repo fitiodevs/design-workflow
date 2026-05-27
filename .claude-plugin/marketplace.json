@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "design-workflow",
-      "description": "UI/screen design pipeline — Júri critique (Nielsen 10 + 5dim radar) + theme audit; 11 atomic operators (theme audit/create/extend/port, bolder/quieter/distill, motion, frontend-design, ux-writing, tweaks); flow audit. Foundation orchestration (compose/sequence/ship, status, promote, atlas-save, opus-execute, caveman) lives in product-workflow.",
+      "description": "UI/screen design pipeline — Olavo critique (Nielsen 10 + 5dim radar) + theme audit; 11 atomic operators (theme audit/create/extend/port, bolder/quieter/distill, motion, frontend-design, ux-writing, tweaks); flow audit. Foundation orchestration (compose/sequence/ship, status, promote, atlas-save, opus-execute, caveman) lives in product-workflow.",
       "source": "./",
       "strict": false,
       "skills": [

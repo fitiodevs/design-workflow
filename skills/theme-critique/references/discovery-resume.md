@@ -1,11 +1,11 @@
 # Discovery — resume protocol
 
-> Reference loaded by `theme-critique` (Júri) when user invokes `/juri --resume <feature>`.
+> Reference loaded by `theme-critique` (Olavo) when user invokes `/olavo --resume <feature>`.
 > Define como retomar entrevista parcial sem corromper estado nem perder respostas válidas.
 
 ## Pré-condições (validação strict)
 
-Júri **só retoma** quando todas estas condições passam:
+Olavo **só retoma** quando todas estas condições passam:
 
 1. **Arquivo existe.** `.design-spec/features/<feature>/discovery.md` é encontrado.
 2. **Frontmatter parseable.** YAML válido entre `---` markers.
@@ -15,28 +15,28 @@ Júri **só retoma** quando todas estas condições passam:
 
 ## Mensagens de erro user-facing
 
-Quando a validação falha, Júri responde com 1 das 5 mensagens abaixo (não tenta retomar, não corrige silenciosamente):
+Quando a validação falha, Olavo responde com 1 das 5 mensagens abaixo (não tenta retomar, não corrige silenciosamente):
 
 ### Erro 1 — file ausente
-> "Não encontrei `.design-spec/features/{{feature}}/discovery.md`. Confere se o slug tá certo, ou roda `/juri` (sem args) pra começar nova discovery."
+> "Não encontrei `.design-spec/features/{{feature}}/discovery.md`. Confere se o slug tá certo, ou roda `/olavo` (sem args) pra começar nova discovery."
 
 ### Erro 2 — frontmatter inválido
-> "Frontmatter de `discovery.md` quebrado — provável edição manual. Cola o arquivo aqui pra eu olhar, ou apaga e roda `/juri` de novo."
+> "Frontmatter de `discovery.md` quebrado — provável edição manual. Cola o arquivo aqui pra eu olhar, ou apaga e roda `/olavo` de novo."
 
 ### Erro 3 — status errado
-> "`discovery.md` está com `status: {{status_atual}}`. Resume só funciona em `in_progress`. Se quer recomeçar, apaga e roda `/juri`. Se quer revisar uma já aprovada, abre o arquivo direto."
+> "`discovery.md` está com `status: {{status_atual}}`. Resume só funciona em `in_progress`. Se quer recomeçar, apaga e roda `/olavo`. Se quer revisar uma já aprovada, abre o arquivo direto."
 
 ### Erro 4 — idade >14 dias
-> "Esta discovery foi criada {{X}} dias atrás. Recomendação: rodar `/juri` em modo `light` pra atualizar contexto antes de continuar — produto/persona costumam ter mexido."
+> "Esta discovery foi criada {{X}} dias atrás. Recomendação: rodar `/olavo` em modo `light` pra atualizar contexto antes de continuar — produto/persona costumam ter mexido."
 >
 > *(em Onda A, oferecer "continuar mesmo assim" como segunda opção; em Onda C ficará mais firme)*
 
 ### Erro 5 — parse de blocos falha
-> "Consegui ler o frontmatter mas não consigo identificar onde a entrevista parou. Possível formato corrompido. Me cola o arquivo aqui ou apaga e recomeça com `/juri`."
+> "Consegui ler o frontmatter mas não consigo identificar onde a entrevista parou. Possível formato corrompido. Me cola o arquivo aqui ou apaga e recomeça com `/olavo`."
 
 ## Algoritmo "find first incomplete block"
 
-Após validação OK, Júri parsa o markdown:
+Após validação OK, Olavo parsa o markdown:
 
 ```
 1. Localiza todas as seções `## Block N — <name>`.
@@ -46,11 +46,11 @@ Após validação OK, Júri parsa o markdown:
 5. Retoma fazendo aquela pergunta literal (de `discovery-protocol.md`).
 ```
 
-Se todas as seções estão `complete` mas o arquivo ainda é `status: in_progress` no frontmatter, Júri assume que o último passo (gerar plan + escrever skeletons) falhou e retoma daí.
+Se todas as seções estão `complete` mas o arquivo ainda é `status: in_progress` no frontmatter, Olavo assume que o último passo (gerar plan + escrever skeletons) falhou e retoma daí.
 
 ## Output ao retomar
 
-Antes de fazer a próxima pergunta, Júri ecoa um summary curto:
+Antes de fazer a próxima pergunta, Olavo ecoa um summary curto:
 
 ```
 Retomando discovery: {{feature_slug}}
@@ -72,9 +72,9 @@ Retomando discovery: {{feature_slug}}
 
 ## Quando resume falha mid-flow
 
-Se durante o resume o usuário disser "para" ou `--bail`, Júri:
+Se durante o resume o usuário disser "para" ou `--bail`, Olavo:
 
 1. Persiste o que foi capturado nas perguntas novas.
 2. Mantém `status: in_progress`.
-3. Imprime: "Pausado. Retoma com `/juri --resume {{feature}}`."
+3. Imprime: "Pausado. Retoma com `/olavo --resume {{feature}}`."
 4. Sai sem efeito colateral em `lib/`.
