@@ -4,7 +4,7 @@ description: Amplifies a screen that's bland/timid. Raises color commitment (Res
 metadata:
   dw:
     craft:
-      requires: [color, anti-ai-slop]
+      requires: [color, anti-ai-slop, visual-hierarchy]
 ---
 
 # Skill: theme-bolder (`/theme-bolder`) — invokes **Saga** (English: **Amplifier**)
@@ -21,6 +21,7 @@ Before amplifying, read these craft references — they encode universal rules i
 
 - `craft/color.md` — when to commit (Restrained → Committed → Drenched) and how to keep accent discipline as you raise intensity.
 - `craft/anti-ai-slop.md` — what NOT to reach for as you turn the dial up (purple gradients, glassy reflexes, emoji-as-icon).
+- `craft/visual-hierarchy.md` — de-emphasis beats emphasis: push secondary back before shouting the primary; weight-then-size-then-color; symptom→fix for "weak / timid".
 
 These are upstream from any project's design system; the project's own tokens (`AppColors`, `docs/product.md`) override only when they explicitly contradict.
 

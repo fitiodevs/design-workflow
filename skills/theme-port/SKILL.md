@@ -4,7 +4,7 @@ description: Ports a structural source (Figma frame OR HTML mockup from any tool
 metadata:
   dw:
     craft:
-      requires: [state-coverage, typography, design-context]
+      requires: [state-coverage, typography, design-context, platform-conventions]
 ---
 
 # Skill: theme-port (`/theme-port`) — persona **Elo** (English: **Architect**)
@@ -41,6 +41,7 @@ Before porting, read these craft references — they encode universal rules inde
 
 - `craft/state-coverage.md` — every interactive surface needs default/hover/focus/active/disabled/loading/empty/error states. The source rarely shows them all; infer the missing ones from these rules.
 - `craft/typography.md` — type scale, line height, letter spacing. Use to map source font sizes to your `TextTheme` semantic roles instead of porting raw px values.
+- `craft/platform-conventions.md` — hybrid iOS+Android idioms: keep touch targets ≥44pt/48dp, respect safe areas/insets, map to bottom-tab nav not hamburger, honor dynamic type. A flat HTML/Figma source rarely encodes these — enforce them in the widget output.
 
 These are upstream from any project's design system; the project's own tokens (`AppColors`, `docs/product.md`) override only when they explicitly contradict.
 
