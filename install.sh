@@ -26,12 +26,13 @@ for src in "${SCRIPT_DIR}/skills"/*/; do
   count=$((count + 1))
 done
 
-# craft/ — universal design rule docs loaded by 5 wired skills
-# (theme-critique, theme-create, theme-port, theme-bolder, frontend-design).
+# craft/ — universal design rule docs loaded by the wired skills.
 # The skills reference these as `craft/<doc>.md` (project-relative); since
 # install lands them globally outside any project, we copy craft/ to a stable
 # global location and rewrite the references in the installed SKILL.md copies
-# to absolute paths so the model can resolve them from any cwd.
+# to absolute paths so the model can resolve them from any cwd. We detect the
+# wired skills dynamically (any installed SKILL.md containing a `craft/*.md`
+# reference) so the list never drifts as wiring changes.
 craft_count=0
 if [ -d "${SCRIPT_DIR}/craft" ]; then
   rm -rf "${CRAFT_TARGET}"
@@ -41,15 +42,17 @@ if [ -d "${SCRIPT_DIR}/craft" ]; then
   echo ""
   echo "  installed: craft/ (${craft_count} docs → ${CRAFT_TARGET})"
 
-  for s in theme-critique theme-create theme-port theme-bolder frontend-design; do
-    skill_md="${SKILL_TARGET}/${s}/SKILL.md"
-    if [ -f "${skill_md}" ]; then
+  rewrote=0
+  for skill_md in "${SKILL_TARGET}"/*/SKILL.md; do
+    [ -f "${skill_md}" ] || continue
+    if grep -q '`craft/[a-z-]*\.md`' "${skill_md}"; then
       # `craft/anti-ai-slop.md` → `~/.claude/craft/anti-ai-slop.md`
       sed -i.bak 's|`craft/\([a-z-]*\)\.md`|`~/.claude/craft/\1.md`|g' "${skill_md}"
       rm -f "${skill_md}.bak"
+      rewrote=$((rewrote + 1))
     fi
   done
-  echo "  rewrote: craft/ refs → ~/.claude/craft/ in 5 wired skills"
+  echo "  rewrote: craft/ refs → ~/.claude/craft/ in ${rewrote} wired skill(s)"
 fi
 
 # agents/ — global subagents (persona bundles + single-file critics).
