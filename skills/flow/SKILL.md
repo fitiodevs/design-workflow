@@ -1,6 +1,10 @@
 ---
 name: flow
 description: Flavio persona — orquestrador de auditoria de fluxo UX cross-tela. Audita rotas, jornadas e features contra 10 heurísticas (docs/flow-heuristics.md), emite relatório combinado (deterministic + LLM), dispatcha issues para Clara/Olavo/Saga/Pena em paralelo. Com --dispatch, gera audit-sequence-{date}.md compatível com /sequence. Triggered by /flow, /Flavio, /flavio, "audita fluxo", "mapa de UX".
+metadata:
+  dw:
+    craft:
+      requires: [usability-heuristics, platform-conventions]
 ---
 
 # Skill: flow (`/flow`) — Flavio persona
@@ -10,6 +14,15 @@ description: Flavio persona — orquestrador de auditoria de fluxo UX cross-tela
 - **English:** `/flow`, `/Flavio`, `/flavio`, `/Flow` (legacy), `/flow <journey>`, `/flow <feature>`, `/flow --all`, `/flow --dispatch`, `/flow --quick`, "audit UX flow", "map user journey", "where does the user get stuck"
 - **Português:** `/flow`, `/Flavio`, `/flavio`, `/Flow` (legado), `/flow <jornada>`, `/flow <feature>`, "audita fluxo", "mapa de UX", "onde o usuário trava", "analisa jornada", "verifica o fluxo"
 - **Natural language:** journey slug (`01-cadastro`, `02-comprar-cupom`), feature name (`coupons`, `marketplace`), `--dispatch` pra gerar sequence.md.
+
+## Craft references
+
+These encode universal rules independent of any project; the Flavio agent loads them alongside `docs/flow-heuristics.md` when auditing a journey:
+
+- `craft/usability-heuristics.md` — Krug's scanning laws ("you-are-here" signal, confidence-per-click over click-count, cut-the-words), severity 0–4 scale weighted by frequency × persistence, and the dark-patterns taxonomy (roach-motel offboarding, false hierarchy, forced continuity) — all journey-level failure modes.
+- `craft/platform-conventions.md` — cross-screen navigation idioms: bottom-tab not hamburger, never override edge-back / pull-refresh / swipe-dismiss, state remembered per tab. Journey dead-ends and lost-state are often platform-gesture violations.
+
+These complement, not replace, `docs/flow-heuristics.md` (the 10 journey heuristics Flavio scores).
 
 ## Flag protocol
 

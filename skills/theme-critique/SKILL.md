@@ -4,7 +4,7 @@ description: Olavo persona — multi-mode design orchestrator. Without args, run
 metadata:
   dw:
     craft:
-      requires: [anti-ai-slop, color, state-coverage, typography, design-context]
+      requires: [anti-ai-slop, color, state-coverage, typography, design-context, visual-hierarchy, usability-heuristics, platform-conventions]
 ---
 
 # Skill: theme-critique (`/theme-critique`) — invokes **Olavo** (English: **Critic**)
@@ -23,6 +23,9 @@ Before generating critique output, read these craft references — they encode u
 - `craft/color.md` — palette structure and accent discipline (Nielsen #4, #8).
 - `craft/state-coverage.md` — required states for every interactive surface (Nielsen #1, #5).
 - `craft/typography.md` — type scale, line height, letter spacing (Nielsen #4, #8).
+- `craft/visual-hierarchy.md` — grayscale-first / squint test, weight-size-color levers, spacing & elevation (Nielsen #8; flat-screen verdicts).
+- `craft/usability-heuristics.md` — Krug's scanning laws, severity scale, dark-patterns taxonomy (extends Nielsen with scan-cost + ethics).
+- `craft/platform-conventions.md` — hybrid iOS+Android idioms: touch targets, safe areas, native gestures, dynamic type, dark mode (Nielsen #2, #4; platform-fit P0s).
 
 These are upstream from any project's design system; the project's own tokens (`AppColors`, `docs/product.md`) override only when they explicitly contradict.
 

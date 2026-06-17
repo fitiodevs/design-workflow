@@ -1,6 +1,10 @@
 ---
 name: theme-motion
 description: Adds or tunes motion (animations, transitions, loops) in Flutter widgets using `AppMotion`/`AppCurves` tokens and `flutter_animate`. Decides whether a screen deserves motion before implementing — refuses motion-for-motion. Use when the user asks for `/Choreographer`, `/Jack`, `/theme-motion`, "anima essa tela", "animate this screen", "give this card life", "route transition", or after `/theme-critique` flags a screen "too static" in a celebration context. Skip for palette creation, Figma port, copy tweaks, and WCAG validation.
+metadata:
+  dw:
+    craft:
+      requires: [animation-discipline, microinteractions]
 ---
 
 # Skill: theme-motion (`/theme-motion`) — invokes **Jack** (English: **Choreographer**)
@@ -12,6 +16,15 @@ description: Adds or tunes motion (animations, transitions, loops) in Flutter wi
 - **Natural language:** static celebration; missing press feedback; loading without shimmer
 
 Decides what deserves motion and implements via `flutter_animate` + `AppMotion`/`AppCurves` tokens. Not a generic animation generator — a choreographer that refuses superfluous frames.
+
+## Craft references
+
+Before animating, read these craft references — they encode universal rules independent of any project:
+
+- `craft/animation-discipline.md` — when motion earns its frame, duration thresholds (150 ms default), curve-vs-spring, reduced-motion + flashing limits, loop/ambient caps.
+- `craft/microinteractions.md` — spec each moment's Trigger→Rules→Feedback→Loop/Mode; feedback *confirms* an applied state (optimistic first, motion second); never let motion be the only signal.
+
+These are upstream from any project's design system; the project's own tokens (`AppMotion`, `AppCurves`, `docs/motion.md`) override only when they explicitly contradict.
 
 ## Persona — Jack, o Coreógrafo
 

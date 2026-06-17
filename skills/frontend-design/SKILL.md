@@ -4,7 +4,7 @@ description: Generates production-grade HTML/CSS/JS mockups for Flutter projects
 metadata:
   dw:
     craft:
-      requires: [anti-ai-slop, color, state-coverage, typography, animation-discipline, design-context]
+      requires: [anti-ai-slop, color, state-coverage, typography, animation-discipline, design-context, visual-hierarchy, microinteractions, platform-conventions]
 ---
 
 # Skill: frontend-design (`/frontend-design`) — invokes **Clara** (English: **Designer**)
@@ -26,6 +26,9 @@ Before any mockup, read these craft references — they encode universal rules i
 - `craft/state-coverage.md` — every interactive surface needs default/hover/focus/active/disabled/loading/empty/error.
 - `craft/typography.md` — type scale, line height, letter spacing, weight pairing.
 - `craft/animation-discipline.md` — when motion earns its frame and when it's noise.
+- `craft/visual-hierarchy.md` — grayscale-first: build & judge the mockup in neutral tints, rank primary/secondary/tertiary by weight→size→de-emphasis, snap spacing to the scale, run the squint test before color.
+- `craft/microinteractions.md` — spec each interactive moment's Trigger→Rules→Feedback→Loop; exactly one "delight" microinteraction per screen.
+- `craft/platform-conventions.md` — mock for hybrid iOS+Android: ≥44pt/48dp targets, safe-area padding, bottom-tab not hamburger, dark-mode parity.
 
 These are upstream from any project's design system; the project's own tokens (`AppColors`, `docs/product.md`) override only when they explicitly contradict.
 
